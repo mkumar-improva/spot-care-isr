@@ -1,106 +1,200 @@
+import type { Metadata } from 'next';
+import { revalidateTag } from 'next/cache';
 import { notFound } from 'next/navigation';
 import { getProvider } from '@/lib/api';
+import type { ProviderDetail } from '@/lib/api';
+import {
+  ProviderGallery,
+  ProviderOverview,
+  ProviderSections,
+  ProviderSocialLinks,
+} from '@/components/providers';
+import { absoluteUrl, getDefaultSocialImage, getSiteUrl } from '@/lib/site';
 
 type Params = { params: { id: string } };
 
-export const revalidate = 3600; // 1 hour for detail pages
+export const revalidate = 3600; // 30 seconds for detail pages
+
+const SITE_NAME = 'SpotCare';
+const FALLBACK_DESCRIPTION =
+  'Explore healthcare providers on SpotCare to discover services, contact information, and up-to-date care availability.';
+
+function buildLocation(provider: ProviderDetail): string | null {
+  const segments = [provider.city, provider.state, provider.postalCode].filter(Boolean);
+  return segments.length ? segments.join(', ') : null;
+}
+
+function buildDescription(provider: ProviderDetail): string {
+  const trimmedDescription = provider.description?.trim();
+  if (trimmedDescription) {
+    return trimmedDescription;
+  }
+
+  const location = buildLocation(provider);
+  const services =
+    provider.services && provider.services.length ? provider.services.filter(Boolean).join(', ') : null;
+
+  const parts = [
+    `Learn more about ${provider.name}`,
+    location ? `located in ${location}` : null,
+    services ? `offering ${services}` : null,
+    'Discover contact details, amenities, and care insights powered by SpotCare ISR.',
+  ].filter(Boolean);
+
+  return `${parts.join('. ')}.`;
+}
+
+function buildKeywords(provider: ProviderDetail): string[] {
+  const keywords = new Set<string>([
+    'SpotCare',
+    'healthcare provider',
+    'care services',
+    'healthcare directory',
+    provider.name,
+  ]);
+
+  if (provider.city) keywords.add(provider.city);
+  if (provider.state) keywords.add(provider.state);
+  if (provider.postalCode) keywords.add(provider.postalCode);
+
+  provider.services?.forEach((service) => {
+    if (service) {
+      keywords.add(service);
+      keywords.add(`${service} provider`);
+    }
+  });
+
+  return Array.from(keywords);
+}
+
+function resolvePrimaryImage(provider: ProviderDetail) {
+  const primary = provider.images?.find((image) => image?.url);
+  if (!primary || !primary.url) {
+    return null;
+  }
+
+  const isAbsolute = /^https?:\/\//i.test(primary.url);
+  return {
+    url: isAbsolute ? primary.url : null,
+    alt: primary.caption?.trim() || `${provider.name} facility exterior`,
+  };
+}
+
+export async function generateMetadata({ params }: Params): Promise<Metadata> {
+  const siteUrl = getSiteUrl();
+  const pageUrl = absoluteUrl(`/providers/${params.id}`);
+  const { url: defaultOgImageUrl, alt: defaultOgAlt } = getDefaultSocialImage('opengraph');
+  const { url: defaultTwitterImageUrl } = getDefaultSocialImage('twitter');
+
+  try {
+    const provider = await getProvider(params.id);
+    const description = buildDescription(provider);
+    const location = buildLocation(provider);
+    const keywords = buildKeywords(provider);
+    const primaryImage = resolvePrimaryImage(provider);
+    const ogImageUrl = primaryImage?.url ?? defaultOgImageUrl;
+    const ogImageAlt = primaryImage?.alt ?? defaultOgAlt;
+    const twitterImageUrl = primaryImage?.url ?? defaultTwitterImageUrl;
+    const title = `${provider.name} | ${SITE_NAME} Provider`;
+
+    return {
+      metadataBase: new URL(siteUrl),
+      title,
+      description,
+      keywords,
+      alternates: {
+        canonical: pageUrl,
+      },
+      openGraph: {
+        type: 'website',
+        url: pageUrl,
+        title,
+        description,
+        siteName: SITE_NAME,
+        locale: 'en_US',
+        images: [
+          {
+            url: ogImageUrl,
+            alt: ogImageAlt,
+            width: 1200,
+            height: 630,
+          },
+        ],
+        phoneNumbers: provider.phoneNumbers,
+        emails: provider.email ? [provider.email] : undefined,
+        countryName: provider.state ?? undefined,
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title,
+        description,
+        images: [twitterImageUrl],
+        site: '@SpotCare',
+        creator: '@SpotCare',
+      },
+      other: {
+        'provider:code': provider.code,
+        'provider:location': location ?? '',
+      },
+    };
+  } catch (error) {
+    console.warn('Failed to generate metadata for provider', params.id, error);
+
+    return {
+      metadataBase: new URL(siteUrl),
+      title: `Provider ${params.id} | ${SITE_NAME}`,
+      description: FALLBACK_DESCRIPTION,
+      keywords: ['SpotCare', 'healthcare provider directory'],
+      alternates: {
+        canonical: pageUrl,
+      },
+      openGraph: {
+        type: 'website',
+        url: pageUrl,
+        title: `Provider ${params.id} | ${SITE_NAME}`,
+        description: FALLBACK_DESCRIPTION,
+        siteName: SITE_NAME,
+        locale: 'en_US',
+        images: [
+          {
+            url: defaultOgImageUrl,
+            alt: defaultOgAlt,
+            width: 1200,
+            height: 630,
+          },
+        ],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: `Provider ${params.id} | ${SITE_NAME}`,
+        description: FALLBACK_DESCRIPTION,
+        images: [defaultTwitterImageUrl],
+        site: '@SpotCare',
+        creator: '@SpotCare',
+      },
+    };
+  }
+}
 
 export default async function ProviderPage({ params }: Params) {
-  const code = params.id;
   try {
-    const provider = await getProvider(code);
-    const socialLinks = provider.socialLinks?.filter((link) => link.url) ?? [];
-
+    const provider = await getProvider(params.id);
+    revalidateTag('providers:sitemap');
 
     return (
-      <div className="container" style={{ display: 'grid', gap: '1.5rem' }}>
-        <div className="card">
-          <h2 style={{ marginTop: 0 }}>{provider.name}</h2>
-          <p className="muted">Provider code: {provider.code}</p>
-          {provider.description ? <p>{provider.description}</p> : null}
-
-          <section>
-            {provider.address ? <p>{provider.address}</p> : null}
-            {provider.city || provider.state || provider.postalCode ? (
-              <p>
-                {[provider.city, provider.state, provider.postalCode].filter(Boolean).join(', ')}
-              </p>
-            ) : null}
-            {provider.phoneNumbers?.length ? (
-              <p>
-                Phone: {provider.phoneNumbers.join(', ')}
-              </p>
-            ) : provider.phone ? (
-              <p>Phone: {provider.phone}</p>
-            ) : null}
-            {provider.email ? <p>Email: {provider.email}</p> : null}
-            {provider.services?.length ? (
-              <p>Services: {provider.services.join(', ')}</p>
-            ) : null}
-          </section>
-        </div>
-
-        {provider.images?.length ? (
-          <div className="card">
-            <h3 style={{ marginTop: 0 }}>Gallery</h3>
-            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-              {provider.images.map((img) => (
-                <figure key={img.id} style={{ margin: 0 }}>
-                  <img
-                    src={img.url}
-                    alt={img.caption ?? provider.name}
-                    style={{ maxWidth: '200px', borderRadius: '4px', border: '1px solid #eee' }}
-                  />
-                  {img.caption ? (
-                    <figcaption className="muted" style={{ fontSize: '0.85rem' }}>
-                      {img.caption}
-                    </figcaption>
-                  ) : null}
-                </figure>
-              ))}
-            </div>
-          </div>
-        ) : null}
-
-        {socialLinks.length ? (
-          <div className="card">
-            <h3 style={{ marginTop: 0 }}>Social & Web</h3>
-            <ul>
-              {socialLinks.map((link) => (
-                <li key={link.id}>
-                  <a href={link.url} target="_blank" rel="noreferrer">
-                    {link.type ?? 'Link'}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ) : null}
-
-        {provider.sections?.length ? (
-          <div className="card">
-            <h3 style={{ marginTop: 0 }}>Sections</h3>
-            <ul>
-              {provider.sections.map((section) => (
-                <li key={section.id}>
-                  {section.name}
-                  {section.careType ? <span className="muted"> ({section.careType})</span> : null}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ) : null}
-      </div>
+      <section className="space-y-8">
+        <ProviderOverview provider={provider} />
+        <ProviderGallery provider={provider} />
+        <ProviderSocialLinks provider={provider} />
+        <ProviderSections provider={provider} />
+      </section>
     );
   } catch (error) {
-    console.warn('Failed to load provider', code, error);
+    console.warn('Failed to load provider', params.id, error);
     return notFound();
   }
 }
 
-// Optionally pre-render a small set of provider pages at build time.
-// If your API supports an index of IDs, you can fetch and return them.
-// Returning an empty array will defer to on-demand rendering with ISR.
 export async function generateStaticParams(): Promise<{ id: string }[]> {
   return [];
 }

@@ -1,50 +1,33 @@
-import Link from 'next/link';
-import { findNearestProviders } from '@/lib/api';
+import { SearchForm } from '@/components/search';
 
-export const revalidate = 900; // Segment-level default (15 min)
+const DEFAULT_LAT = Number(process.env.DEFAULT_LAT ?? '33.9253024');
+const DEFAULT_LON = Number(process.env.DEFAULT_LON ?? '-84.38574419999999');
+const DEFAULT_RADIUS = Number(process.env.DEFAULT_RADIUS ?? '5');
+const DEFAULT_CARE_TYPE = String(process.env.DEFAULT_CARE_TYPE ?? 'Adult Day Care');
 
-type HomeProps = {
-  searchParams?: {
-    lat?: string;
-    lon?: string;
-    radius?: string;
-    careType?: string;
-    page?: string;
-    pageSize?: string;
-  };
-};
-
-export default async function HomePage({ searchParams }: HomeProps) {
-  const lat = Number(searchParams?.lat ?? process.env.DEFAULT_LAT ?? '33.9253024');
-  const lon = Number(searchParams?.lon ?? process.env.DEFAULT_LON ?? '-84.38574419999999');
-  const radius = Number(searchParams?.radius ?? process.env.DEFAULT_RADIUS ?? '5');
-  const careType = String(searchParams?.careType ?? process.env.DEFAULT_CARE_TYPE ?? 'Adult Day Care');
-  const page = Number(searchParams?.page ?? 1);
-  const pageSize = Number(searchParams?.pageSize ?? 1000);
-
-  const providers = await findNearestProviders({ lat, lon, radius, careType, page, pageSize });
-
+export default function HomePage() {
   return (
-    <div className="container">
-      <p className="muted">Incremental Static Regeneration enabled (15 min).</p>
-      <p className="muted">
-        Querying nearest providers for lat={lat}, lon={lon}, radius={radius} km, careType="{careType}".
-      </p>
-      <div className="grid">
-        {providers.map((p) => (
-          <Link key={p.code ?? p.id} href={`/providers/${p.code}`} className="card">
-            <h3 style={{ marginTop: 0 }}>{p.name}</h3>
-            <p className="muted">{p.services?.join(', ') || '—'}</p>
-            {p.address ? <p style={{ marginBottom: 0 }}>{p.address}</p> : null}
-            {p.city || p.state ? (
-              <p className="muted" style={{ marginTop: '0.25rem' }}>
-                {[p.city, p.state, p.postalCode].filter(Boolean).join(', ')}
-              </p>
-            ) : null}
-            {p.phone ? <p>Phone: {p.phone}</p> : null}
-          </Link>
-        ))}
+    <section className="grid gap-16 py-10">
+      <div className="grid gap-6 text-center sm:text-left">
+        <span className="inline-flex items-center justify-center rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary">
+          SpotCare Provider Directory
+        </span>
+        <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
+          Find the right care provider in seconds.
+        </h1>
+        <p className="mx-auto max-w-2xl text-base text-muted-foreground sm:mx-0">
+          Search across the SpotCare network using geographic coordinates, care types, and radius filters.
+          We keep every listing fresh with Incremental Static Regeneration so you always see near real-time updates.
+        </p>
       </div>
-    </div>
+
+      <SearchForm
+        defaultCareType={DEFAULT_CARE_TYPE}
+        defaultLat={DEFAULT_LAT}
+        defaultLon={DEFAULT_LON}
+        defaultRadius={DEFAULT_RADIUS}
+        className="mx-auto w-full max-w-3xl"
+      />
+    </section>
   );
 }
