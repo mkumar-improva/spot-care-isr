@@ -1,27 +1,51 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, use } from "react";
 import Logo from "@/components/ui/logo";
 import logoImg from "@/assets/app/spot/full.png";
 import NavBarElements from "./navbar-elements";
 import RenderButtonOpenHeroSearch from "./render-button-open-hero-search";
 import useHeaderUiStore from "store/ui/header-ui-store";
+import useSearchUiStore from "store/ui/search-ui-store";
 import SearchComponent from "@/components/search/Component";
+import { useLoadScript } from "@react-google-maps/api";
+import { Config } from "@/constants/config";
+
+// Keep libraries array as a constant outside component to prevent reloading
+const GOOGLE_MAPS_LIBRARIES: ("places" | "marker")[] = ["places", "marker"];
 
 const HeaderNav = () => {
   /*----------Begining of Store Import----------*/
   const { showHeroSearch, setShowHeroSearch } = useHeaderUiStore();
+  const { setIsMapLoaded } = useSearchUiStore();
   /*----------End of Store Import----------*/
 
   const heroSearchRef = useRef<HTMLDivElement>(null);
 
+  /*------Start of Google Maps Script Loading------*/
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: Config.KEY.MAP || "",
+    libraries: GOOGLE_MAPS_LIBRARIES,
+  });
+
+  useEffect(() => {
+    setIsMapLoaded(isLoaded);
+  }, [isLoaded, setIsMapLoaded]);
+  /*----------End of Google Maps Script Loading----------*/
+
   /*----------Start of Click Outside Handler----------*/
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        heroSearchRef.current &&
-        !heroSearchRef.current.contains(event.target as Node)
-      ) {
+      const target = event.target as Element;
+      
+      // Check if click is outside heroSearchRef
+      const isOutsideHeroSearch = heroSearchRef.current && 
+        !heroSearchRef.current.contains(event.target as Node);
+      
+      // Check if click is on Google Maps autocomplete suggestions
+      const isOnPacContainer = target.closest('.pac-container');
+      
+      if (isOutsideHeroSearch && !isOnPacContainer) {
         setShowHeroSearch(false);
       }
     };
@@ -41,9 +65,7 @@ const HeaderNav = () => {
       {/* Overlay for Hero Search */}
       <div
         className={`nc-Header nc-Header-3 fixed z-40 top-0 inset-0 bg-black/30 dark:bg-black/50 transition-opacity will-change-[opacity] hidden md:block ${
-          showHeroSearch
-            ? "visible"
-            : "invisible opacity-0 pointer-events-none"
+          showHeroSearch ? "visible" : "invisible opacity-0 pointer-events-none"
         } 2xl:px-20 px-4`}
       ></div>
       {showHeroSearch && <div id="nc-Header-3-anchor"></div>}

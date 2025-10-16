@@ -1,5 +1,5 @@
 import ButtonPrimary from "@/components/ui/button/types/button-primary";
-import ButtonSecondary from "@/components/ui/button/types/button-seondary";
+import ButtonSecondary from "@/components/ui/button/types/button-secondary";
 
 const NavBarElements = () => {
   return (

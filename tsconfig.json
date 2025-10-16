@@ -41,7 +41,10 @@
       ],
       "@/components/search/*":[
         "components/search/*"
-      ]
+      ],
+      "@/constants/*":[
+        "constants/*"
+      ],
     },
     "forceConsistentCasingInFileNames": true,
     "incremental": true,

@@ -316,8 +316,36 @@ input[type="radio"]:checked + label span {
 background-color: #495af2; //bg-blue
 }
 
-
-
 select::-webkit-scrollbar {
   width: 0px; /* Remove scrollbar in WebKit-based browsers */
+}
+
+/* Style the container of the suggestions */
+.pac-container {
+  @apply w-full xs:w-96 text-white shadow-lg rounded-lg mt-5 dark:bg-gray-800 bg-white;
+}
+
+.pac-container {
+  z-index: 99999999999 !important;
+}
+@media (max-width: 1024px) {
+  .pac-container {
+    max-height: 50vh !important;   /* limit height to half the screen */
+    overflow-y: auto !important;   /* enable scroll if overflow */
+  }
+}
+
+/* Style each suggestion */
+.pac-item {
+  @apply w-full text-gray-800 hover:bg-gray-100 p-4 border-0 dark:text-white dark:hover:bg-gray-700 !important;
+}
+
+/* Style the query within each suggestion */
+.pac-item-query {
+  @apply font-body font-bold text-sm dark:text-gray-300;
+}
+
+/* Highlighted text within suggestions */
+.pac-matched {
+  @apply text-green-500 dark:text-green-300;
 }
