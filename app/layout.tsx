@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
-import './globals.css';
-import { SiteHeader } from '@/components/layout/site-header';
+import '@/styles/index.scss';
+import '@/styles/globals.css';
+import { SiteHeader } from '@/components/layout/Header/Component';
 import { getDefaultSocialImage, getSiteUrl } from '@/lib/site';
 
 const SITE_NAME = 'SpotCare Healthcare Provider Directory';
@@ -86,11 +87,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <SiteHeader title="Healthcare Provider Directory" />
-        <main className="py-10 sm:py-12">
-          <div className="container-tight space-y-10">{children}</div>
-        </main>
+        <SiteHeader />
       </body>
     </html>
   );
 }
+
+
+{/* <SiteHeader title="Healthcare Provider Directory" />
+        <main className="py-10 sm:py-12">
+          <div className="container-tight space-y-10">{children}</div>
+        </main> */}

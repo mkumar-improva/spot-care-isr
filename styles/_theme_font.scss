@@ -1,0 +1,62 @@
+@font-face {
+  font-family: Improva;
+  font-weight: 300;
+  src: url('/fonts/Improva/Improva-Light.otf') ;
+}
+
+@font-face {
+  font-family: Improva;
+  font-weight: 400;
+  src: url('/fonts/Improva/Improva-Regular.otf');
+}
+
+@font-face {
+  font-family: Improva;
+  font-weight: 500;
+  src: url('/fonts/Improva/Improva-Medium.otf');
+}
+
+@font-face {
+  font-family: Improva;
+  font-weight: 600;
+  src: url('/fonts/Improva/Improva-Bold.otf');
+}
+
+@font-face {
+  font-family: Improva;
+  font-weight: 700;
+  src: url('/fonts/Improva/Improva-ExtraBold.otf');
+}
+
+@font-face {
+  font-family: 'Improva';
+  src: url('/fonts/Airbnb/Airbnb.woff2') format('woff2');
+  font-weight: 100 900; /* Supports all weights */
+  font-display: swap;
+  font-style: normal;
+}
+
+/* Apply globally */
+html,
+body {
+    @apply font-body antialiased;
+}
+
+/* Heading font */
+h1,
+h2,
+h3,
+h4 {
+  @apply font-display;
+}
+
+:root {
+  --font-display: Improva;
+  --font-body: Improva;
+}
+
+/* Optional theme override */
+.theme-animals {
+  --font-display: 'Improva', sans-serif;
+  --font-body: 'Improva', sans-serif;
+}

@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@tailwind variants;
 
 @layer base {
   :root {
@@ -75,14 +76,6 @@
 
     --shadow-soft: 0 10px 30px -12px rgba(15, 23, 42, 0.7);
     --shadow-elevated: 0 30px 80px -45px rgba(15, 23, 42, 0.7);
-  }
-
-  * {
-    @apply border-border;
-  }
-
-  body {
-    @apply min-h-screen bg-background font-sans text-foreground antialiased;
   }
 }
 
