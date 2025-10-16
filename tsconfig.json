@@ -23,6 +23,24 @@
       ],
       "@/lib/*": [
         "lib/*"
+      ],
+      "@/styles/*": [
+        "styles/*"
+      ],
+      "@/assets/*":[
+        "assets/*"
+      ],
+      "@/utils/*":[
+        "utils/*"
+      ],
+      "@/types/*":[
+        "types/*"
+      ],
+      "@/components/ui/button/*": [
+        "components/ui/button/*"
+      ],
+      "@/components/search/*":[
+        "components/search/*"
       ]
     },
     "forceConsistentCasingInFileNames": true,
@@ -35,10 +53,11 @@
   },
   "include": [
     "next-env.d.ts",
+    "types/**/*.d.ts",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "tailwind.config.js"  ],
   "exclude": [
     "node_modules"
   ]
