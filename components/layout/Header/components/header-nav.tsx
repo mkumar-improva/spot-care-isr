@@ -1,39 +1,53 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, use } from "react";
 import Logo from "@/components/ui/logo";
 import logoImg from "@/assets/app/spot/full.png";
 import NavBarElements from "./navbar-elements";
 import RenderButtonOpenHeroSearch from "./render-button-open-hero-search";
 import useHeaderUiStore from "store/ui/header-ui-store";
+import useSearchUiStore from "store/ui/search-ui-store";
 import SearchComponent from "@/components/search/Component";
+import { useLoadScript } from "@react-google-maps/api";
+import { Config } from "@/constants/config";
+import { useOutsideAlerter } from "@/hooks/common/use-outsider-click";
+
+// Keep libraries array as a constant outside component to prevent reloading
+const GOOGLE_MAPS_LIBRARIES: ("places" | "marker")[] = ["places", "marker"];
 
 const HeaderNav = () => {
   /*----------Begining of Store Import----------*/
   const { showHeroSearch, setShowHeroSearch } = useHeaderUiStore();
+  const {
+    setIsMapLoaded,
+    setIsShowCareVerticalLine,
+    setIsShowLocationVerticalLine,
+  } = useSearchUiStore();
   /*----------End of Store Import----------*/
 
   const heroSearchRef = useRef<HTMLDivElement>(null);
 
-  /*----------Start of Click Outside Handler----------*/
+  /*------Start of Google Maps Script Loading------*/
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: Config.KEY.MAP || "",
+    libraries: GOOGLE_MAPS_LIBRARIES,
+  });
+
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        heroSearchRef.current &&
-        !heroSearchRef.current.contains(event.target as Node)
-      ) {
-        setShowHeroSearch(false);
-      }
-    };
+    setIsMapLoaded(isLoaded);
+  }, [isLoaded, setIsMapLoaded]);
+  /*----------End of Google Maps Script Loading----------*/
 
-    if (showHeroSearch) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [showHeroSearch, setShowHeroSearch]);
+  /*----------Start of Click Outside Handler----------*/
+  useOutsideAlerter(
+    heroSearchRef,
+    () => {
+      setIsShowCareVerticalLine(true);
+      setIsShowLocationVerticalLine(true);
+      setShowHeroSearch(false);
+    },
+    ".pac-container" // ignore clicks on Google Maps autocomplete dropdown
+  );
   /*----------End of Click Outside Handler----------*/
 
   return (
@@ -41,9 +55,7 @@ const HeaderNav = () => {
       {/* Overlay for Hero Search */}
       <div
         className={`nc-Header nc-Header-3 fixed z-40 top-0 inset-0 bg-black/30 dark:bg-black/50 transition-opacity will-change-[opacity] hidden md:block ${
-          showHeroSearch
-            ? "visible"
-            : "invisible opacity-0 pointer-events-none"
+          showHeroSearch ? "visible" : "invisible opacity-0 pointer-events-none"
         } 2xl:px-20 px-4`}
       ></div>
       {showHeroSearch && <div id="nc-Header-3-anchor"></div>}
