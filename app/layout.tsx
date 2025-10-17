@@ -11,6 +11,7 @@ const SITE_TAGLINE = 'Find the right care provider in seconds.';
 const siteUrl = getSiteUrl();
 const { url: openGraphImageUrl, alt: socialImageAlt } = getDefaultSocialImage('opengraph');
 const { url: twitterImageUrl } = getDefaultSocialImage('twitter');
+import Footer from '@/components/layout/Footer/Component';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -88,6 +89,8 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <SiteHeader />
+        <main className='min-h-screen'>{children}</main>
+        <Footer />
       </body>
     </html>
   );

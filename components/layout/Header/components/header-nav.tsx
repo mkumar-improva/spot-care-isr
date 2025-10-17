@@ -10,6 +10,7 @@ import useSearchUiStore from "store/ui/search-ui-store";
 import SearchComponent from "@/components/search/Component";
 import { useLoadScript } from "@react-google-maps/api";
 import { Config } from "@/constants/config";
+import { useOutsideAlerter } from "@/hooks/common/use-outsider-click";
 
 // Keep libraries array as a constant outside component to prevent reloading
 const GOOGLE_MAPS_LIBRARIES: ("places" | "marker")[] = ["places", "marker"];
@@ -17,7 +18,11 @@ const GOOGLE_MAPS_LIBRARIES: ("places" | "marker")[] = ["places", "marker"];
 const HeaderNav = () => {
   /*----------Begining of Store Import----------*/
   const { showHeroSearch, setShowHeroSearch } = useHeaderUiStore();
-  const { setIsMapLoaded } = useSearchUiStore();
+  const {
+    setIsMapLoaded,
+    setIsShowCareVerticalLine,
+    setIsShowLocationVerticalLine,
+  } = useSearchUiStore();
   /*----------End of Store Import----------*/
 
   const heroSearchRef = useRef<HTMLDivElement>(null);
@@ -34,30 +39,15 @@ const HeaderNav = () => {
   /*----------End of Google Maps Script Loading----------*/
 
   /*----------Start of Click Outside Handler----------*/
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Element;
-      
-      // Check if click is outside heroSearchRef
-      const isOutsideHeroSearch = heroSearchRef.current && 
-        !heroSearchRef.current.contains(event.target as Node);
-      
-      // Check if click is on Google Maps autocomplete suggestions
-      const isOnPacContainer = target.closest('.pac-container');
-      
-      if (isOutsideHeroSearch && !isOnPacContainer) {
-        setShowHeroSearch(false);
-      }
-    };
-
-    if (showHeroSearch) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [showHeroSearch, setShowHeroSearch]);
+  useOutsideAlerter(
+    heroSearchRef,
+    () => {
+      setIsShowCareVerticalLine(true);
+      setIsShowLocationVerticalLine(true);
+      setShowHeroSearch(false);
+    },
+    ".pac-container" // ignore clicks on Google Maps autocomplete dropdown
+  );
   /*----------End of Click Outside Handler----------*/
 
   return (

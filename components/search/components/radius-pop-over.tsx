@@ -15,14 +15,9 @@ interface RadiusPopOverProps {
   mobileClassName?: string;
   placeHolder?: string;
   desc?: string;
-  miles?: string;
-  popoverButtonRef: React.MutableRefObject<HTMLButtonElement | null>;
   hasButtonSubmit?: boolean;
-  containerRef: React.MutableRefObject<HTMLDivElement | null>;
-  optionRefs: React.MutableRefObject<(HTMLElement | null)[]>;
   onFocusScroll?: () => void;
   SearchOption?: () => void;
-  onClickCapture?: () => void;
 }
 
 const RadiusPopOver = ({
@@ -30,45 +25,45 @@ const RadiusPopOver = ({
   mobileClassName,
   placeHolder,
   desc,
-  miles,
   hasButtonSubmit = false,
-  containerRef,
-  optionRefs,
   onFocusScroll,
   SearchOption,
-  popoverButtonRef,
-  onClickCapture,
 }: RadiusPopOverProps) => {
   /*----------Begining of Store Import----------*/
   const { isHomePage } = useHeaderUiStore();
-  const { highlightedIndex, setMilesRadius, setHighlightedIndex } =
-    useSearchUiStore();
   const { loading, isWishlistLoaded } = useLoadingState();
+  const { setIsShowLocationVerticalLine, setIsShowCareVerticalLine } =
+    useSearchUiStore();
   /*----------End of Store Import----------*/
+
+  /*--Begining of refs----------*/
+  const containerRef = useRef<HTMLDivElement>(null);
+  const optionRefs = useRef<(HTMLElement | null)[]>([]);
+  const popoverButtonRef = useRef<HTMLButtonElement | null>(null);
+  /*----------End of refs----------*/
 
   /*----------Begining of state ----------*/
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isRadiusOpen, setRadiusOpen] = useState(false);
+  const [miles, setMiles] = useState("");
+  const [highlightedIndex, setHighlightedIndex] = useState(-1);
   /*----------End of state ----------*/
+
+  //Handlers
+  const handleSelectLocation = (item: string, close: () => void) => {
+    setMiles(item);
+    close();
+    setHighlightedIndex(-1);
+  };
+
+  const onClickCapture = () => {
+    setIsShowCareVerticalLine(true);
+    setIsShowLocationVerticalLine(true);
+  };
 
   return (
     <Popover className={`flex relative ${className} lg:px-0`}>
       {({ open, close }) => {
-        const openPopover = () => {
-          if (!open && popoverButtonRef.current) {
-            popoverButtonRef.current.click();
-          }
-        };
-
-        const closePopover = () => {
-          const closeButton = document.querySelector(
-            '[data-headlessui-state="open"]'
-          );
-          if (closeButton instanceof HTMLElement) {
-            closeButton.click();
-          }
-        };
-
         return (
           <>
             <div
@@ -80,7 +75,6 @@ const RadiusPopOver = ({
             >
               <Popover.Button
                 ref={popoverButtonRef}
-                tabIndex={-1}
                 className={`relative z-10 flex-1 flex text-left items-center pl-[1rem] pr-[1rem] py-[.75rem] lg:px-[1.75rem] space-x-3 focus:outline-none`}
                 onClickCapture={onClickCapture}
               >
@@ -98,7 +92,7 @@ const RadiusPopOver = ({
                     value={miles}
                     required
                     onChange={(e) => {
-                      setMilesRadius(e.currentTarget.value);
+                      setMiles(e.currentTarget.value);
                     }}
                     onKeyDown={(e) => {
                       if (e.key === "Enter" && !open) {
@@ -107,18 +101,20 @@ const RadiusPopOver = ({
                           SearchOption();
                         }
 
-                        if (closePopover) {
-                          closePopover();
-                          setIsDropdownOpen(false);
-                          setRadiusOpen(false);
-                        }
+                        close();
+                        setIsDropdownOpen(false);
+                        setRadiusOpen(false);
                         setHighlightedIndex(-1);
                         if (document.activeElement instanceof HTMLElement) {
                           document.activeElement.blur();
                         }
                       }
                     }}
-                    onFocusCapture={openPopover}
+                    onFocus={() => {
+                      if (!open && popoverButtonRef.current) {
+                        popoverButtonRef.current.click();
+                      }
+                    }}
                   />
                   <span className="block mt-0.5 text-sm text-neutral-400 font-light ">
                     <span className="line-clamp-1">
@@ -168,6 +164,7 @@ const RadiusPopOver = ({
               )}
             </div>
 
+            {/*  Popover pannel*/}
             {open && (
               <div className="h-8 absolute self-center top-1/2 -translate-y-1/2 z-0 -left-0.5 right-1 lg:bg-white dark:lg:bg-neutral-800"></div>
             )}
@@ -183,7 +180,7 @@ const RadiusPopOver = ({
             >
               <Popover.Panel
                 className={`absolute top-[-8rem] left-1/2 transform -translate-x-1/2 z-10 w-full h-fit bg-white
-              rounded-xl overflow-hidden shadow-lg  py-4 ${
+              rounded-xl overflow-hidden shadow-lg ${
                 isHomePage ? "md:top-[4rem] lg:top-[6rem]" : "xl:top-[6rem]"
               }`}
               >
@@ -193,9 +190,10 @@ const RadiusPopOver = ({
                   tabIndex={-1}
                 >
                   <RenderRecentSearch
-                    onClick={() => {}}
+                    onClick={handleSelectLocation}
                     optionRefs={optionRefs}
                     highlightedIndex={highlightedIndex}
+                    onClose={close}
                   />
                 </div>
               </Popover.Panel>

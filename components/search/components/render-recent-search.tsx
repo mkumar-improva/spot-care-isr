@@ -1,12 +1,18 @@
 "use client";
-import { FC } from "react";
+import { FC, MutableRefObject } from "react";
 
 interface RenderRecentSearchProps {
-  onClick: () => void;
+  onClick: (value: string, onClose: () => void) => void;
   optionRefs: React.MutableRefObject<(HTMLElement | null)[]>;
   highlightedIndex?: number;
+  onClose: (
+    focusableElement?:
+      | HTMLElement
+      | React.MouseEvent<HTMLElement>
+      | MutableRefObject<HTMLElement | null>
+      | undefined
+  ) => void;
 }
-
 
 const radiusOptions = [
   "5 miles",
@@ -21,6 +27,7 @@ const RenderRecentSearch: FC<RenderRecentSearchProps> = ({
   onClick,
   optionRefs,
   highlightedIndex = -1,
+  onClose,
 }) => {
   return (
     <>
@@ -28,7 +35,9 @@ const RenderRecentSearch: FC<RenderRecentSearchProps> = ({
         {radiusOptions.map((item, index) => (
           <span
             ref={(el) => (optionRefs.current[index] = el)}
-            onClick={onClick}
+            onClick={() => {
+              onClick(item || "", onClose);
+            }}
             key={item}
             className={`w-full py-[1rem] px-[2.5rem] items-center cursor-pointer rounded-md block font-medium text-neutral-700 dark:text-neutral-200
                 ${

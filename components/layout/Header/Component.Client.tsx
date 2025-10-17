@@ -1,4 +1,5 @@
-import RenderButtonOpenHeroSearch from "./components/render-button-open-hero-search";
+'use client'
+
 import HeaderNav from "./components/header-nav";
 
 const StandardHeader = () => {

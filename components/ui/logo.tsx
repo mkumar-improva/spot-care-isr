@@ -9,6 +9,7 @@ interface LogoProps {
   className?: string;
   imgLight?: string;
   imgDark?: string;
+  onclick?: () => void;
 }
 
 const Logo: React.FC<LogoProps> = ({
@@ -18,12 +19,14 @@ const Logo: React.FC<LogoProps> = ({
   className = "w-24",
   imgLight = "",
   imgDark = "",
+  onclick,
 }) => {
   return (
     <Link href={href} className={className}>
       <Image
         src={img}
         alt={alt}
+        onClick={onclick}
         className={`block ${imgLight} ${imgDark}`}
         loading="lazy"
       />

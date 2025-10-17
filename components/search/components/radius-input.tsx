@@ -33,25 +33,6 @@ const RadiusInput: FC<RadiusInputProps> = ({
   setCareTypeOpen = () => {},
   isRadiusOpen,
 }) => {
-  /*--Begining of refs----------*/
-  const containerRef = useRef<HTMLDivElement>(null);
-  const optionRefs = useRef<(HTMLElement | null)[]>([]);
-  const popoverButtonRef = useRef<HTMLButtonElement | null>(null);
-  /*----------End of refs----------*/
-
-  /*----------Begining of state ----------*/
-  const [miles, setMiles] = useState("");
-  const [highlightedIndex, setHighlightedIndex] = useState(-1);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  /*----------End of state ----------*/
-
-  /*----------Start of useEffect-----------*/
-  useEffect(() => {
-    return () => {
-      setHighlightedIndex(-1);
-    };
-  }, []);
-  /*----------End of useEffect-----------*/
 
   return (
     <RadiusPopOver
@@ -59,11 +40,7 @@ const RadiusInput: FC<RadiusInputProps> = ({
       mobileClassName={mobileClassName}
       placeHolder={placeHolder}
       desc={desc}
-      miles={miles}
-      popoverButtonRef={popoverButtonRef}
       hasButtonSubmit={hasButtonSubmit}
-      containerRef={containerRef}
-      optionRefs={optionRefs}
       onFocusScroll={onFocusScroll}
       SearchOption={() => {}}
       onClickCapture={() => {}}
@@ -72,3 +49,5 @@ const RadiusInput: FC<RadiusInputProps> = ({
 };
 
 export default RadiusInput;
+
+

@@ -45,6 +45,9 @@
       "@/constants/*":[
         "constants/*"
       ],
+      "@/hooks/*":[
+        "hooks/*"
+      ]
     },
     "forceConsistentCasingInFileNames": true,
     "incremental": true,

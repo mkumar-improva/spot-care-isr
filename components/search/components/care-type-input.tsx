@@ -9,6 +9,7 @@ import React, {
 } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ServiceIcon } from "@hugeicons-pro/core-stroke-standard/index";
+import useSearchUiStore from "store/ui/search-ui-store";
 
 export interface CareTypeInputProps {
   placeHolder?: string;
@@ -35,6 +36,11 @@ const CareTypeInput: FC<CareTypeInputProps> = ({
   setCareTypeOpen = () => {},
   isCareTypeOpen,
 }) => {
+  /*----------Begining of Store Import----------*/
+  const { setIsShowCareVerticalLine, setIsShowLocationVerticalLine } =
+    useSearchUiStore();
+  /*----------End of Store Import----------*/
+
   /*----------Begining of Refs----------*/
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -44,10 +50,32 @@ const CareTypeInput: FC<CareTypeInputProps> = ({
   const [value, setValue] = useState("");
   /*----------End of States----------*/
 
+  //handlers
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target as Node)
+      ) {
+        setCareTypeOpen(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className={`relative flex ${className}`} ref={containerRef}>
       {/* Care Type Input Container */}
       <div
+        onClick={() => {
+          setIsShowCareVerticalLine(false);
+          setIsShowLocationVerticalLine(true);
+          setCareTypeOpen(true);
+        }}
         className={`flex z-10 flex-1 relative pl-[1.3rem] pr-0 py-[.75rem] lg:px-[1.75rem] flex-shrink-0 items-center space-x-3 
             cursor-pointer focus:outline-none text-left ${
               isCareTypeOpen && !mobileClassName ? "nc-hero-field-focused" : ""

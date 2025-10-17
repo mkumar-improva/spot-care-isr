@@ -37,7 +37,13 @@ const LocationInput: FC<LocationInputProps> = ({
   isFromMobileSearch = false,
 }) => {
   /*----------Begining of Store Import----------*/
-  const { isMapLoaded, locationValue, setLocationValue } = useSearchUiStore();
+  const {
+    isMapLoaded,
+    locationValue,
+    setIsShowLocationVerticalLine,
+    setIsShowCareVerticalLine,
+    setLocationValue,
+  } = useSearchUiStore();
   /*----------End of Store Import----------*/
 
   /*--Begining of refs----------*/
@@ -50,6 +56,22 @@ const LocationInput: FC<LocationInputProps> = ({
   const [showPopover, setShowPopover] = useState(autoFocus);
   /*----------End of state ----------*/
 
+  //handlers
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (!containerRef.current) return;
+      if (!showPopover || containerRef.current.contains(event.target as Node)) {
+        return;
+      }
+      setShowPopover(false);
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [showPopover]);
+
   if (!isMapLoaded) {
     return (
       <div className="flex-1 flex items-center justify-start">
@@ -58,6 +80,7 @@ const LocationInput: FC<LocationInputProps> = ({
       </div>
     );
   }
+  
   return (
     <div
       className={`relative flex ${className} xl:dark:bg-gray-800 xl:bg-white xl:px-0 px-5 sm:px-0 md:pr-0 md::pl-3
@@ -66,6 +89,11 @@ const LocationInput: FC<LocationInputProps> = ({
     >
       {/* Location Container */}
       <div
+        onClick={() => {
+          setShowPopover(true);
+          setIsShowCareVerticalLine(false);
+          setIsShowLocationVerticalLine(false);
+        }}
         className={`flex z-10 flex-1 relative pl-[1rem] pr-[1rem] lg:px-[1.75rem] flex-shrink-0 items-center space-x-3 cursor-pointer focus:outline-none text-left ${
           showPopover ? "nc-hero-field-focused" : ""
         } dark:text-white text-black ${mobileClassName}`}
@@ -81,8 +109,9 @@ const LocationInput: FC<LocationInputProps> = ({
             className="text-base"
           >
             <input
-              className={`block w-full bg-transparent border-none focus:ring-0 p-0 focus:outline-none focus:placeholder-neutral-300 text-base
-                 font-semibold placeholder-neutral-800 dark:placeholder-neutral-200 truncate`}
+              className={`block w-full bg-transparent border-none focus:ring-0 p-0 focus:outline-none 
+                focus:placeholder-neutral-300 text-base font-semibold placeholder-neutral-800 
+                dark:placeholder-neutral-200 overflow-hidden text-ellipsis whitespace-nowrap`}
               placeholder={placeHolder}
               value={locationValue}
               autoFocus={showPopover}
@@ -103,7 +132,7 @@ const LocationInput: FC<LocationInputProps> = ({
               {!!locationValue ? placeHolder : desc}
             </span>
           </span>
-          {locationValue  && (
+          {locationValue && (
             <ClearDataButton
               onClick={() => {
                 setLocationValue("");
