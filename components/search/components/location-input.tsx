@@ -8,7 +8,13 @@ import useSearchUiStore from "store/ui/search-ui-store";
 import ClearDataButton from "@/components/ui/button/types/clear-data-button";
 
 export interface LocationInputProps {
-  setShowVerticalLine?: React.Dispatch<React.SetStateAction<boolean>>;
+  setProviderSearchShowVerticalLine?: React.Dispatch<
+    React.SetStateAction<boolean>
+  >;
+  setCareSearchShowVerticalLine?: React.Dispatch<React.SetStateAction<boolean>>;
+  setRadiusSearchShowVerticalLine?: React.Dispatch<
+    React.SetStateAction<boolean>
+  >;
   placeHolder?: string;
   desc?: string;
   className?: string;
@@ -27,7 +33,9 @@ export interface AddressComponent {
 export type AddressComponents = AddressComponent[];
 
 const LocationInput: FC<LocationInputProps> = ({
-  setShowVerticalLine,
+  setProviderSearchShowVerticalLine,
+  setCareSearchShowVerticalLine,
+  setRadiusSearchShowVerticalLine,
   autoFocus = false,
   placeHolder = "Location",
   desc = "Where are you looking?",
@@ -37,13 +45,7 @@ const LocationInput: FC<LocationInputProps> = ({
   isFromMobileSearch = false,
 }) => {
   /*----------Begining of Store Import----------*/
-  const {
-    isMapLoaded,
-    locationValue,
-    setIsShowLocationVerticalLine,
-    setIsShowCareVerticalLine,
-    setLocationValue,
-  } = useSearchUiStore();
+  const { isMapLoaded, locationValue, setLocationValue } = useSearchUiStore();
   /*----------End of Store Import----------*/
 
   /*--Begining of refs----------*/
@@ -80,20 +82,18 @@ const LocationInput: FC<LocationInputProps> = ({
       </div>
     );
   }
-  
+
   return (
     <div
       className={`relative flex ${className} xl:dark:bg-gray-800 xl:bg-white xl:px-0 px-5 sm:px-0 md:pr-0 md::pl-3
         }`}
+      onClick={() => {
+        inputRef.current?.focus();
+      }}
       ref={containerRef}
     >
       {/* Location Container */}
       <div
-        onClick={() => {
-          setShowPopover(true);
-          setIsShowCareVerticalLine(false);
-          setIsShowLocationVerticalLine(false);
-        }}
         className={`flex z-10 flex-1 relative pl-[1rem] pr-[1rem] lg:px-[1.75rem] flex-shrink-0 items-center space-x-3 cursor-pointer focus:outline-none text-left ${
           showPopover ? "nc-hero-field-focused" : ""
         } dark:text-white text-black ${mobileClassName}`}
@@ -114,7 +114,12 @@ const LocationInput: FC<LocationInputProps> = ({
                 dark:placeholder-neutral-200 overflow-hidden text-ellipsis whitespace-nowrap`}
               placeholder={placeHolder}
               value={locationValue}
-              autoFocus={showPopover}
+              onFocus={() => {
+                setShowPopover(true);
+                setCareSearchShowVerticalLine?.(false);
+                setRadiusSearchShowVerticalLine?.(false);
+                setProviderSearchShowVerticalLine?.(false);
+              }}
               onChange={(e) => setLocationValue(e.currentTarget.value)}
               ref={inputRef}
               required
@@ -125,14 +130,13 @@ const LocationInput: FC<LocationInputProps> = ({
               className="line-clamp-1"
               onClick={() => {
                 inputRef.current?.focus();
-                setShowPopover(true);
                 onFocusScroll();
               }}
             >
               {!!locationValue ? placeHolder : desc}
             </span>
           </span>
-          {locationValue && (
+          {locationValue && showPopover && (
             <ClearDataButton
               onClick={() => {
                 setLocationValue("");
