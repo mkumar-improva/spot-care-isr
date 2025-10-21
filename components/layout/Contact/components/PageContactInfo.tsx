@@ -54,6 +54,7 @@ const PageContactInfo = () => {
       <div className="w-full 2xl:w-[80%] flex flex-col justify-start items-start gap-[2rem]">
         {info.map((e) => (
           <div
+            key={e.title}
             className=" flex items-center justify-center md:justify-start w-full space-x-8  bg-[#fafafa] 
             dark:bg-neutral-800 px-2 sm:pl-4 sm:pr-10 
             py-3 rounded-xl border-[#ebebeb] dark:border-neutral-700 border-[1px]"
@@ -79,6 +80,7 @@ const PageContactInfo = () => {
         space-x-4 md:space-x-[3rem] lg:space-x-[5.15rem] xl:space-x-[3.25rem] 2xl:space-x-14">
           {socialPlatforms.map((e) => (
             <div
+              key={e.title}
               className={`p-3 bg-[#f7f6f6] dark:bg-neutral-800 rounded-xl cursor-pointer`}
               title={e.title}
             >

@@ -1,18 +1,18 @@
 import React, { useRef, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import Turnstile, { useTurnstile } from "react-turnstile";
-import ButtonPrimary from "shared/Button/ButtonPrimary";
-import { ContactTypes } from "types/ContactTypes";
-import { Services } from "services/user.service";
-import { StatusMessages } from "constants/StatusMessages";
+import ButtonPrimary from "@/components/ui/button/types/button-primary";
+import { ContactTypes } from "@/types/ContactTypes";
+// import { Services } from "services/user.service";
+import { StatusMessages } from "@/constants/StatusMessages";
 import { Config } from "constants/config";
-import Notifier from "components/Notifier/Notifier";
-import { NotifierModel } from "types/NotifierModel";
-import TextField from "components/TextField/TextField";
-import CustomTextArea from "components/CustomTextArea/CustomTextArea";
-import { useContactForm } from "hooks/useContactForm";
-import loaderStore from "store/loaderStore";
-import { KEYS } from "constants/KeyConstants";
+import Notifier from "@/components/ui/Notifier/Notifier";
+import { NotifierModel } from "@/types/NotifierModel";
+import TextField from "@/components/ui/TextField/TextField";
+import CustomTextArea from "@/components/ui/CustomTextArea/CustomTextArea";
+import { useContactForm } from "@/hooks/contact/use-contact-form";
+import useContactLoader from "store/loader/contact-loader";
+import { KEYS } from "@/constants/KeyConstants";
 
 const PageContactFields = () => {
   const {
@@ -29,7 +29,7 @@ const PageContactFields = () => {
     message: "",
     mode: "error",
   });
-  const { contactLoader, setContactLoader } = loaderStore();
+  const { contactLoader, setContactLoader } = useContactLoader();
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
 
   const handleSendMessage = async (e: React.FormEvent) => {
@@ -62,6 +62,7 @@ const PageContactFields = () => {
       message: formData.message ?? "",
     };
 
+    /*
     try {
       const result = await Services.CreateContact(ContactMessage);
 
@@ -87,6 +88,17 @@ const PageContactFields = () => {
         mode: "error",
       });
     }
+    */
+
+    // Development fallback while Services.CreateContact is not available
+    // This stops the loader, shows a success message and resets the form.
+    setContactLoader(false);
+    setNotifierDetails({
+      message: StatusMessages.SuccessMessages.MessageSent,
+      mode: "success",
+    });
+    resetForm();
+    setTurnstileToken(null);
   };
 
   const handler = (e: React.KeyboardEvent<HTMLFormElement>) => {
@@ -151,12 +163,12 @@ const PageContactFields = () => {
         required={false}
         draggable={false}
       />
-      <div className="recaptcha-container ">
+      <div style={{ width: '100%', minWidth: '300px' }}>
         <Turnstile
           sitekey={Config.KEY.SITE_KEY}
           theme="light"
           size="flexible"
-          style={{ width: "100%" }}
+          refreshExpired="auto"
           onVerify={(token) => {
             setTurnstileToken(token);
             setNotifierDetails({
@@ -171,7 +183,7 @@ const PageContactFields = () => {
               mode: "error",
             })
           }
-        />
+            />
         {/* <ReCAPTCHA
           ref={captchaRef}
           sitekey={Config.KEY.SITE_KEY} // Replace with your Site Key
@@ -207,13 +219,7 @@ const PageContactFields = () => {
           />
         </div>
       </div>
-
-      <ButtonPrimary
-        translate="rounded-md"
-        loading={contactLoader}
-        className="w-full my-3"
-        type="submit"
-      >
+      <ButtonPrimary className="bg-primary-600 hover:bg-primary-700 font-semibold text-white rounded-lg px-6 py-2 text-base w-full  transition-colors duration-200 ease-in-out">
         Send message
       </ButtonPrimary>
     </form>

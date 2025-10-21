@@ -47,6 +47,9 @@
       ],
       "@/hooks/*":[
         "hooks/*"
+      ],
+      "@/data/*":[
+        "data/*"
       ]
     },
     "forceConsistentCasingInFileNames": true,

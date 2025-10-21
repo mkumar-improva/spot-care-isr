@@ -1,3 +1,5 @@
+"use client";
+
 import { Config } from "constants/config";
 import React from "react";
 import { Helmet } from "react-helmet-async";

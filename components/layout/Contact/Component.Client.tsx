@@ -1,3 +1,5 @@
+"use client";
+
 import PageContactInfo from "./components/PageContactInfo";
 import PageContactFields from "./components/PageContactFields";
 import { Helmet } from "react-helmet-async";

@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { Helmet } from "react-helmet-async";
 import { Config } from "constants/config";
@@ -6,7 +8,6 @@ const TermsOfUse: React.FC = () => {
   return (
     <div className="w-full max-w-screen-2xl xl:max-w-screen-2xl mx-auto px-4 lg:px-[10rem] xl:px-[22rem] 2xl:px-[24rem] py-6 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200">
       <div className="w-full flex items-center justify-start mb-6">
-        
         {/* <ButtonSecondary
           className="border-gray-200"
           onClick={() => navigate("/")}

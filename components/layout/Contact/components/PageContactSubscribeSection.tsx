@@ -1,6 +1,6 @@
-import ButtonCircle from "shared/Button/ButtonCircle";
-import Input from "shared/Input/Input";
-import NcImage from "shared/NcImage/NcImage";
+import ButtonCircle from "@/components/ui/button/types/button-circle";
+import Input from "@/components/ui/Input/Input";
+import NcImage from "@/components/ui/NcImage/NcImage";
 import subscribePng from "images/SVG-subcribe2.png";
 
 const PageContactSubscribeSection = () => {
@@ -27,7 +27,7 @@ const PageContactSubscribeSection = () => {
         </div>
       </div>
       <div className="md:w-1/2 w-full">
-        <NcImage src={subscribePng} />
+        <NcImage src={subscribePng.src} />
       </div>
     </div>
   );

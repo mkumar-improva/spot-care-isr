@@ -1,4 +1,10 @@
 import { SearchForm } from '@/components/search';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Spot.care | Find Trusted Healthcare Providers in the USA',
+  description: 'Connect with top-rated healthcare providers in the USA. Compare assisted living, skilled nursing, hospice, and home health services.',
+};
 
 const DEFAULT_LAT = Number(process.env.DEFAULT_LAT ?? '33.9253024');
 const DEFAULT_LON = Number(process.env.DEFAULT_LON ?? '-84.38574419999999');

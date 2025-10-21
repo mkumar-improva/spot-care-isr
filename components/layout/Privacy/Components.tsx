@@ -1,4 +1,5 @@
 import PrivacyPolicy from "./Component.Client";
-const Privacy: React.FC = () => {
-  return <PrivacyPolicy />;
+
+export function Privacy()  {
+   return <PrivacyPolicy />;
 }

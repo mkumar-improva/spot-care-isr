@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import "@/styles/index.scss";
 import "@/styles/globals.css";
-import { SiteHeader } from "@/components/layout/Header/Component";
 import { getDefaultSocialImage, getSiteUrl } from "@/lib/site";
 import GoogleMapsProvider from "@/components/providers/google-maps-provider";
-import Footer from "@/components/layout/Footer/Component";
+import {Footer} from "@/components/layout/Footer/Component";
+import SiteHeader from "@/components/layout/Header/Component.Client";
 import SearchMobile from "@/components/search/components/search-mobile";
 
 const SITE_NAME = "SpotCare Healthcare Provider Directory";
@@ -92,9 +92,9 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <GoogleMapsProvider>
-          <SearchMobile />
-          <SiteHeader />
-          <main className="min-h-screen pt-20">{children}</main>
+          <SearchMobile/>
+          <SiteHeader/>
+          <main className="min-h-screen ">{children}</main>
           <Footer />
         </GoogleMapsProvider>
       </body>

@@ -1,7 +1,5 @@
 import FAQ from './Component.Client';
 
-const FaqComponent = () => {
+export function FaqComponent() {
   return <FAQ />;
 };
-
-export default FaqComponent;

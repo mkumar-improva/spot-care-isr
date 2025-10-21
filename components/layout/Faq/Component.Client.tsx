@@ -1,29 +1,15 @@
 "use client";
-
-import { useMemo, useState, useEffect } from "react";
 import Topicbar from "./components/TopicBar";
 import FAQContent from "./components/FaqContent";
-import { faqData } from "./data";
-import { Helmet } from "react-helmet-async";
-import { Config } from "constants/config";
+import useFaqCategory from "@/hooks/faq/use-faq-category";
 
 function FAQ() {
-  const defaultCategory = useMemo(() => Object.keys(faqData)[0] || "", []);
-  const [activeCategory, setActiveCategory] = useState<string>(defaultCategory);
-  const [isMobile, setIsMobile] = useState<boolean>(
-    typeof window !== "undefined" ? window.innerWidth < 1024 : false
-  );
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 1024);
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  const currentFAQ = faqData[activeCategory] || Object.values(faqData)[0];
+  const {
+    activeCategory,
+    isMobile,
+    currentFAQ,
+    handleCategoryChange,
+  } = useFaqCategory();
 
   if (!currentFAQ) {
     return (
@@ -40,7 +26,7 @@ function FAQ() {
           {!isMobile && (
             <Topicbar
               activeCategory={activeCategory}
-              onCategoryChange={setActiveCategory}
+              onCategoryChange={handleCategoryChange}
             />
           )}
           <FAQContent
