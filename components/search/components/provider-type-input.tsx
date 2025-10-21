@@ -35,6 +35,7 @@ const ProviderTypeInput: FC<ProviderTypeInputProps> = ({
     inputRef,
     placeHolder,
     desc,
+    storePostalCode,
     setOnFocus,
     handleSpanClick,
     handleProviderNameChange,
@@ -69,6 +70,7 @@ const ProviderTypeInput: FC<ProviderTypeInputProps> = ({
             text-base font-semibold placeholder-neutral-800 dark:placeholder-neutral-200 truncate`}
             placeholder={placeHolder}
             value={searchProviderName}
+            disabled={!storePostalCode}
             onChange={handleProviderNameChange}
             onFocus={() => {
               setOnFocus(true);

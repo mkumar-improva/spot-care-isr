@@ -26,7 +26,8 @@
     "react-dom": "18.3.1",
     "tailwind-merge": "^3.3.1",
     "zustand": "^4.5.2",
-    "@headlessui/react": "^1.7.17"
+    "@headlessui/react": "^1.7.17",
+    "react-hot-toast": "^2.4.1"
   },
   "devDependencies": {
     "@tailwindcss/aspect-ratio": "^0.4.2",

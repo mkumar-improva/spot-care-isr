@@ -18,11 +18,15 @@ const HeaderNav = () => {
 
   const heroSearchRef = useRef<HTMLDivElement>(null);
 
-  useOutsideAlerter(heroSearchRef, () => {
-    {
-      setShowHeroSearch(false);
-    }
-  });
+  useOutsideAlerter(
+    heroSearchRef,
+    () => {
+      {
+        setShowHeroSearch(false);
+      }
+    },
+    ".pac-container"
+  );
 
   return (
     <>
@@ -50,7 +54,7 @@ const HeaderNav = () => {
               img={logoImg}
               alt="SpotCare Logo"
               href="/"
-              className="w-[7.25rem] relative z-[999999]"
+              className="w-[4.25rem] md:w-[7.25rem] relative z-[999999]"
             />
             {/* Hero Search */}
             <div className={`ml-[12rem] hidden xl:block`} ref={heroSearchRef}>

@@ -6,6 +6,9 @@ import { getDefaultSocialImage, getSiteUrl } from "@/lib/site";
 import GoogleMapsProvider from "@/components/providers/google-maps-provider";
 import Footer from "@/components/layout/Footer/Component";
 import SearchMobile from "@/components/search/components/search-mobile";
+import ClientStoreInitializerProps from "@/components/data/client-store-initializer";
+import { Services } from "@/services/service";
+import { ToastProvider } from "@/components/ui/toast/toast-provider";
 
 const SITE_NAME = "SpotCare Healthcare Provider Directory";
 const SITE_DESCRIPTION =
@@ -85,16 +88,21 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const result = await Services.LoadCareTypes();
+  const cares = result?.cares || [];
+
   return (
     <html lang="en">
       <body>
         <GoogleMapsProvider>
           <SearchMobile />
+          <ClientStoreInitializerProps careTypes={cares} />
           <SiteHeader />
           <main className="min-h-screen pt-20">{children}</main>
+          <ToastProvider />
           <Footer />
         </GoogleMapsProvider>
       </body>

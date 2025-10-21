@@ -47,6 +47,9 @@
       ],
       "@/hooks/*":[
         "hooks/*"
+      ],
+      "@/services/*":[
+        "services/*"
       ]
     },
     "forceConsistentCasingInFileNames": true,

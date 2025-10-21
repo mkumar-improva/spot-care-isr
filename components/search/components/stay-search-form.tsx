@@ -8,8 +8,6 @@ import { useOutsideAlerter } from "@/hooks/common/use-outsider-click";
 
 const StaySearchForm: FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-
-  const [isCareTypeOpen, setCareTypeOpen] = useState(false);
   const [isRadiusOpen, setRadiusOpen] = useState(false);
   const [careSearchShowVerticalLine, setCareSearchShowVerticalLine] =
     useState<boolean>(true);
@@ -21,7 +19,6 @@ const StaySearchForm: FC = () => {
     () => {
       setCareSearchShowVerticalLine(true);
       setRadiusSearchShowVerticalLine(true);
-      setCareTypeOpen(false);
       setRadiusOpen(false);
     },
     ".pac-container"
@@ -38,8 +35,6 @@ const StaySearchForm: FC = () => {
         mobileClassName=""
         setRadiusOpen={setRadiusOpen}
         isRadiusOpen={isRadiusOpen}
-        setCareTypeOpen={setCareTypeOpen}
-        isCareTypeOpen={isCareTypeOpen}
         setCareSearchShowVerticalLine={setCareSearchShowVerticalLine}
         setRadiusSearchShowVerticalLine={setRadiusSearchShowVerticalLine}
       />

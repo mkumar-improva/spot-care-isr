@@ -1,15 +1,11 @@
 "use client";
-import { FC, Fragment, use, useRef, useState } from "react";
+import { Fragment, FC } from "react";
 import { Popover, Transition } from "@headlessui/react";
-import useHeaderUiStore from "store/ui/header-ui-store";
-import useSearchUiStore from "store/ui/search-ui-store";
-import useLoadingState from "store/loader/loding-state";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Search02Icon } from "@hugeicons-pro/core-stroke-standard/index";
 import { SolarSystem01Icon } from "@hugeicons-pro/core-stroke-rounded/index";
-import ButtonCircle from "@/components/ui/button/types/button-circle";
 import RenderRecentSearch from "./render-recent-search";
 import SearchButton from "@/components/ui/button/types/search-button";
+import useRadiusPopOver from "@/hooks/search/use-radius-pop-over";
 
 interface RadiusPopOverProps {
   className?: string;
@@ -18,53 +14,42 @@ interface RadiusPopOverProps {
   desc?: string;
   hasButtonSubmit?: boolean;
   onFocusScroll?: () => void;
-  SearchOption?: () => void;
   setCareSearchShowVerticalLine?: React.Dispatch<React.SetStateAction<boolean>>;
   setRadiusSearchShowVerticalLine?: React.Dispatch<
     React.SetStateAction<boolean>
   >;
 }
 
-const RadiusPopOver = ({
+const RadiusPopOver: FC<RadiusPopOverProps> = ({
   className,
   mobileClassName,
   placeHolder,
   desc,
   hasButtonSubmit = false,
   onFocusScroll,
-  SearchOption,
   setCareSearchShowVerticalLine,
   setRadiusSearchShowVerticalLine,
-}: RadiusPopOverProps) => {
-  /*----------Begining of Store Import----------*/
-  const { isHomePage } = useHeaderUiStore();
-  const { loading, isWishlistLoaded } = useLoadingState();
-  /*----------End of Store Import----------*/
-
-  /*--Begining of refs----------*/
-  const containerRef = useRef<HTMLDivElement>(null);
-  const optionRefs = useRef<(HTMLElement | null)[]>([]);
-  const popoverButtonRef = useRef<HTMLButtonElement | null>(null);
-  /*----------End of refs----------*/
-
-  /*----------Begining of state ----------*/
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isRadiusOpen, setRadiusOpen] = useState(false);
-  const [miles, setMiles] = useState("");
-  const [highlightedIndex, setHighlightedIndex] = useState(-1);
-  /*----------End of state ----------*/
-
-  //Handlers
-  const handleSelectLocation = (item: string, close: () => void) => {
-    setMiles(item);
-    close();
-    setHighlightedIndex(-1);
-  };
-
-  const onClickCapture = () => {
-    setCareSearchShowVerticalLine?.(true);
-    setRadiusSearchShowVerticalLine?.(false);
-  };
+}) => {
+  const {
+    isHomePage,
+    loading,
+    isWishlistLoaded,
+    radiusValue,
+    highlightedIndex,
+    containerRef,
+    optionRefs,
+    popoverButtonRef,
+    setIsDropdownOpen,
+    setRadiusOpen,
+    setRadiusValue,
+    setHighlightedIndex,
+    handleSelectLocation,
+    onClickCapture,
+    SearchOption
+  } = useRadiusPopOver({
+    setCareSearchShowVerticalLine,
+    setRadiusSearchShowVerticalLine,
+  });
 
   return (
     <Popover className={`flex relative ${className} lg:px-0`}>
@@ -94,10 +79,10 @@ const RadiusPopOver = ({
                   <input
                     className={`block w-full bg-transparent border-none focus:ring-0 p-0 focus:outline-none focus:placeholder-neutral-300 text-base font-semibold placeholder-neutral-800 dark:placeholder-neutral-200 truncate`}
                     placeholder={placeHolder}
-                    value={miles}
+                    value={radiusValue}
                     required
                     onChange={(e) => {
-                      setMiles(e.currentTarget.value);
+                      setRadiusValue(e.currentTarget.value);
                     }}
                     onKeyDown={(e) => {
                       if (e.key === "Enter" && !open) {
@@ -123,7 +108,7 @@ const RadiusPopOver = ({
                   />
                   <span className="block mt-0.5 text-sm text-neutral-400 font-light ">
                     <span className="line-clamp-1">
-                      {!!miles ? placeHolder : desc}
+                      {!!radiusValue ? placeHolder : desc}
                     </span>
                   </span>
                 </div>

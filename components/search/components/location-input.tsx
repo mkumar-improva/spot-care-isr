@@ -1,11 +1,11 @@
 "use client";
-import React, { useState, useRef, useEffect, FC } from "react";
+import React, { useState, useEffect, FC } from "react";
 import { Autocomplete } from "@react-google-maps/api";
-import { Config } from "@/constants/config";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Location01Icon } from "@hugeicons-pro/core-stroke-rounded/index";
-import useSearchUiStore from "store/ui/search-ui-store";
+import useLocationTypeInput from "@/hooks/search/use-location-type-input";
 import ClearDataButton from "@/components/ui/button/types/clear-data-button";
+import { useOutsideAlerter } from "@/hooks/common/use-outsider-click";
 
 export interface LocationInputProps {
   setProviderSearchShowVerticalLine?: React.Dispatch<
@@ -24,14 +24,6 @@ export interface LocationInputProps {
   isFromMobileSearch?: boolean;
 }
 
-export interface AddressComponent {
-  long_name: string;
-  short_name: string;
-  types: string[];
-}
-
-export type AddressComponents = AddressComponent[];
-
 const LocationInput: FC<LocationInputProps> = ({
   setProviderSearchShowVerticalLine,
   setCareSearchShowVerticalLine,
@@ -44,35 +36,23 @@ const LocationInput: FC<LocationInputProps> = ({
   onFocusScroll = () => {},
   isFromMobileSearch = false,
 }) => {
-  /*----------Begining of Store Import----------*/
-  const { isMapLoaded, locationValue, setLocationValue } = useSearchUiStore();
-  /*----------End of Store Import----------*/
-
-  /*--Begining of refs----------*/
-  const containerRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
-  /*----------End of refs----------*/
-
-  /*----------Begining of state ----------*/
-  const [showPopover, setShowPopover] = useState(autoFocus);
-  /*----------End of state ----------*/
-
-  //handlers
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (!containerRef.current) return;
-      if (!showPopover || containerRef.current.contains(event.target as Node)) {
-        return;
-      }
-      setShowPopover(false);
-    };
-
-    document.addEventListener("click", handleClickOutside);
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, [showPopover]);
+  //hooks
+  const {
+    isMapLoaded,
+    locationValue,
+    containerRef,
+    inputRef,
+    autocompleteRef,
+    showPopover,
+    setShowPopover,
+    setLocationValue,
+    handlePlaceChanged,
+  } = useLocationTypeInput({
+    autofocus: autoFocus,
+    setProviderSearchShowVerticalLine,
+    setCareSearchShowVerticalLine,
+    setRadiusSearchShowVerticalLine,
+  });
 
   if (!isMapLoaded) {
     return (
@@ -107,6 +87,7 @@ const LocationInput: FC<LocationInputProps> = ({
               autocompleteRef.current = autocomplete;
             }}
             className="text-base"
+            onPlaceChanged={handlePlaceChanged}
           >
             <input
               className={`block w-full bg-transparent border-none focus:ring-0 p-0 focus:outline-none 
@@ -136,7 +117,7 @@ const LocationInput: FC<LocationInputProps> = ({
               {!!locationValue ? placeHolder : desc}
             </span>
           </span>
-          {locationValue && showPopover && (
+          {locationValue && (
             <ClearDataButton
               onClick={() => {
                 setLocationValue("");

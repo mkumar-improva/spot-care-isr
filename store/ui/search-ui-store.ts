@@ -1,5 +1,6 @@
 import { createWithEqualityFn } from "zustand/traditional";
 import { shallow } from "zustand/shallow";
+import { Providers } from "@/types/provider-details";
 
 type State = {
   searchActiveTab: "services" | "provider";
@@ -9,6 +10,12 @@ type State = {
   isShowCareVerticalLine: boolean;
   isShowLocationVerticalLine: boolean;
   showHeroMobileSearch: boolean;
+  careTypeValue: string;
+  radiusValue: string;
+  storePostalCode: string;
+  providerNameDebounce: Providers[] | null;
+  providerNameError: boolean;
+  providerIsRecord: boolean;
 };
 
 type Action = {
@@ -19,6 +26,12 @@ type Action = {
   setIsShowLocationVerticalLine: (show: boolean) => void;
   setSearchProviderName: (name: string) => void;
   setShowHeroMobileSearch: (show: boolean) => void;
+  setCareTypeValue: (value: string) => void;
+  setRadiusValue: (value: string) => void;
+  setStorePostalCode: (code: string) => void;
+  setProviderNameDebounce: (providers: Providers[] | null) => void;
+  setProviderNameError: (error: boolean) => void;
+  setProviderIsRecord: (isRecord: boolean) => void;
 };
 
 const useSearchUiStore = createWithEqualityFn<State & Action>()(
@@ -30,6 +43,12 @@ const useSearchUiStore = createWithEqualityFn<State & Action>()(
     isShowLocationVerticalLine: true,
     searchProviderName: "",
     showHeroMobileSearch: false,
+    careTypeValue: "",
+    radiusValue: "",
+    storePostalCode: "",
+    providerNameDebounce: null,
+    providerNameError: false,
+    providerIsRecord: true,
     setSearchActiveTab: (tab) => set({ searchActiveTab: tab }),
     setIsMapLoaded: (loaded) => set({ isMapLoaded: loaded }),
     setLocationValue: (value) => set({ locationValue: value }),
@@ -38,6 +57,12 @@ const useSearchUiStore = createWithEqualityFn<State & Action>()(
       set({ isShowLocationVerticalLine: show }),
     setSearchProviderName: (name) => set({ searchProviderName: name }),
     setShowHeroMobileSearch: (show) => set({ showHeroMobileSearch: show }),
+    setCareTypeValue: (value) => set({ careTypeValue: value }),
+    setRadiusValue: (value) => set({ radiusValue: value }),
+    setStorePostalCode: (code) => set({ storePostalCode: code }),
+    setProviderNameDebounce: (providers) => set({ providerNameDebounce: providers }),
+    setProviderNameError: (error) => set({ providerNameError: error }),
+    setProviderIsRecord: (isRecord) => set({ providerIsRecord: isRecord }),
   }),
   shallow // ✅ this is now valid
 );
