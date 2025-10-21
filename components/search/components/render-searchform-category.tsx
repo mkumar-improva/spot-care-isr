@@ -19,7 +19,7 @@ const RenderSearchFormCategory = () => {
         onClick={() => setSearchActiveTab("services")}
       >
         <div
-          className={`w-[10px] h-[10px] rounded-full ${
+          className={`hidden md:block w-[10px] h-[10px] rounded-full ${
             searchActiveTab === "services"
               ? "bg-no-repeat bg-gradient-to-r from-purple-500 via-violet-500 to-pink-300"
               : "bg-transparent"
@@ -28,8 +28,8 @@ const RenderSearchFormCategory = () => {
         <p
           className={`text-base font-semibold ${
             searchActiveTab === "services"
-              ? "text-neutral-900"
-              : "text-neutral-500"
+              ? "text-neutral-900 underline md:no-underline decoration-[2.5px] underline-offset-4"
+              : "text-neutral-500 underline-offset-[2px]"
           }`}
         >
           Services
@@ -40,17 +40,17 @@ const RenderSearchFormCategory = () => {
         onClick={() => setSearchActiveTab("provider")}
       >
         <div
-          className={`w-[10px] h-[10px] rounded-full ${
+          className={`hidden md:block w-[10px] h-[10px] rounded-full ${
             searchActiveTab === "provider"
-              ? "bg-no-repeat bg-gradient-to-r from-purple-500 via-violet-500 to-pink-300"
+              ? " bg-no-repeat bg-gradient-to-r from-purple-500 via-violet-500 to-pink-300"
               : "bg-transparent"
           }`}
         ></div>
         <p
           className={`text-base font-semibold ${
             searchActiveTab === "provider"
-              ? "text-neutral-900"
-              : "text-neutral-500"
+              ? "text-neutral-900 underline md:no-underline decoration-[2.5px] underline-offset-4"
+              : "text-neutral-500 underline-offset-[2px]"
           }`}
         >
           Providers

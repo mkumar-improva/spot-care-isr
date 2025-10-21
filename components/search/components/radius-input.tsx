@@ -1,9 +1,5 @@
 "use client";
-import { FC, Fragment, useState, useEffect, useRef } from "react";
-import { Popover, Transition } from "@headlessui/react";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { Search02Icon } from "@hugeicons-pro/core-stroke-standard/index";
-import { SolarSystem01Icon } from "@hugeicons-pro/core-stroke-rounded/index";
+import { FC } from "react";
 import RadiusPopOver from "./radius-pop-over";
 
 export interface RadiusInputProps {
@@ -18,6 +14,10 @@ export interface RadiusInputProps {
   isCareTypeOpen?: boolean;
   setCareTypeOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   isRadiusOpen?: boolean;
+  setCareSearchShowVerticalLine?: React.Dispatch<React.SetStateAction<boolean>>;
+  setRadiusSearchShowVerticalLine?: React.Dispatch<
+    React.SetStateAction<boolean>
+  >;
 }
 
 const RadiusInput: FC<RadiusInputProps> = ({
@@ -32,8 +32,9 @@ const RadiusInput: FC<RadiusInputProps> = ({
   isCareTypeOpen,
   setCareTypeOpen = () => {},
   isRadiusOpen,
+  setCareSearchShowVerticalLine,
+  setRadiusSearchShowVerticalLine,
 }) => {
-
   return (
     <RadiusPopOver
       className={className}
@@ -43,11 +44,10 @@ const RadiusInput: FC<RadiusInputProps> = ({
       hasButtonSubmit={hasButtonSubmit}
       onFocusScroll={onFocusScroll}
       SearchOption={() => {}}
-      onClickCapture={() => {}}
+      setCareSearchShowVerticalLine={setCareSearchShowVerticalLine}
+      setRadiusSearchShowVerticalLine={setRadiusSearchShowVerticalLine}
     />
   );
 };
 
 export default RadiusInput;
-
-
