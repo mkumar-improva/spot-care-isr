@@ -40,6 +40,7 @@ const ProviderTypeInput: FC<ProviderTypeInputProps> = ({
     handleSpanClick,
     handleProviderNameChange,
     handleClearData,
+    SearchOption
   } = useProviderInputType();
 
   return (
@@ -96,7 +97,7 @@ const ProviderTypeInput: FC<ProviderTypeInputProps> = ({
         className={`hidden md:flex items-center justify-center bg-primary-700
             text-white rounded-full overflow-hidden`}
         size="size-12 size-[4.25rem]"
-        onClick={() => {}}
+        onClick={SearchOption}
       />
     </div>
   );

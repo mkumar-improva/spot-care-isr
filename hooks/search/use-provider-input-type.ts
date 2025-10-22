@@ -6,6 +6,7 @@ import useSearchDataStore from "store/data/search-data-store";
 import useHeaderUiStore from "store/ui/header-ui-store";
 import { Services } from "@/services/service";
 import { parseProviderResults } from "@/utils/makers";
+import useLoadingState from "store/loader/loding-state";
 
 const useProviderInputType = () => {
   /*--Begining of refs----------*/
@@ -18,6 +19,9 @@ const useProviderInputType = () => {
 
   /*----------Begining of Store Import----------*/
   const { isHomePage } = useHeaderUiStore();
+  const { loading, setLoading } = useLoadingState();
+  //End of store import
+
   const {
     locationValue,
     searchProviderName,
@@ -104,8 +108,30 @@ const useProviderInputType = () => {
 
   const handleClearData = () => {
     setSearchProviderName("");
-    setProviderIsRecord(false)
+    setProviderIsRecord(false);
     inputRef.current?.focus();
+  };
+
+  const SearchOption = () => {
+    try {
+      setLoading(true);
+      const filterData = {
+        searchText: searchProviderName ?? "",
+        lat: currentLocation?.lat ?? 0.0,
+        lon: currentLocation?.lng ?? 0.0,
+        page: 1,
+        pageSize: 1000,
+        postalCode: storePostalCode ?? "",
+        location: locationValue ?? "",
+        filter: "recommended",
+        headerType: "provider",
+      };
+      console.log("Filter Data for SearchOption:", filterData);
+    } catch (ex) {
+      console.error(ex);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return {
@@ -125,6 +151,7 @@ const useProviderInputType = () => {
     handleSpanClick,
     handleProviderNameChange,
     handleClearData,
+    SearchOption
   };
 };
 

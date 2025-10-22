@@ -13,6 +13,8 @@ import MobileProviderServiceForm from "./mobile-provider-service-form";
 import useSearchUiStore from "store/ui/search-ui-store";
 import logoImg from "@/assets/app/spot/full.png";
 import RenderSearchFormCategory from "./render-searchform-category";
+import useRadiusPopOver from "@/hooks/search/use-radius-pop-over";
+import useProviderInputType from "@/hooks/search/use-provider-input-type";
 
 const SearchMobile = () => {
   const { showHeroMobileSearch, searchActiveTab, setShowHeroMobileSearch } =
@@ -22,6 +24,11 @@ const SearchMobile = () => {
   const closeDialog = () => {
     setShowHeroMobileSearch(false);
   };
+
+  //hooks
+  const { SearchOption } = useRadiusPopOver({});
+  const { SearchOption: SearchOptionProvider } = useProviderInputType();
+
   return (
     <Transition appear show={showHeroMobileSearch} as={Fragment}>
       <Dialog
@@ -90,6 +97,11 @@ const SearchMobile = () => {
                       type="submit"
                       className="flex-shrink-0 px-2 py-1.5 w-full rounded-xl flex items-center justify-center text-neutral-50 focus:outline-none 
                     relative z-20 bg-primary-700"
+                      onClick={
+                        searchActiveTab === "services"
+                          ? SearchOption
+                          : SearchOptionProvider
+                      }
                     >
                       <HugeiconsIcon
                         icon={Search02Icon}

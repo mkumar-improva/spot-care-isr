@@ -1,6 +1,6 @@
 "use client";
 
-import {  useRef, useState } from "react";
+import { useRef, useState } from "react";
 import useHeaderUiStore from "store/ui/header-ui-store";
 import useSearchUiStore from "store/ui/search-ui-store";
 import useLoadingState from "store/loader/loding-state";
@@ -99,6 +99,21 @@ const useRadiusPopOver = ({
       }
     } catch (err) {
       console.error("Error in SearchOption:", err);
+      toast.custom((t) => (
+        <HeroSearchCustomToast
+          icon={
+            <HugeiconsIcon
+              icon={Alert01Icon}
+              className="size-10 flex-shrink-0"
+              style={{ color: "#facc15", width: "2.5rem", height: "2.5rem" }}
+              aria-hidden="true"
+            />
+          }
+          description1={`Invalid address`}
+          description2={`Make sure you have entered a valid State or City`}
+          toasttype={t}
+        />
+      ));
     } finally {
       setLoading(false);
     }
@@ -121,7 +136,7 @@ const useRadiusPopOver = ({
     setHighlightedIndex,
     handleSelectLocation,
     onClickCapture,
-    SearchOption
+    SearchOption,
   };
 };
 

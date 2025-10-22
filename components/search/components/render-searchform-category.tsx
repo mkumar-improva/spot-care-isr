@@ -1,10 +1,14 @@
 "use client";
-import useHeaderUiStore from "store/ui/header-ui-store";
 import useSearchUiStore from "store/ui/search-ui-store";
 
-const RenderSearchFormCategory = () => {
+interface RenderSearchFormCategoryProps {
+  isHomePage?: boolean;
+}
+
+const RenderSearchFormCategory = ({
+  isHomePage,
+}: RenderSearchFormCategoryProps) => {
   /*----------Begining of Store Import----------*/
-  const { isHomePage } = useHeaderUiStore();
   const { searchActiveTab, setSearchActiveTab } = useSearchUiStore();
   /*----------End of Store Import----------*/
 

@@ -5,7 +5,6 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { Location01Icon } from "@hugeicons-pro/core-stroke-rounded/index";
 import useLocationTypeInput from "@/hooks/search/use-location-type-input";
 import ClearDataButton from "@/components/ui/button/types/clear-data-button";
-import { useOutsideAlerter } from "@/hooks/common/use-outsider-click";
 
 export interface LocationInputProps {
   setProviderSearchShowVerticalLine?: React.Dispatch<

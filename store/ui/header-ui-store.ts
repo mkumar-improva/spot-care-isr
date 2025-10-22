@@ -12,7 +12,7 @@ type Action = {
 
 const useHeaderUiStore = create<State & Action>((set) => ({
   showHeroSearch: false,
-  isHomePage: false,
+  isHomePage: true,
   setShowHeroSearch: (show) => set({ showHeroSearch: show }),
   setIsHomePage: (isHome) => set({ isHomePage: isHome }),
 }));

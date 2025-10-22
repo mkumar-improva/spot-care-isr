@@ -1,19 +1,18 @@
 "use client";
 
-import React, { useRef, useEffect, use } from "react";
+import React, { useRef } from "react";
 import Logo from "@/components/ui/logo";
 import logoImg from "@/assets/app/spot/full.png";
 import NavBarElements from "./navbar-elements";
 import RenderButtonOpenHeroSearch from "./render-button-open-hero-search";
 import useHeaderUiStore from "store/ui/header-ui-store";
-import useSearchUiStore from "store/ui/search-ui-store";
 import SearchComponent from "@/components/search/Component";
 import { useOutsideAlerter } from "@/hooks/common/use-outsider-click";
 import SearchTab from "./search-tab";
 
 const HeaderNav = () => {
   /*----------Begining of Store Import----------*/
-  const { showHeroSearch, setShowHeroSearch } = useHeaderUiStore();
+  const { isHomePage, showHeroSearch, setShowHeroSearch } = useHeaderUiStore();
   /*----------End of Store Import----------*/
 
   const heroSearchRef = useRef<HTMLDivElement>(null);
@@ -57,13 +56,15 @@ const HeaderNav = () => {
               className="w-[4.25rem] md:w-[7.25rem] relative z-[999999]"
             />
             {/* Hero Search */}
-            <div className={`ml-[12rem] hidden xl:block`} ref={heroSearchRef}>
-              <div className="block">
-                <RenderButtonOpenHeroSearch />
-                <div className="lg:hidden w-full max-w-lg mx-auto"></div>
-                <SearchComponent />
+            {!isHomePage && (
+              <div className={`ml-[12rem] hidden xl:block`} ref={heroSearchRef}>
+                <div className="block">
+                  <RenderButtonOpenHeroSearch />
+                  <div className="lg:hidden w-full max-w-lg mx-auto"></div>
+                  <SearchComponent />
+                </div>
               </div>
-            </div>
+            )}
             <div className="flex items-center justify-end gap-4">
               {/* Search Tab */}
               <div className="block md:hidden ml-0">

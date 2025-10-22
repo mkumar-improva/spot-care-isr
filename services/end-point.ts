@@ -73,4 +73,18 @@ export const END_POINT = {
     });
     return await response.json();
   },
+  getIpAddress: async () => {
+    try {
+      var url = new URL(`${Config.URL.IP_FINDER_V2}?key=${Config.KEY.IP_FINDER_V2_API_KEY}`);
+      const response = await fetch(url.toString(), {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching :", error);
+    }
+  },
 };
