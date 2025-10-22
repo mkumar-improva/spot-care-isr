@@ -12,7 +12,7 @@ const ButtonCircle: React.FC<ButtonCircleProps> = ({
   ...args
 }) => {
   return (
-    <button className={`${className}${size}${twFocusClass(true)}`} {...args} />
+    <button className={`${className} ${size} ${twFocusClass(true)}`} {...args} />
   );
 };
 

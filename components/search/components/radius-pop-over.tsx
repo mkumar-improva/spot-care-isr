@@ -9,6 +9,7 @@ import { Search02Icon } from "@hugeicons-pro/core-stroke-standard/index";
 import { SolarSystem01Icon } from "@hugeicons-pro/core-stroke-rounded/index";
 import ButtonCircle from "@/components/ui/button/types/button-circle";
 import RenderRecentSearch from "./render-recent-search";
+import SearchButton from "@/components/ui/button/types/search-button";
 
 interface RadiusPopOverProps {
   className?: string;
@@ -18,6 +19,10 @@ interface RadiusPopOverProps {
   hasButtonSubmit?: boolean;
   onFocusScroll?: () => void;
   SearchOption?: () => void;
+  setCareSearchShowVerticalLine?: React.Dispatch<React.SetStateAction<boolean>>;
+  setRadiusSearchShowVerticalLine?: React.Dispatch<
+    React.SetStateAction<boolean>
+  >;
 }
 
 const RadiusPopOver = ({
@@ -28,12 +33,12 @@ const RadiusPopOver = ({
   hasButtonSubmit = false,
   onFocusScroll,
   SearchOption,
+  setCareSearchShowVerticalLine,
+  setRadiusSearchShowVerticalLine,
 }: RadiusPopOverProps) => {
   /*----------Begining of Store Import----------*/
   const { isHomePage } = useHeaderUiStore();
   const { loading, isWishlistLoaded } = useLoadingState();
-  const { setIsShowLocationVerticalLine, setIsShowCareVerticalLine } =
-    useSearchUiStore();
   /*----------End of Store Import----------*/
 
   /*--Begining of refs----------*/
@@ -57,8 +62,8 @@ const RadiusPopOver = ({
   };
 
   const onClickCapture = () => {
-    setIsShowCareVerticalLine(true);
-    setIsShowLocationVerticalLine(true);
+    setCareSearchShowVerticalLine?.(true);
+    setRadiusSearchShowVerticalLine?.(false);
   };
 
   return (
@@ -126,40 +131,15 @@ const RadiusPopOver = ({
 
               {/* BUTTON SUBMIT OF FORM */}
               {hasButtonSubmit && (
-                <div className="lg:pr-3 pr-2">
-                  <ButtonCircle
-                    className="size-16 flex items-center justify-center bg-primary-700 text-white rounded-full overflow-hidden"
-                    onClick={SearchOption}
-                    disabled={loading || isWishlistLoaded} // Optional styling for loading state
-                  >
-                    {loading || isWishlistLoaded ? (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="animate-spin lg:h-6 lg:w-6 h-4 w-4"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        ></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                        ></path>
-                      </svg>
-                    ) : (
-                      <HugeiconsIcon
-                        icon={Search02Icon}
-                        className="md:size-[1.3rem] lg:size-[1.9rem] xl:size-[2rem]"
-                      />
-                    )}
-                  </ButtonCircle>
+                <div className="hidden md:block pr-2 lg:pr-3">
+                  <SearchButton
+                    className={`flex items-center justify-center bg-primary-700 
+                  text-white rounded-full overflow-hidden`}
+                    size="size-12 size-[4.25rem]"
+                    onClick={SearchOption ?? (() => {})}
+                    disabled={loading || isWishlistLoaded}
+                    loading={loading || isWishlistLoaded}
+                  />
                 </div>
               )}
             </div>

@@ -8,47 +8,21 @@ import RenderButtonOpenHeroSearch from "./render-button-open-hero-search";
 import useHeaderUiStore from "store/ui/header-ui-store";
 import useSearchUiStore from "store/ui/search-ui-store";
 import SearchComponent from "@/components/search/Component";
-import { useLoadScript } from "@react-google-maps/api";
-import { Config } from "@/constants/config";
 import { useOutsideAlerter } from "@/hooks/common/use-outsider-click";
-
-// Keep libraries array as a constant outside component to prevent reloading
-const GOOGLE_MAPS_LIBRARIES: ("places" | "marker")[] = ["places", "marker"];
+import SearchTab from "./search-tab";
 
 const HeaderNav = () => {
   /*----------Begining of Store Import----------*/
   const { showHeroSearch, setShowHeroSearch } = useHeaderUiStore();
-  const {
-    setIsMapLoaded,
-    setIsShowCareVerticalLine,
-    setIsShowLocationVerticalLine,
-  } = useSearchUiStore();
   /*----------End of Store Import----------*/
 
   const heroSearchRef = useRef<HTMLDivElement>(null);
 
-  /*------Start of Google Maps Script Loading------*/
-  const { isLoaded } = useLoadScript({
-    googleMapsApiKey: Config.KEY.MAP || "",
-    libraries: GOOGLE_MAPS_LIBRARIES,
-  });
-
-  useEffect(() => {
-    setIsMapLoaded(isLoaded);
-  }, [isLoaded, setIsMapLoaded]);
-  /*----------End of Google Maps Script Loading----------*/
-
-  /*----------Start of Click Outside Handler----------*/
-  useOutsideAlerter(
-    heroSearchRef,
-    () => {
-      setIsShowCareVerticalLine(true);
-      setIsShowLocationVerticalLine(true);
+  useOutsideAlerter(heroSearchRef, () => {
+    {
       setShowHeroSearch(false);
-    },
-    ".pac-container" // ignore clicks on Google Maps autocomplete dropdown
-  );
-  /*----------End of Click Outside Handler----------*/
+    }
+  });
 
   return (
     <>
@@ -86,8 +60,14 @@ const HeaderNav = () => {
                 <SearchComponent />
               </div>
             </div>
-            {/* Right Side Elements */}
-            <NavBarElements />
+            <div className="flex items-center justify-end gap-4">
+              {/* Search Tab */}
+              <div className="block md:hidden ml-0">
+                <SearchTab />
+              </div>
+              {/* Right Side Elements */}
+              <NavBarElements />
+            </div>
           </div>
         </div>
       </header>

@@ -10,6 +10,7 @@ import React, {
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ServiceIcon } from "@hugeicons-pro/core-stroke-standard/index";
 import useSearchUiStore from "store/ui/search-ui-store";
+import ClearDataButton from "@/components/ui/button/types/clear-data-button";
 
 export interface CareTypeInputProps {
   placeHolder?: string;
@@ -22,6 +23,10 @@ export interface CareTypeInputProps {
   isRadiusOpen?: boolean;
   setCareTypeOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   isCareTypeOpen?: boolean;
+  setCareSearchShowVerticalLine?: React.Dispatch<React.SetStateAction<boolean>>;
+  setRadiusSearchShowVerticalLine?: React.Dispatch<
+    React.SetStateAction<boolean>
+  >;
 }
 
 const CareTypeInput: FC<CareTypeInputProps> = ({
@@ -30,15 +35,16 @@ const CareTypeInput: FC<CareTypeInputProps> = ({
   desc = "What are you looking?",
   className = "nc-flex-1.5",
   mobileClassName = "",
+
   onFocusScroll = () => {},
   setRadiusOpen = () => {},
   isRadiusOpen,
   setCareTypeOpen = () => {},
   isCareTypeOpen,
+  setCareSearchShowVerticalLine,
+  setRadiusSearchShowVerticalLine,
 }) => {
   /*----------Begining of Store Import----------*/
-  const { setIsShowCareVerticalLine, setIsShowLocationVerticalLine } =
-    useSearchUiStore();
   /*----------End of Store Import----------*/
 
   /*----------Begining of Refs----------*/
@@ -72,8 +78,8 @@ const CareTypeInput: FC<CareTypeInputProps> = ({
       {/* Care Type Input Container */}
       <div
         onClick={() => {
-          setIsShowCareVerticalLine(false);
-          setIsShowLocationVerticalLine(true);
+          setCareSearchShowVerticalLine?.(false);
+          setRadiusSearchShowVerticalLine?.(true);
           setCareTypeOpen(true);
         }}
         className={`flex z-10 flex-1 relative pl-[1.3rem] pr-0 py-[.75rem] lg:px-[1.75rem] flex-shrink-0 items-center space-x-3 
@@ -100,6 +106,13 @@ const CareTypeInput: FC<CareTypeInputProps> = ({
           <span className="block mt-0.5 text-sm text-neutral-400 font-light">
             <span className="line-clamp-1">{!!value ? placeHolder : desc}</span>
           </span>
+          {value && (
+            <ClearDataButton
+              onClick={() => {
+                setValue("");
+              }}
+            />
+          )}
         </div>
       </div>
     </div>

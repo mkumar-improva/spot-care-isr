@@ -1,7 +1,5 @@
 import FooterContent from "./Component.Client";
 
-const Footer = () => {
+export function Footer() {
   return <FooterContent />;
 };
-
-export default Footer;
