@@ -1,8 +1,8 @@
 "use client";
 
+import { usePathname } from 'next/navigation';
 import HeaderNav from "./components/header-nav";
 import React, { use, useEffect } from "react";
-import { usePathname } from "next/navigation";
 import useHeaderUiStore from "store/ui/header-ui-store";
 
 const StandardHeader = () => {
@@ -24,6 +24,11 @@ const StandardHeader = () => {
 
     setIsHomePage(!nonHomeRoutes.includes(pathName));
   }, [pathName]);
+
+  const pathname = usePathname();
+  const isBlogPage = pathname === '/blog';
+
+  if (isBlogPage) return null;
 
   return (
     <div className="w-full sticky top-0 z-40">

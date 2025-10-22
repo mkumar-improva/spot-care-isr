@@ -12,5 +12,8 @@ export const Config = {
       "",
     DUMMY_IMAGE: process.env.NEXT_PUBLIC_DUMMY_IMAGE || "",
     IP_FINDER_V2_API_KEY: process.env.NEXT_PUBLIC_IP_FINDER_V2_API_KEY || "",
+    EMAIL: process.env.NEXT_PUBLIC_EMAIL || "support@spot.care",
+    SITE_KEY: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "",
+    BLOG_URL: process.env.NEXT_PUBLIC_SPOTCARE_BLOG_URL || "",
   },
 };

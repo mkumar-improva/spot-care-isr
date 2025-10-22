@@ -117,7 +117,7 @@ const FooterContent = () => {
       <div
         className={`${
           !isFooterSize ? "px-4" : "px-5"
-        } nc-Footer md:px-10 lg:py-2 py-2 relative`}
+        } nc-Footer md:px-10 lg:py-2 py-2 relative border-t border-gray-200 dark:border-neutral-700`}
       >
         {/* Scroll Button */}
         {showScrollButton && (
