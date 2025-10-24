@@ -35,10 +35,12 @@ const ProviderTypeInput: FC<ProviderTypeInputProps> = ({
     inputRef,
     placeHolder,
     desc,
+    storePostalCode,
     setOnFocus,
     handleSpanClick,
     handleProviderNameChange,
     handleClearData,
+    SearchOption,
   } = useProviderInputType();
 
   return (
@@ -69,6 +71,7 @@ const ProviderTypeInput: FC<ProviderTypeInputProps> = ({
             text-base font-semibold placeholder-neutral-800 dark:placeholder-neutral-200 truncate`}
             placeholder={placeHolder}
             value={searchProviderName}
+            disabled={!storePostalCode}
             onChange={handleProviderNameChange}
             onFocus={() => {
               setOnFocus(true);
@@ -93,8 +96,8 @@ const ProviderTypeInput: FC<ProviderTypeInputProps> = ({
       <SearchButton
         className={`hidden md:flex items-center justify-center bg-primary-700
             text-white rounded-full overflow-hidden`}
-        size="size-12 size-[4.25rem]"
-        onClick={() => {}}
+        size="size-12 lg:size-16"
+        onClick={SearchOption}
       />
     </div>
   );

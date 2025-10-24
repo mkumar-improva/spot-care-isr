@@ -11,6 +11,8 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { ServiceIcon } from "@hugeicons-pro/core-stroke-standard/index";
 import useSearchUiStore from "store/ui/search-ui-store";
 import ClearDataButton from "@/components/ui/button/types/clear-data-button";
+import useCareTypeInput from "@/hooks/search/use-care-type-input";
+import { RenderGroupedCareCategories } from "./render-grouped-care-categories";
 
 export interface CareTypeInputProps {
   placeHolder?: string;
@@ -21,8 +23,6 @@ export interface CareTypeInputProps {
   onFocusScroll?: () => void;
   setRadiusOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   isRadiusOpen?: boolean;
-  setCareTypeOpen?: React.Dispatch<React.SetStateAction<boolean>>;
-  isCareTypeOpen?: boolean;
   setCareSearchShowVerticalLine?: React.Dispatch<React.SetStateAction<boolean>>;
   setRadiusSearchShowVerticalLine?: React.Dispatch<
     React.SetStateAction<boolean>
@@ -39,39 +39,37 @@ const CareTypeInput: FC<CareTypeInputProps> = ({
   onFocusScroll = () => {},
   setRadiusOpen = () => {},
   isRadiusOpen,
-  setCareTypeOpen = () => {},
-  isCareTypeOpen,
   setCareSearchShowVerticalLine,
   setRadiusSearchShowVerticalLine,
 }) => {
-  /*----------Begining of Store Import----------*/
-  /*----------End of Store Import----------*/
-
-  /*----------Begining of Refs----------*/
-  const containerRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-  /*----------End of Refs----------*/
-
-  /*----------Begining of States----------*/
-  const [value, setValue] = useState("");
-  /*----------End of States----------*/
+  const {
+    careTypes,
+    containerRef,
+    inputRef,
+    listRef,
+    careTypeValue,
+    careTypeOpen,
+    highlightedIndex,
+    filteredCareTypes,
+    setCareTypeValue,
+    setCareTypeOpen,
+  } = useCareTypeInput();
 
   //handlers
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
-      ) {
-        setCareTypeOpen(false);
-      }
-    };
+  const handleSelectLocation = (item: string, id: number) => {
+    setCareTypeValue(item);
+    setCareTypeOpen(false);
+    setCareSearchShowVerticalLine?.(true);
+  };
 
-    document.addEventListener("click", handleClickOutside);
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, []);
+  //renderers
+  const renderRecentSearches = () => {
+    return RenderGroupedCareCategories({
+      groupedCareCategories: filteredCareTypes,
+      highlightedIndex: highlightedIndex,
+      handleSelectLocation: handleSelectLocation,
+    });
+  };
 
   return (
     <div className={`relative flex ${className}`} ref={containerRef}>
@@ -81,10 +79,11 @@ const CareTypeInput: FC<CareTypeInputProps> = ({
           setCareSearchShowVerticalLine?.(false);
           setRadiusSearchShowVerticalLine?.(true);
           setCareTypeOpen(true);
+          inputRef.current?.focus();
         }}
         className={`flex z-10 flex-1 relative pl-[1.3rem] pr-0 py-[.75rem] lg:px-[1.75rem] flex-shrink-0 items-center space-x-3 
             cursor-pointer focus:outline-none text-left ${
-              isCareTypeOpen && !mobileClassName ? "nc-hero-field-focused" : ""
+              careTypeOpen && !mobileClassName ? "nc-hero-field-focused" : ""
             } ${mobileClassName || ""}`}
       >
         {/* Icon */}
@@ -98,23 +97,32 @@ const CareTypeInput: FC<CareTypeInputProps> = ({
             focus:placeholder-neutral-300 text-base font-semibold placeholder-neutral-800 dark:placeholder-neutral-200 
             truncate"
             placeholder={placeHolder}
-            value={value}
-            autoFocus={isCareTypeOpen}
-            onChange={(e) => setValue(e.target.value)}
+            value={careTypeValue}
+            autoFocus={careTypeOpen}
+            onChange={(e) => setCareTypeValue(e.target.value)}
             ref={inputRef}
           />
           <span className="block mt-0.5 text-sm text-neutral-400 font-light">
-            <span className="line-clamp-1">{!!value ? placeHolder : desc}</span>
+            <span className="line-clamp-1">{!!careTypeValue ? placeHolder : desc}</span>
           </span>
-          {value && (
+          {careTypeValue && (
             <ClearDataButton
               onClick={() => {
-                setValue("");
+                setCareTypeValue("");
               }}
             />
           )}
         </div>
       </div>
+      {careTypes && careTypes.length > 0 && careTypeOpen && (
+        <div
+          ref={listRef}
+          className="absolute left-0 z-40 w-full min-w-[300px] sm:min-w-[500px] bg-white dark:bg-neutral-800
+         top-full mt-3 py-3 sm:py-6 rounded-3xl shadow-xl max-h-96 overflow-y-auto scrollbar-hide"
+        >
+          {renderRecentSearches()}
+        </div>
+      )}
     </div>
   );
 };

@@ -43,7 +43,6 @@ const RadiusInput: FC<RadiusInputProps> = ({
       desc={desc}
       hasButtonSubmit={hasButtonSubmit}
       onFocusScroll={onFocusScroll}
-      SearchOption={() => {}}
       setCareSearchShowVerticalLine={setCareSearchShowVerticalLine}
       setRadiusSearchShowVerticalLine={setRadiusSearchShowVerticalLine}
     />

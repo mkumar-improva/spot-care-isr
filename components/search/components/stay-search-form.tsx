@@ -5,23 +5,24 @@ import CareTypeInput from "./care-type-input";
 import LocationInput from "./location-input";
 import RadiusInput from "./radius-input";
 import { useOutsideAlerter } from "@/hooks/common/use-outsider-click";
+import useHeaderUiStore from "store/ui/header-ui-store";
 
 const StaySearchForm: FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-
-  const [isCareTypeOpen, setCareTypeOpen] = useState(false);
   const [isRadiusOpen, setRadiusOpen] = useState(false);
   const [careSearchShowVerticalLine, setCareSearchShowVerticalLine] =
     useState<boolean>(true);
   const [radiusSearchShowVerticalLine, setRadiusSearchShowVerticalLine] =
     useState<boolean>(true);
 
+  //store import
+  const { isHomePage } = useHeaderUiStore();
+
   useOutsideAlerter(
     containerRef,
     () => {
       setCareSearchShowVerticalLine(true);
       setRadiusSearchShowVerticalLine(true);
-      setCareTypeOpen(false);
       setRadiusOpen(false);
     },
     ".pac-container"
@@ -30,16 +31,17 @@ const StaySearchForm: FC = () => {
   return (
     <div
       ref={containerRef}
-      className={`mx-auto relative  flex rounded-full  bg-white border 
-        border-neutral-200`}
+      className={`mx-auto relative  flex rounded-full  bg-white dark:bg-neutral-800 ${
+        isHomePage
+          ? "shadow-xl dark:shadow-2xl ring ring-neutral-50"
+          : "border border-neutral-200 dark:border-neutral-6000"
+      }`}
     >
       <CareTypeInput
         className="flex-1"
         mobileClassName=""
         setRadiusOpen={setRadiusOpen}
         isRadiusOpen={isRadiusOpen}
-        setCareTypeOpen={setCareTypeOpen}
-        isCareTypeOpen={isCareTypeOpen}
         setCareSearchShowVerticalLine={setCareSearchShowVerticalLine}
         setRadiusSearchShowVerticalLine={setRadiusSearchShowVerticalLine}
       />
@@ -54,6 +56,7 @@ const StaySearchForm: FC = () => {
         className="flex-1"
         setCareSearchShowVerticalLine={setCareSearchShowVerticalLine}
         setRadiusSearchShowVerticalLine={setRadiusSearchShowVerticalLine}
+        mobileClassName="py-[0.75rem]"
       />
       <div
         className={`self-center h-8 py-2 border-r ${

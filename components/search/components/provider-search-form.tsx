@@ -3,13 +3,19 @@
 import ProviderTypeInput from "./provider-type-input";
 import useProviderSearchForm from "@/hooks/search/use-provider-search-form";
 import LocationInput from "./location-input";
+import ProviderSearchDropdown from "./provider-search-dropdown";
 
 const ProviderSearchForm = () => {
   const {
     containerRef,
     isHomePage,
     showVerticalLine,
+    searchProviderName,
+    providerNameDebounce,
+    providerIsRecord,
+    providerNameError,
     setShowVerticalLine,
+    handleOnClick,
   } = useProviderSearchForm();
 
   return (
@@ -41,6 +47,13 @@ const ProviderSearchForm = () => {
           mobileClassName="md:py-[.75rem] lg:py-[1.25rem]"
         />
       </div>
+      <ProviderSearchDropdown
+        searchProviderName={searchProviderName}
+        providerNameError={providerNameError}
+        providerIsRecord={providerIsRecord}
+        providerNameDebounce={providerNameDebounce}
+        handleOnClick={handleOnClick}
+      />
     </div>
   );
 };

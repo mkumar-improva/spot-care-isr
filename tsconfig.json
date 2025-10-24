@@ -50,6 +50,12 @@
       ],
       "@/data/*":[
         "data/*"
+      ],
+      "@/services/*":[
+        "services/*"
+      ],
+      "@/store/*":[
+        "store/*"
       ]
     },
     "forceConsistentCasingInFileNames": true,
