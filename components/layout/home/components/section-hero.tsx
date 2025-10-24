@@ -5,6 +5,8 @@ import { TypeAnimation } from "react-type-animation";
 import imagePng from "assets/app/banner.png";
 import Image from "next/image";
 import PageHomeSearchForm from "@/components/search/components/page-home-search-form";
+import ButtonPrimary from "@/components/ui/button/types/button-primary";
+import useSearchUiStore from "@/store/ui/search-ui-store";
 
 export interface SectionHeroProps {
   className?: string;
@@ -12,6 +14,7 @@ export interface SectionHeroProps {
 
 const SectionHero: FC<SectionHeroProps> = ({ className = "" }) => {
   const { loading } = useLoadingState();
+  const { setShowHeroMobileSearch } = useSearchUiStore();
 
   return (
     <div className="nc-PageHome relative">
@@ -56,6 +59,16 @@ const SectionHero: FC<SectionHeroProps> = ({ className = "" }) => {
               opacity-0 animate-fade-in bg-clip-text text-transparent bg-no-repeat bg-gradient-to-r
                from-purple-500 via-violet-500 to-pink-300"
             />
+            <div className="w-full flex items-center justify-center pt-[1rem]">
+              <ButtonPrimary
+                loading={loading}
+                className="w-[80%] md:hidden bg-primary-700 hover:bg-primary-800
+                 font-medium text-white py-2 text-lg rounded-full"
+                onclick={() => setShowHeroMobileSearch(true)}
+              >
+                Start your search
+              </ButtonPrimary>
+            </div>
           </div>
           {/* Right Column: Image */}
           <div className="hidden xl:flex w-full justify-center">
@@ -68,8 +81,8 @@ const SectionHero: FC<SectionHeroProps> = ({ className = "" }) => {
         </div>
         {/* Search Form (only on xl screens and above) */}
         <div
-          className="hidden md:flex md:justify-center xl:flex-none xl:justify-normal absolute md:inset-x-0 xl:left-0 xl:right-auto z-10 top-40 md:top-[8rem] lg:top-[8rem] 
-          xl:top-[12rem] 2xl:top-[15rem] mb-12"
+          className="hidden md:flex md:justify-center xl:flex-none xl:justify-normal absolute md:inset-x-0 xl:left-0 
+         xl:right-auto z-10 top-40 md:top-[8rem] lg:top-[8rem] xl:top-[12rem] 2xl:top-[15rem] mb-12"
         >
           <PageHomeSearchForm isHomePage={true} />
         </div>

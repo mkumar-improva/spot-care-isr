@@ -12,15 +12,18 @@ const HomePageComponent = () => {
 
   return (
     <>
-      <div className=" mx-auto w-full px-0 sm:px-4 md:px-0 lg:px-10 max-w-screen-2xl">
+      <div
+        className="mx-auto w-full px-0 sm:px-4 md:px-0 lg:px-10  
+      flex flex-col items-start justify-start max-w-screen-2xl"
+      >
         <div
-          className={`nc-ListingStayMapPage relative`}
+          className={`w-full nc-ListingStayMapPage relative`}
           data-nc-id="ListingStayMapPage"
         >
           <BgGlassmorphism />
           <div className="relative space-y-24 mb-[1.5rem] md:mb-24 lg:space-y-30 lg:mb-36">
             {/* SECTION HERO */}
-            <SectionHero />
+            <SectionHero className="p-5 sm:p-8 md:p-0 md:mt-4 lg:mb-72 lg:mt-8" />
           </div>
         </div>
       </div>
@@ -31,7 +34,7 @@ const HomePageComponent = () => {
       ) : (
         homeFilteredPaginatedList &&
         homeFilteredPaginatedList.length > 0 && (
-          <div className="pt-1 md:pt-[2rem] lg:pt-0 pb-[2rem] lg:pb-8 px-4 xl:px-[1rem] 2xl:px-[2.8rem] xl:max-w-none">
+          <div className="pt-1 md:pt-[2rem] lg:pt-0 pb-[2rem] lg:pb-8 px-4 xl:px-[1rem] 2xl:px-[2.8rem]  xl:max-w-none">
             <HomeProviderList />
           </div>
         )

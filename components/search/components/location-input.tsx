@@ -56,8 +56,8 @@ const LocationInput: FC<LocationInputProps> = ({
   if (!isMapLoaded) {
     return (
       <div className="flex-1 flex items-center justify-start">
-        <HugeiconsIcon icon={Location01Icon} className="size-6 lg:size-7" />
-        <p className="text-neutral-900 text-base">Loading...</p>
+        <HugeiconsIcon icon={Location01Icon} className="text-neutral-300 size-6 lg:size-7" />
+        <p className="text-neutral-500 text-base">Loading...</p>
       </div>
     );
   }

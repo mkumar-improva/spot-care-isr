@@ -56,6 +56,7 @@ const StaySearchForm: FC = () => {
         className="flex-1"
         setCareSearchShowVerticalLine={setCareSearchShowVerticalLine}
         setRadiusSearchShowVerticalLine={setRadiusSearchShowVerticalLine}
+        mobileClassName="py-[0.75rem]"
       />
       <div
         className={`self-center h-8 py-2 border-r ${

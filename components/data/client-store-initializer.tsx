@@ -98,7 +98,6 @@ const ClientStoreInitializerProps: FC<ClientStoreInitializerProps> = ({
           currentPage: 1,
           totalPages: Math.ceil(total / APP_CONSTANTS.PAGINATION_LIMIT),
         });
-        console.log(parsedProviders);
         setHomeDataInitialized(true);
       }
       setLoading(false);

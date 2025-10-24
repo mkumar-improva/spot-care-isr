@@ -120,7 +120,7 @@ const RadiusPopOver: FC<RadiusPopOverProps> = ({
                   <SearchButton
                     className={`flex items-center justify-center bg-primary-700 
                   text-white rounded-full overflow-hidden`}
-                    size="size-12 size-[4.25rem]"
+                    size="size-12 lg:size-16"
                     onClick={SearchOption ?? (() => {})}
                     disabled={loading || isWishlistLoaded}
                     loading={loading || isWishlistLoaded}
