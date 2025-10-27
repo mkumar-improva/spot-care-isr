@@ -21,7 +21,7 @@ const ResetPasswordConfirmation: FC<ResetPasswordConfirmationProps> = ({
         </h1>
         {/* Description */}
         <p className="mt-2 text-sm text-neutral-500">
-          You can now use your new password to log in to you account
+          You can now use your new password to log in to your account
         </p>
         {/* Back to Login button */}
         <ButtonPrimary

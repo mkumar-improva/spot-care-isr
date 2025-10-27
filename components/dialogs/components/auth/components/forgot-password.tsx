@@ -5,6 +5,7 @@ import Notifier from "@/components/ui/Notifier/Notifier";
 import ButtonPrimary from "@/components/ui/button/types/button-primary";
 import useForgotPassword from "@/hooks/auth/use-forgot-password";
 import PasswordConfirmation from "./password-confirmation";
+import NotifierSection from "@/components/ui/Notifier/notifier-section";
 
 export interface ForgotPasswordProps {
   className?: string;
@@ -22,6 +23,8 @@ const ForgotPassword: FC<ForgotPasswordProps> = ({
     setShowConfirmationPopup,
     handleInputChange,
     handler,
+    authLoader,
+    loading,
     onSubmit,
     NotifierState,
     setNotifierState,
@@ -54,26 +57,12 @@ const ForgotPassword: FC<ForgotPasswordProps> = ({
             </h4>
           </div>
           {/* Notifier */}
-          <div
-            className={`w-full transition-all duration-300 ease-in-out overflow-hidden ${
-              NotifierState ? "my-1" : "my-0"
-            }`}
-          >
-            <div
-              className={`transform transition-all duration-300 ease-in-out ${
-                NotifierState
-                  ? "opacity-100 scale-100 max-h-20 mb-0"
-                  : "opacity-0 scale-95 max-h-0 mb-0"
-              }`}
-            >
-              <Notifier
-                notifierState={NotifierState}
-                message={NotifierDetails.message}
-                mode={NotifierDetails.mode}
-                onClose={handleNotifierClose}
-              />
-            </div>
-          </div>
+          <NotifierSection
+            NotifierState={NotifierState}
+            NotifierDetails={NotifierDetails}
+            handleNotifierClose={handleNotifierClose}
+            margin="my-1"
+          />
           {/* Forgot Password Form */}
           <form
             className={`w-full flex flex-col items-start justify-start gap-4`}
@@ -95,13 +84,20 @@ const ForgotPassword: FC<ForgotPasswordProps> = ({
               <ButtonPrimary
                 className="bg-primary-700 font-medium text-white px-6 py-2 text-base hover:bg-primary-800 transition-colors duration-200 ease-in-out rounded-md w-full"
                 type="submit"
+                disabled={authLoader || loading}
+                loading={authLoader || loading}
               >
                 Send verification link
               </ButtonPrimary>
               {/* to login */}
               <div
-                className={`w-full text-sm font-normal text-center text-primary-500 hover:underline cursor-pointer`}
+                className={`w-full text-sm font-normal text-center ${
+                  authLoader || loading
+                    ? "text-gray-400 cursor-not-allowed"
+                    : "text-primary-500 hover:underline cursor-pointer"
+                }`}
                 onClick={() => {
+                  if (authLoader || loading) return;
                   callback();
                 }}
               >

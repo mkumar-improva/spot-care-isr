@@ -1,7 +1,7 @@
 import { EndpointConstants } from "@/constants/end-point-constants";
 import { END_POINT } from "./end-point";
 import { CareResponse } from "@/types/care-types";
-import { mapToType, mapListToType } from "@/utils/mapper";
+import { mapToType, mapListToType, mapToBaseResponse } from "@/utils/mapper";
 import handleError from "@/utils/handleError";
 import { Providers, QnaResponse } from "@/types/provider-details";
 import { IpInfo } from "@/types/ip-info";
@@ -84,15 +84,12 @@ export const Services = {
   },
   AddWishlist: async (wishlistBody: AddWishlist) => {
     try {
-      const result = await END_POINT.post(
-        EndpointConstants.AddWishlist,
-        {
-          customerId: wishlistBody.customerId,
-          providerId: wishlistBody.providerId,
-          providercode: wishlistBody.providercode,
-          serviceTag: wishlistBody.serviceTag,
-        }
-      );
+      const result = await END_POINT.post(EndpointConstants.AddWishlist, {
+        customerId: wishlistBody.customerId,
+        providerId: wishlistBody.providerId,
+        providercode: wishlistBody.providercode,
+        serviceTag: wishlistBody.serviceTag,
+      });
       return result;
     } catch (error) {
       handleError(error, "AddWishlist");
@@ -151,6 +148,70 @@ export const Services = {
       return result;
     } catch (error) {
       handleError(error, "GetReportOptions");
+    }
+  },
+  Register: async (
+    firstName: string,
+    lastName: string,
+    phone: string,
+    email: string,
+    password: string
+  ) => {
+    try {
+      const result = await END_POINT.post(
+        EndpointConstants.Register,
+        {
+          firstName,
+          lastName,
+          phone,
+          email,
+          password,
+        },
+        true
+      );
+      let data = mapToBaseResponse<any>(result);
+      return data;
+    } catch (error) {
+      handleError(error, "Register");
+    }
+  },
+  Verify: async (otp: string, email: string) => {
+    try {
+      const result = await END_POINT.post(
+        EndpointConstants.Verify,
+        { otp, email },
+        true
+      );
+      let data = mapToBaseResponse<any>(result);
+      return data;
+    } catch (error) {
+      handleError(error, "Verify");
+    }
+  },
+  RetryVerification: async (email: string) => {
+    try {
+      const result = await END_POINT.post(
+        EndpointConstants.RetryVerification,
+        { email },
+        true
+      );
+      let data = mapToBaseResponse<any>(result);
+      return data;
+    } catch (error) {
+      handleError(error, "RetryVerification");
+    }
+  },
+  ForgotPassword: async (email: string) => {
+    try {
+      const result = await END_POINT.post(
+        EndpointConstants.ForgotPassword,
+        { email },
+        true
+      );
+      let data = mapToBaseResponse<any>(result);
+      return data;
+    } catch (error) {
+      handleError(error, "ForgotPassword");
     }
   },
 };

@@ -1,9 +1,11 @@
 "use client";
-import Notifier from "@/components/ui/Notifier/Notifier";
 import { NotifierModel } from "@/types/NotifierModel";
 import { KEYS } from "@/constants/KeyConstants";
-import { FC, useEffect, useState, KeyboardEvent, FormEvent, use } from "react";
+import { useEffect, useState, FormEvent } from "react";
 import { FormValidator } from "@/utils/validator";
+import useLoadingState from "@/store/loader/loding-state";
+import { Services } from "@/services/service";
+import { StatusMessages } from "@/constants/StatusMessages";
 
 interface FormData {
   email: string;
@@ -14,6 +16,9 @@ interface FormErrors {
 }
 
 const useForgotPassword = () => {
+  //store
+  const { authLoader, loading, setAuthLoader } = useLoadingState();
+
   //state
   const [NotifierState, setNotifierState] = useState(false);
   const [NotifierDetails, setNotifierDetails] = useState<NotifierModel>({
@@ -70,8 +75,31 @@ const useForgotPassword = () => {
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setNotifierState(false);
-    setShowConfirmationPopup(true);
+    if (authLoader || loading) return;
+    NotifierReset();
+    if (!validateForm()) return;
+    setAuthLoader(true);
+    try {
+      let { email } = formData;
+      let result = await Services.ForgotPassword(email);
+      if (!result || result.status !== "success") {
+        setNotifierState(true);
+        setNotifierDetails({
+          message: result?.message || StatusMessages.ErrorMessage.CommonError,
+          mode: "error",
+        });
+        return;
+      }
+      setShowConfirmationPopup(true);
+    } catch (err) {
+      console.error("Forgot password request failed", err);
+      setNotifierDetails({
+        message: StatusMessages.ErrorMessage.CommonError,
+        mode: "error",
+      });
+    } finally {
+      setAuthLoader(false);
+    }
   };
 
   const handleNotifierClose = () => {
@@ -114,6 +142,14 @@ const useForgotPassword = () => {
     });
   };
 
+  const NotifierReset = () => {
+    setNotifierState(false);
+    setNotifierDetails({
+      message: "",
+      mode: "error",
+    });
+  };
+
   return {
     formData,
     formErrors,
@@ -123,6 +159,8 @@ const useForgotPassword = () => {
     handler,
     onSubmit,
     NotifierState,
+    authLoader,
+    loading,
     setNotifierState,
     NotifierDetails,
     setNotifierDetails,
