@@ -3,8 +3,10 @@ import { END_POINT } from "./end-point";
 import { CareResponse } from "@/types/care-types";
 import { mapToType, mapListToType } from "@/utils/mapper";
 import handleError from "@/utils/handleError";
-import { Providers } from "@/types/provider-details";
+import { Providers, QnaResponse } from "@/types/provider-details";
 import { IpInfo } from "@/types/ip-info";
+import { AddWishlist } from "@/types/add-wish-list";
+import { ContactTypes } from "@/types/contact-types";
 
 export const Services = {
   LoadCareTypes: async () => {
@@ -78,6 +80,77 @@ export const Services = {
       return { data: filteredProviders, total: result["total"] };
     } catch (error) {
       handleError(error, "LoadCaresForHomeScreen");
+    }
+  },
+  AddWishlist: async (wishlistBody: AddWishlist) => {
+    try {
+      const result = await END_POINT.post(
+        EndpointConstants.AddWishlist,
+        {
+          customerId: wishlistBody.customerId,
+          providerId: wishlistBody.providerId,
+          providercode: wishlistBody.providercode,
+          serviceTag: wishlistBody.serviceTag,
+        }
+      );
+      return result;
+    } catch (error) {
+      handleError(error, "AddWishlist");
+    }
+  },
+  DeleteWishlist: async (providerCode: string, customerId: number) => {
+    try {
+      const result = await END_POINT.get(
+        EndpointConstants.DeleteWishlist +
+          `?providerCode=${providerCode}&customerId=${customerId}`
+      );
+      return result;
+    } catch (error) {
+      handleError(error, "DeleteWishlist");
+    }
+  },
+  CreateContact: async (contactMessage: ContactTypes) => {
+    try {
+      const result = await END_POINT.post(
+        EndpointConstants.CreateContactMessage,
+        {
+          fullName: contactMessage.fullName,
+          email: contactMessage.email,
+          message: contactMessage.message,
+        }
+      );
+      return result;
+    } catch (error) {
+      handleError(error, "CreateContact");
+    }
+  },
+  GetProvider: async (code: string) => {
+    try {
+      const result = await END_POINT.get(
+        EndpointConstants.GetProvider + `/${code}`
+      );
+      let providerList = mapToType<Providers>(result["data"] ?? []);
+      return providerList;
+    } catch (error) {
+      handleError(error, "GetProvider");
+    }
+  },
+  LoadQnA: async (providerId: string) => {
+    try {
+      const result = await END_POINT.get(
+        EndpointConstants.MsProviderWithQA + providerId
+      );
+      return mapToType<QnaResponse>(result["data"] ?? {});
+    } catch (error) {
+      handleError(error, "LoadQnA");
+    }
+  },
+  GetReportOptions: async () => {
+    try {
+      const result = await END_POINT.get(EndpointConstants.GetReportOptions);
+      return result;
+    } catch (error) {
+      handleError(error, "GetReportOptions");
     }
   },
 };

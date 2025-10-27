@@ -1,5 +1,6 @@
 "use client";
 import { FC, RefObject, useState } from "react";
+import { useRouter } from "next/navigation";
 import useHomeDataStore from "@/store/data/home-data-store";
 import CustomHeading from "./custom-heading";
 import ProviderCard from "@/components/ui/provider-card/provider-card";
@@ -14,6 +15,7 @@ interface SectionGridHasMapProps {
 const SectionGridHasMap: FC<SectionGridHasMapProps> = ({
   customHeadingRef,
 }) => {
+  const router = useRouter();
   const { homeFilteredPaginatedList, homePageLocation, homeProviderList } =
     useHomeDataStore();
   //state
@@ -29,6 +31,11 @@ const SectionGridHasMap: FC<SectionGridHasMapProps> = ({
       window.scrollTo({ top: y, behavior: "smooth" });
       element.focus?.();
     }
+  };
+
+  const handleProviderClick = (provider: any) => {
+    const detailUrl = `/detail-screen/${provider.code}?lat=${provider.locations[0]?.latitude || 40.7127753}&lon=${provider.locations[0]?.longitude || -74.0059728}&distance=${provider.distanceInMiles || 0}`;
+    router.push(detailUrl);
   };
   return (
     <div className="relative flex min-h-screen gap-[1.5rem]">
@@ -47,12 +54,14 @@ const SectionGridHasMap: FC<SectionGridHasMapProps> = ({
           {homeFilteredPaginatedList.map((item, index) => (
             <div
               key={index}
+              onClick={() => handleProviderClick(item)}
               onMouseEnter={() => {
                 setCurrentHoverID((_) => item.code);
               }}
               onMouseLeave={() => {
                 setCurrentHoverID((_) => -1);
               }}
+              className="cursor-pointer transition-all hover:shadow-lg"
             >
               {/* Provider Card Component */}
               <ProviderCard data={item} />
