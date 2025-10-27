@@ -8,16 +8,28 @@ import {
   CustomerSupportIcon,
   City02Icon,
 } from "@hugeicons-pro/core-stroke-rounded/index";
+import useAuthUIStore from "@/store/ui/auth-ui-store";
 
 const useMenuBar = () => {
+  const { setShowLogin, setShowSignup, setShowForgotPassword } =
+    useAuthUIStore();
+
   //references
   const menuBarRef = useRef<HTMLDivElement>(null);
 
   //handlers
   const _onAccountClicked = () => {};
   const _onHelpClicked = () => {};
-  const _loginFunction = () => {};
-  const _signupFunction = () => {};
+  const _loginFunction = () => {
+    setShowForgotPassword(false);
+    setShowLogin(true);
+    setShowSignup(false);
+  };
+  const _signupFunction = () => {
+    setShowSignup(true);
+    setShowLogin(false);
+    setShowForgotPassword(false);
+  };
   const _logout = () => {};
 
   //menu items

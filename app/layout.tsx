@@ -3,13 +3,13 @@ import "@/styles/index.scss";
 import "@/styles/globals.css";
 import { getDefaultSocialImage, getSiteUrl } from "@/lib/site";
 import GoogleMapsProvider from "@/components/providers/google-maps-provider";
-import {Footer} from "@/components/layout/Footer/Component";
+import { Footer } from "@/components/layout/Footer/Component";
 import SiteHeader from "@/components/layout/Header/Component.Client";
 import SearchMobile from "@/components/search/components/search-mobile";
 import ClientStoreInitializerProps from "@/components/data/client-store-initializer";
 import { Services } from "@/services/service";
 import { ToastProvider } from "@/components/ui/toast/toast-provider";
-import { Providers } from "@/types/provider-details";
+import DialogRenderer from "@/components/dialogs/Component";
 
 const SITE_NAME = "SpotCare Healthcare Provider Directory";
 const SITE_DESCRIPTION =
@@ -99,17 +99,21 @@ export default async function RootLayout({
     loadHomeScreenData(),
   ]);
 
-  const cares = careTypesResult.status === 'fulfilled' ? careTypesResult.value?.cares || [] : [];
-  const ipInfoData = ipInfo.status === 'fulfilled' ? ipInfo.value : null;
-  const homeData = homeScreenData.status === 'fulfilled' ? homeScreenData.value : null;
+  const cares =
+    careTypesResult.status === "fulfilled"
+      ? careTypesResult.value?.cares || []
+      : [];
+  const ipInfoData = ipInfo.status === "fulfilled" ? ipInfo.value : null;
+  const homeData =
+    homeScreenData.status === "fulfilled" ? homeScreenData.value : null;
 
   return (
     <html lang="en">
       <body>
         <GoogleMapsProvider>
           <SearchMobile />
-          <ClientStoreInitializerProps 
-            careTypes={cares} 
+          <ClientStoreInitializerProps
+            careTypes={cares}
             ipInfo={ipInfoData || null}
             homeScreenData={homeData}
           />
@@ -117,6 +121,7 @@ export default async function RootLayout({
           <main className="min-h-screen">{children}</main>
           <ToastProvider />
           <Footer />
+          <DialogRenderer />
         </GoogleMapsProvider>
       </body>
     </html>
@@ -127,15 +132,20 @@ async function loadHomeScreenData() {
   try {
     // Get IP info first
     const ipInfo = await Services.GetIPAddress();
-    
+
     if (!ipInfo) {
       // Fallback to NYC if no IP info
-      const fallbackData = await Services.LoadCaresForHomeScreen(40.7127753, -74.0059728, 25, 10);
+      const fallbackData = await Services.LoadCaresForHomeScreen(
+        40.7127753,
+        -74.0059728,
+        25,
+        10
+      );
       return {
         providers: fallbackData?.data || [],
         total: fallbackData?.total || 0,
         location: { lat: 40.7127753, lon: -74.0059728, city: "New York" },
-        isUSLocation: false
+        isUSLocation: false,
       };
     }
 
@@ -148,25 +158,35 @@ async function loadHomeScreenData() {
 
     if (hasValidCoords) {
       // Try user's location first
-      const liveData = await Services.LoadCaresForHomeScreen(lat!, lon!, 30, 25);
-      
+      const liveData = await Services.LoadCaresForHomeScreen(
+        lat!,
+        lon!,
+        30,
+        25
+      );
+
       if (liveData && liveData.total > 0) {
         return {
           providers: liveData.data,
           total: liveData.total,
           location: { lat: lat!, lon: lon!, city: city || "Unknown" },
-          isUSLocation: true
+          isUSLocation: true,
         };
       }
     }
 
     // Fallback to NYC
-    const fallbackData = await Services.LoadCaresForHomeScreen(40.7127753, -74.0059728, 25, 10);
+    const fallbackData = await Services.LoadCaresForHomeScreen(
+      40.7127753,
+      -74.0059728,
+      25,
+      10
+    );
     return {
       providers: fallbackData?.data || [],
       total: fallbackData?.total || 0,
       location: { lat: 40.7127753, lon: -74.0059728, city: "New York" },
-      isUSLocation: false
+      isUSLocation: false,
     };
   } catch (error) {
     console.error("Error loading home screen data:", error);
