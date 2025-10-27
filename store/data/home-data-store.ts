@@ -1,4 +1,4 @@
-import create from "zustand";
+import { create } from "zustand";
 import { Providers } from "@/types/provider-details";
 import { PaginationDetails } from "@/types/pagination";
 
