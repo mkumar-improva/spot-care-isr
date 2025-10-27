@@ -56,7 +56,10 @@
       ],
       "@/store/*":[
         "store/*"
-      ]
+      ],
+      "@/contains/*":[
+        "contains/*"
+      ],
     },
     "forceConsistentCasingInFileNames": true,
     "incremental": true,

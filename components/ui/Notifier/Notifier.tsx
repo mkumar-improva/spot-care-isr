@@ -1,7 +1,7 @@
 import { ArrowRight01Icon } from "@hugeicons-pro/core-stroke-sharp/index";
 import { HugeiconsIcon } from "@hugeicons/react";
 import React from "react";
-import { NotifierModel } from "types/NotifierModel";
+import { NotifierModel } from "@/types/notifier-model";
 import { Cancel01Icon } from "@hugeicons-pro/core-stroke-standard/index";
 
 type NotifierProps = NotifierModel & { notifierState: boolean };
