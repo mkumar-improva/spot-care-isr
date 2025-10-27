@@ -6,6 +6,7 @@ export interface ButtonProps {
   loading?: boolean;
   disabled?: boolean;
   children?: ReactNode;
+  type?: ButtonHTMLAttributes<HTMLButtonElement>["type"];
 }
 
 const _renderLoading = () => {
@@ -39,12 +40,14 @@ const Button: FC<ButtonProps> = ({
   loading,
   disabled,
   children,
+  type = "button",
 }) => {
   return (
     <button
       className={`flex items-center justify-center gap-2 ${className}`}
       onClick={onclick}
       disabled={disabled || loading}
+      type={type}
     >
       {loading && _renderLoading()}
       {children}
