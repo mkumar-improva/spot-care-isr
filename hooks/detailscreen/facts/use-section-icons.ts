@@ -16,7 +16,7 @@ import { ReactNode, createElement } from "react";
 export const useSectionIcons = () => {
   const getSectionIcon = (sectionName: string): ReactNode => {
     const iconProps = {
-      className: "h-[16px] w-[16px] flex-shrink-0 mt-1",
+      className: "h-4 w-4 flex-shrink-0 mt-1",
       strokeWidth: 2,
     };
 
@@ -24,8 +24,7 @@ export const useSectionIcons = () => {
       case "General information":
         return createElement(HugeiconsIcon, {
           icon: InformationCircleIcon,
-          className: "h-[16px] w-[16px] flex-shrink-0",
-          strokeWidth: 2,
+          ...iconProps,
         });
       case "Staff information":
         return createElement(HugeiconsIcon, {
@@ -60,8 +59,7 @@ export const useSectionIcons = () => {
       case "Pricing & Availability":
         return createElement(HugeiconsIcon, {
           icon: SaveMoneyDollarIcon,
-          className: "h-[15px] w-[15px] flex-shrink-0 mt-1",
-          strokeWidth: 2,
+          ...iconProps,
         });
       default:
         return createElement("span", {

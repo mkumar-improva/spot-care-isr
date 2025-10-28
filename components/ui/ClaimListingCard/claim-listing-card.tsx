@@ -2,7 +2,8 @@ import React from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Hospital02Icon } from "@hugeicons-pro/core-stroke-rounded/index";
 import { KEYS } from "@/constants/KeyConstants";
-import useClaimStore from "@/store/detailscreen/claim-store";
+import useAuthUIStore from "@/store/ui/auth-ui-store";
+import useClaimProviderDialogStore from "@/store/dialog/claim-provide-store";
 
 interface ClaimListingCardV2Props {
   providerCode: string;
@@ -11,13 +12,14 @@ interface ClaimListingCardV2Props {
 const ClaimListingCardV2: React.FC<ClaimListingCardV2Props> = ({
   providerCode,
 }) => {
-  const { setShowLogin, setProviderInfoDialogOpen, setSelectedProviderCode } = useClaimStore();
+  const { setShowLogin } = useAuthUIStore();
+  const { setShowClaimProvider, setSelectedProviderCode } = useClaimProviderDialogStore();
 
   const handleClaimClick = () => {
     const isLoggedIn = localStorage.getItem(KEYS.ISLOGGEDIN) === "true";
     if (isLoggedIn) {
       setSelectedProviderCode(providerCode);
-      setProviderInfoDialogOpen(true);
+      setShowClaimProvider(true);
     } else {
       setShowLogin(true);
     }

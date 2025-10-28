@@ -19,7 +19,6 @@ const ConsultantContactInfo = () => {
     } else {
       updateFormField(name, value);
     }
-    validateField(name, value, updateFormError);
   };
 
   const selectFields: {

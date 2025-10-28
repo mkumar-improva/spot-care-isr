@@ -30,14 +30,6 @@ const ConsultantContactInformation = () => {
     } else {
       updateFormField(name, value);
     }
-    
-    // Clear error or validate field on change
-    if (value.trim()) {
-      const isValid = validateField(name, value);
-      if (isValid) {
-        updateFormError(name, "");
-      }
-    }
   };
 
   const inputFields: {
