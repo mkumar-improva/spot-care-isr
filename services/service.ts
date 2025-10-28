@@ -7,6 +7,7 @@ import { Providers, QnaResponse } from "@/types/provider-details";
 import { IpInfo } from "@/types/ip-info";
 import { AddWishlist } from "@/types/add-wish-list";
 import { ContactTypes } from "@/types/contact-types";
+import { UserData } from "@/types/user-data";
 
 export const Services = {
   LoadCareTypes: async () => {
@@ -225,6 +226,19 @@ export const Services = {
       return data;
     } catch (error) {
       handleError(error, "ResetPassword");
+    }
+  },
+  Login: async (email: string, password: string) => {
+    try {
+      const result = await END_POINT.post(
+        EndpointConstants.Login,
+        { email, password },
+        true
+      );
+      let data = mapToBaseResponse<UserData>(result);
+      return data;
+    } catch (error) {
+      handleError(error, "Login");
     }
   },
 };

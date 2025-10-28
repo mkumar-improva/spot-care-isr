@@ -64,9 +64,6 @@ const Notifier: React.FC<NotifierProps> = ({
                         onClick={onClick}
                       >
                         {link}
-                        {link.includes("Verify") && (
-                          <HugeiconsIcon icon={ArrowRight01Icon} size={12} />
-                        )}
                       </span>
                     </span>
                   )}

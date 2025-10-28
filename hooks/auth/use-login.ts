@@ -1,15 +1,14 @@
 "use client";
-import React, {
-  useEffect,
-  useState,
-  ChangeEvent,
-  KeyboardEvent,
-  FormEvent,
-} from "react";
+import { useState, ChangeEvent, KeyboardEvent, FormEvent } from "react";
 import { NotifierModel } from "@/types/NotifierModel";
 import { FormValidator } from "@/utils/validator";
-import { KEYS } from "@/constants/KeyConstants";
+import { KEYS, AUTH_KEYS } from "@/constants/KeyConstants";
 import useAuthUIStore from "@/store/ui/auth-ui-store";
+import useLoadingState from "@/store/loader/loding-state";
+import { Services } from "@/services/service";
+import { StatusMessages } from "@/constants/StatusMessages";
+import { AuthHelper } from "@/utils/auth-helper";
+import useAuthDataStore from "@/store/data/use-auth-data-store";
 
 interface FormData {
   email: string;
@@ -23,8 +22,15 @@ interface FormErrors {
 
 const useLogin = () => {
   //store
-  const { setShowSignup, setShowLogin, setShowForgotPassword } =
-    useAuthUIStore();
+  const {
+    setShowSignup,
+    setShowLogin,
+    setShowForgotPassword,
+    setIsLoggedIn,
+    setProfileImage,
+  } = useAuthUIStore();
+  const { loading, authLoader, setAuthLoader } = useLoadingState();
+  const { setUserDetail } = useAuthDataStore();
 
   //state
   const [formData, setFormData] = useState<FormData>({
@@ -39,6 +45,10 @@ const useLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isVerificationPending, setIsVerificationPending] = useState(false);
   const [NotifierDetails, setNotifierDetails] = useState<NotifierModel>({
+    message: "",
+    mode: "error",
+  });
+  const [otpNotifierDetails, setOtpNotifierDetails] = useState<NotifierModel>({
     message: "",
     mode: "error",
   });
@@ -90,6 +100,13 @@ const useLogin = () => {
     });
   };
 
+  const handleOtpNotifierClose = () => {
+    setOtpNotifierDetails({
+      message: "",
+      mode: "error",
+    });
+  };
+
   const handler = (e: KeyboardEvent<HTMLFormElement>) => {
     if (e.key === KEYS.ENTER) {
       e.preventDefault();
@@ -99,8 +116,54 @@ const useLogin = () => {
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted", formData);
-    return;
+    if (authLoader || loading) return;
+    if (!validateForm()) {
+      return;
+    }
+    setAuthLoader(true);
+    NotifierReset();
+    const { email, password } = formData;
+    try {
+      let result = await Services.Login(email, password);
+      if (!result || result.status !== "success") {
+        console.error("Login failed:", result?.message);
+        if (result?.message.includes("402")) {
+          throw new Error(result.message);
+        } else {
+          triggerNotifier(
+            result?.message || StatusMessages.ErrorMessage.LoginError,
+            "error"
+          );
+        }
+        return;
+      }
+      // Successful login
+      AuthHelper.saveSession(result.data);
+      setProfileImage(result.data.profilePicture || "");
+      setUserDetail(result.data);
+      setShowLogin(false);
+      setIsLoggedIn(true);
+    } catch (err: any) {
+      console.error("Login failed:", err);
+      if (err.message.includes("402")) {
+        const msg = err?.message || "Unexpected error occurred";
+        const isUnverified = msg.includes("402");
+        if (isUnverified) {
+          localStorage.setItem(AUTH_KEYS.UNVERIFIED_EMAIL, email);
+          triggerNotifier(
+            msg.split("-")[0],
+            "error",
+            "Verify now",
+            verifyNowClicked
+          );
+        } else {
+          triggerNotifier(StatusMessages.ErrorMessage.LoginError, "error");
+        }
+      }
+    } finally {
+      setEmail(email);
+      setAuthLoader(false);
+    }
   };
 
   const onSignupClick = () => {
@@ -110,6 +173,99 @@ const useLogin = () => {
 
   const openForgotPassword = () => {
     setShowForgotPassword(true);
+  };
+
+  const verifyNowClicked = async () => {
+    await onResendClick();
+    setIsVerificationPending(true);
+  };
+
+  const triggerNotifier = (
+    message: string,
+    mode: "error" | "success",
+    link?: string,
+    onClick?: () => void
+  ) => {
+    setNotifierState(true);
+    setNotifierDetails({
+      message,
+      mode,
+      ...(link && onClick ? { link, onClick } : {}),
+    });
+  };
+
+  const handleOtpsubmit = async (otp: string) => {
+    setAuthLoader(true);
+    OtpNotifierReset();
+    try {
+      const trimmedOtp = otp.trim();
+      if (trimmedOtp === "" || trimmedOtp.length < 4) {
+        setOtpNotifierDetails({
+          message: StatusMessages.SchemaMessage.otpField,
+          mode: "error",
+        });
+        return;
+      }
+      // Check for invalid characters (spaces)
+      if (/\s/.test(otp)) {
+        setOtpNotifierDetails({
+          message: StatusMessages.ErrorMessage.VerificationCodeMissing,
+          mode: "error",
+        });
+        return;
+      }
+      let result = await Services.Verify(trimmedOtp, email);
+      if (!result || result.status !== "success") {
+        setOtpNotifierDetails({
+          message:
+            result?.message || StatusMessages.ErrorMessage.VerificationCode,
+          mode: "error",
+        });
+        return;
+      }
+      setIsVerificationPending(false);
+    } catch (err) {
+      console.error("OTP verification failed:", err);
+      setOtpNotifierDetails({
+        message: StatusMessages.ErrorMessage.VerificationCode,
+        mode: "error",
+      });
+    } finally {
+      setAuthLoader(false);
+    }
+  };
+
+  const onResendClick = async () => {
+    setAuthLoader(true);
+    NotifierReset();
+    OtpNotifierReset();
+    try {
+      let email = localStorage.getItem(AUTH_KEYS.UNVERIFIED_EMAIL) || "";
+      let result = await Services.RetryVerification(email);
+      if (!result || result.status !== "success") {
+        setOtpNotifierDetails({
+          message: result?.message || StatusMessages.ErrorMessage.OTPError,
+          mode: "error",
+        });
+        return;
+      }
+      setOtpNotifierDetails({
+        message: StatusMessages.SuccessMessages.OtpVerification,
+        mode: "success",
+      });
+    } catch (err) {
+      console.error("Resend OTP failed:", err);
+      if (!isVerificationPending) {
+        triggerNotifier(StatusMessages.ErrorMessage.OTPError, "error");
+      } else {
+        setOtpNotifierDetails({
+          message: StatusMessages.ErrorMessage.OTPError,
+          mode: "error",
+        });
+      }
+    } finally {
+      setAuthLoader(false);
+    }
   };
 
   //validation
@@ -149,6 +305,21 @@ const useLogin = () => {
     });
   };
 
+  const NotifierReset = () => {
+    setNotifierState(false);
+    setNotifierDetails({
+      message: "",
+      mode: "error",
+    });
+  };
+
+  const OtpNotifierReset = () => {
+    setOtpNotifierDetails({
+      message: "",
+      mode: "error",
+    });
+  };
+
   return {
     formData,
     formErrors,
@@ -159,6 +330,9 @@ const useLogin = () => {
     email,
     isFormValid,
     hasErrors,
+    authLoader,
+    loading,
+    otpNotifierDetails,
     openForgotPassword,
     onSignupClick,
     handleInputChange,
@@ -171,6 +345,9 @@ const useLogin = () => {
     resetForm,
     clearErrors,
     togglePasswordVisibility,
+    handleOtpsubmit,
+    onResendClick,
+    handleOtpNotifierClose,
   };
 };
 
