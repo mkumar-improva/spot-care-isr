@@ -1,7 +1,7 @@
 import { avatarColors } from "../../../contains/contants";
 import React, { FC } from "react";
 import avatar1 from "@/assets/Image-1.png";
-import { KEYS } from "constants/KeyConstants";
+import Image from "next/image";
 
 export interface AvatarProps {
   containerClassName?: string;
@@ -20,7 +20,7 @@ const Avatar: FC<AvatarProps> = ({
   radius = "rounded-full",
   imgUrl = avatar1,
   userName,
-  textSize = "text-xs"
+  textSize = "text-xs",
 }) => {
   const url = imgUrl || "";
   const name = userName || "";
@@ -37,7 +37,7 @@ const Avatar: FC<AvatarProps> = ({
       style={{ backgroundColor: url ? undefined : _setBgColor(name) }}
     >
       {url ? (
-        <img
+        <Image
           className={`absolute inset-0 w-full h-full object-cover ${radius}`}
           src={url}
           alt={name}

@@ -37,7 +37,8 @@
     "swiper": "^11.2.10",
     "tailwind-merge": "^3.3.1",
     "turnstile": "^5.0.5",
-    "zustand": "^4.5.2"
+    "zustand": "^4.5.2",
+    "jwt-decode": "^4.0.0"
   },
   "devDependencies": {
     "@tailwindcss/aspect-ratio": "^0.4.2",

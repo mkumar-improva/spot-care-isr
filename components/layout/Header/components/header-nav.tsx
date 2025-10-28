@@ -9,10 +9,13 @@ import useHeaderUiStore from "store/ui/header-ui-store";
 import SearchComponent from "@/components/search/Component";
 import { useOutsideAlerter } from "@/hooks/common/use-outsider-click";
 import SearchTab from "./search-tab";
+import AvatarDropDown from "./avatar-drop-down";
+import useAuthUIStore from "@/store/ui/auth-ui-store";
 
 const HeaderNav = () => {
   /*----------Begining of Store Import----------*/
   const { isHomePage, showHeroSearch, setShowHeroSearch } = useHeaderUiStore();
+  const { isLoggedIn } = useAuthUIStore();
   /*----------End of Store Import----------*/
 
   const heroSearchRef = useRef<HTMLDivElement>(null);
@@ -71,7 +74,7 @@ const HeaderNav = () => {
                 <SearchTab />
               </div>
               {/* Right Side Elements */}
-              <NavBarElements />
+              {isLoggedIn ? <AvatarDropDown /> : <NavBarElements />}
             </div>
           </div>
         </div>
