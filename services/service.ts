@@ -214,4 +214,17 @@ export const Services = {
       handleError(error, "ForgotPassword");
     }
   },
+  ResetPassword: async (newPassword: string, token: string) => {
+    try {
+      const result = await END_POINT.post(
+        EndpointConstants.ResetPassword,
+        { newPassword, token },
+        true
+      );
+      let data = mapToBaseResponse<any>(result);
+      return data;
+    } catch (error) {
+      handleError(error, "ResetPassword");
+    }
+  },
 };

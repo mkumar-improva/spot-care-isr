@@ -6,9 +6,9 @@ import {
 } from "@hugeicons-pro/core-stroke-rounded/index";
 import ButtonPrimary from "@/components/ui/button/types/button-primary";
 import TextField from "@/components/ui/TextField/TextField";
-import Notifier from "@/components/ui/Notifier/Notifier";
 import useResetPassword from "@/hooks/reset-password/use-reset-password";
 import ResetPasswordConfirmation from "./reset-password-confirmation";
+import NotifierSection from "@/components/ui/Notifier/notifier-section";
 
 const ResetPasswordForm = () => {
   const {
@@ -19,18 +19,14 @@ const ResetPasswordForm = () => {
     showConfirmPassword,
     NotifierDetails,
     isPasswordReset,
-    resetForm,
-    clearErrors,
-    validateField,
-    validateForm,
+    authLoader,
+    loading,
     onSubmit,
     handler,
     handleInputChange,
     handleNotifierClose,
     togglePasswordVisibility,
     toggleConfirmPasswordVisibility,
-    setNotifierDetails,
-    setNotifierState,
     handleLogin,
   } = useResetPassword();
 
@@ -50,26 +46,12 @@ const ResetPasswordForm = () => {
             </h4>
           </div>
           {/* Reset Password Notifier */}
-          <div
-            className={`w-full transition-all duration-300 ease-in-out overflow-hidden ${
-              notifierState ? "my-1" : "my-0"
-            }`}
-          >
-            <div
-              className={`transform transition-all duration-300 ease-in-out ${
-                notifierState
-                  ? "opacity-100 scale-100 max-h-20 mb-0"
-                  : "opacity-0 scale-95 max-h-0 mb-0"
-              }`}
-            >
-              <Notifier
-                notifierState={notifierState}
-                message={NotifierDetails.message}
-                mode={NotifierDetails.mode}
-                onClose={handleNotifierClose}
-              />
-            </div>
-          </div>
+          <NotifierSection
+            NotifierState={notifierState}
+            NotifierDetails={NotifierDetails}
+            handleNotifierClose={handleNotifierClose}
+            margin="my-1"
+          />
           {/* Reset Password Form */}
           <form
             onSubmit={onSubmit}
@@ -127,6 +109,8 @@ const ResetPasswordForm = () => {
               className="bg-primary-700 font-medium text-white px-6 py-2 text-base hover:bg-primary-800 transition-colors duration-200 
             ease-in-out rounded-md w-full mt-2"
               type="submit"
+              loading={authLoader || loading}
+              disabled={authLoader || loading}
             >
               Reset your password
             </ButtonPrimary>

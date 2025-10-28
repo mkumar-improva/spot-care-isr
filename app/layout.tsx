@@ -10,6 +10,7 @@ import ClientStoreInitializerProps from "@/components/data/client-store-initiali
 import { Services } from "@/services/service";
 import { ToastProvider } from "@/components/ui/toast/toast-provider";
 import DialogRenderer from "@/components/dialogs/Component";
+import ResetPasswordWatcherServer from "@/components/dialogs/components/reset-password/components/reset-password-watcher-server";
 
 const SITE_NAME = "SpotCare Healthcare Provider Directory";
 const SITE_DESCRIPTION =
