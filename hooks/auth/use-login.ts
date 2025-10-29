@@ -1,6 +1,6 @@
 "use client";
 import { useState, ChangeEvent, KeyboardEvent, FormEvent } from "react";
-import { NotifierModel } from "@/types/NotifierModel";
+import { NotifierModel } from "@/types/notifier-model";
 import { FormValidator } from "@/utils/validator";
 import { KEYS, AUTH_KEYS } from "@/constants/KeyConstants";
 import useAuthUIStore from "@/store/ui/auth-ui-store";
