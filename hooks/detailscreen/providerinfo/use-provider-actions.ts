@@ -1,7 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import providerInfoStore from "@/store/detailscreen/providerinfo/provider-info-store";
+import { KEYS } from "@/constants/KeyConstants";
+import useAuthUIStore from "@/store/ui/auth-ui-store";
+import useUIStore from "@/store/detailscreen/ui-store";
+import useReportProviderDialogStore from "@/store/dialog/report-provider-store";
+import useShareProviderDialogStore from "@/store/dialog/share-provider-store";
 import {
   FavouriteStrokeRounded,
   Share08StrokeRounded,
@@ -23,15 +27,14 @@ export const useProviderActions = () => {
     return () => window.removeEventListener("resize", checkTouchDevice);
   }, []);
 
-  const {
-    isLoggedIn,
-    setShowLogin,
-    setIsShareDialogOpen,
-    setDialogProviderName,
-    setDialogProviderCode,
-    setIsReportDialogOpen,
-    selectedProviderDetail,
-  } = providerInfoStore();
+  const { setShowLogin } = useAuthUIStore();
+  const { selectedProviderDetail } = useUIStore();
+  const { setShowShareDialog } = useShareProviderDialogStore();
+  const { setShowReportDialog, setDialogProviderCode, setDialogProviderName } =
+    useReportProviderDialogStore();
+
+  // For now, check if user is logged in from localStorage
+  const isLoggedIn = typeof window !== "undefined" && localStorage.getItem(KEYS.ISLOGGEDIN) === "true";
 
   const providerActions = [
     {
@@ -44,7 +47,7 @@ export const useProviderActions = () => {
       title: "Share",
       icon: Share08StrokeRounded,
       onclick: () => {
-        setIsShareDialogOpen(true);
+        setShowShareDialog(true);
       },
     },
     {
@@ -54,7 +57,7 @@ export const useProviderActions = () => {
         if (isLoggedIn) {
           setDialogProviderCode(selectedProviderDetail?.code ?? "");
           setDialogProviderName(selectedProviderDetail?.name ?? "");
-          setIsReportDialogOpen(true);
+          setShowReportDialog(true);
         } else {
           setShowLogin(true);
         }

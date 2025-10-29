@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import DetailScreen from "@/components/layout/DetailScreen/Component.Client";
+import { DetailScreenComponent } from "@/components/layout/DetailScreen/Component";
 
 interface DetailScreenPageProps {
   params: {
@@ -24,7 +24,7 @@ export default function DetailScreenPage({
   searchParams,
 }: DetailScreenPageProps) {
   return (
-    <DetailScreen
+    <DetailScreenComponent
       code={params.code}
       latitude={searchParams.lat}
       longitude={searchParams.lon}

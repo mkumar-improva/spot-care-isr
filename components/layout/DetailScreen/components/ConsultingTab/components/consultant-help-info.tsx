@@ -15,14 +15,6 @@ const ConsultantHelpInfo = () => {
 
   const handleInputChange = (name: keyof FormData, value: string) => {
     updateFormField(name, value);
-    
-    // Clear error or validate field on change
-    if (value.trim()) {
-      const isValid = validateField(name, value);
-      if (isValid) {
-        updateFormError(name, "");
-      }
-    }
   };
     const city = selectedProviderDetail?.locations?.[0]?.city ?? "";
 
