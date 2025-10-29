@@ -34,7 +34,7 @@ const useReportProviderDialogStore = create<ReportProviderDialogState>((set) => 
   setDialogProviderCode: (code: string) =>
     set({ dialogProviderCode: code }),
   
-  setReportOptions: (options: any[]) =>
+  setReportOptions: (options: ReportOption[]) =>
     set({ reportOptions: options }),
   
   resetReportDialog: () =>

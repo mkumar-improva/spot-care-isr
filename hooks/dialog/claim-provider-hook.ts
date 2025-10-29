@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { upsertClaimedProvider } from "@/utils/upserClaimedProviders";
+import { upsertClaimedProvider } from "@/utils/upsertClaimedProviders";
 import { KEYS } from "constants/KeyConstants";
 import useClaimProviderDialogStore from "@/store/dialog/claim-provide-store";
 

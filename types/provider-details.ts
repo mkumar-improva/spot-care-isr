@@ -80,7 +80,7 @@ export interface Providers {
   distanceInMiles?: number;
   website?: string;
   sections?: Section[];
-  isRatingsAviable?: boolean;
+  isRatingsAvailable?: boolean;
   section: [];
   isSponsored?: boolean;
   isEmailVerified?: boolean;

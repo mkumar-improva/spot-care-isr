@@ -29,7 +29,7 @@ export const upsertClaimedProvider = (
     },
     phoneNumber: [],
     status: status,
-    isRatingsAviable: false,
+    isRatingsAvailable: false,
     section: [],
     business:{
       identityCompleted: false,
@@ -117,7 +117,7 @@ export const updateProviderLocation = (
   providers: Providers[],
   providerCode: string,
   newLocation: any
-): any[] => {
+): Providers[] => {
   const index = providers.findIndex((p) => p.code === providerCode);
   if (index === -1) return providers; // Provider not found
 

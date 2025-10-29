@@ -153,7 +153,7 @@ export const useReportProviderDialog = () => {
       window.addEventListener("keydown", handler);
     }
     return () => window.removeEventListener("keydown", handler);
-  }, [selectedOptionId, reportValue, showReportDialog]);
+  }, [selectedOptionId, reportValue, showReportDialog, saveReport]);
 
   return {
     // Dialog state
