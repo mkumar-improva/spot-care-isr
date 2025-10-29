@@ -49,7 +49,18 @@ export const useAuthWatcher = () => {
     // --- Case 3: Unauthorized access to restricted routes ---
     if (isRestricted && (!loggedIn || !valid)) {
       console.warn("Unauthorized access attempt:", pathname);
-      notFound();
+      router.push("/");
+      setIsLoggedIn(false);
+      return;
+    }
+
+    // --- Case 4: Valid token present -> ensure in-memory and local flags are set ---
+    if (token && valid) {
+      if (!loggedIn) {
+        localStorage.setItem(AUTH_KEYS.ISLOGGEDIN, "true");
+      }
+      setIsLoggedIn(true);
+      return;
     }
   }, [pathname]);
 };

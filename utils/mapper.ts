@@ -4,7 +4,7 @@ export function mapToType<T>(jsonData: any): T {
   return jsonData as T;
 }
 
-export function mapListToType<T>(jsonData: any[]): T[] {
+export function mapListToType<T>(jsonData: unknown[]): T[] {
   return jsonData.map((item) => item as T);
 }
 

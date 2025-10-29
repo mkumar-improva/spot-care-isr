@@ -52,7 +52,7 @@ export const parseProviderResults = async (
       totalReview: item.totalReview ?? null,
       isPreffered: false,
       distanceInMiles: distance ?? 0,
-      isRatingsAviable:
+      isRatingsAvailable:
         item.rating?.overall != null && item.rating.overall >= 0,
       section: Array.isArray(item.section) ? item.section : [],
       isSponsored: item.isSponsored ?? false,
@@ -69,7 +69,7 @@ export const parseProviderResults = async (
   });
 
   allMarkers.sort(sortByValues("isPreffered", "desc"));
-  allMarkers.sort(sortByValues("isRatingsAviable", "asc"));
+  allMarkers.sort(sortByValues("isRatingsAvailable", "asc"));
   allMarkers.sort(sortByValues("section", "desc"));
   allMarkers.sort(sortByValues("images", "desc"));
   // allMarkers.sort(sortByValues("isSponsored", "desc"))
@@ -109,7 +109,7 @@ export const parseProvider = (
     totalReview: provider.totalReview ?? null,
     isPreffered: false,
     distanceInMiles: distance ?? 0,
-    isRatingsAviable:
+    isRatingsAvailable:
       provider.rating?.overall != null && provider.rating.overall >= 0,
     section: Array.isArray(provider.section) ? provider.section : [],
     isSponsored: provider.isSponsored ?? false,
@@ -127,12 +127,12 @@ export const parseProvider = (
 
 const sortByValues = (key: SortKey, direction: "asc" | "desc") => {
   return (a: Providers, b: Providers): number => {
-    let valueA: any;
-    let valueB: any;
+    let valueA: unknown;
+    let valueB: unknown;
 
     // Check if the key exists and get values from providerDetails
     if (a && b && key in a && key in b) {
-      if (key === "isRatingsAviable") {
+      if (key === "isRatingsAvailable") {
         valueA = valueA ? 1 : 0;
         valueB = valueB ? 1 : 0;
       }
@@ -146,8 +146,8 @@ const sortByValues = (key: SortKey, direction: "asc" | "desc") => {
     }
 
     if (key === "images") {
-      valueA = a[key]?.length > 0 ? 1 : 0;
-      valueB = b[key]?.length > 0 ? 1 : 0;
+      valueA = (a[key] as unknown[] | undefined)?.length && (a[key] as unknown[]).length > 0 ? 1 : 0;
+      valueB = (b[key] as unknown[] | undefined)?.length && (b[key] as unknown[]).length > 0 ? 1 : 0;
     } else {
       valueA = a[key];
       valueB = b[key];
@@ -237,7 +237,8 @@ const sortByValues = (key: SortKey, direction: "asc" | "desc") => {
 //   return allMarkers;
 // };
 
-function sortByImage(objects: any[]) {
+type HasProviderPictures = { providerDetails: { Pictures: string } };
+function sortByImage<T extends HasProviderPictures>(objects: T[]) {
   return objects.sort((a, b) => {
     if (
       a.providerDetails.Pictures === "" &&
@@ -250,7 +251,7 @@ function sortByImage(objects: any[]) {
     ) {
       return -1;
     } else {
-      return a.providerDetails.Pictures.localeCompare(b.Pictures);
+      return a.providerDetails.Pictures.localeCompare(b.providerDetails.Pictures);
     }
   });
 }

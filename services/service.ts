@@ -1,5 +1,6 @@
 import { EndpointConstants } from "@/constants/end-point-constants";
 import { END_POINT } from "./end-point";
+import { Config } from "@/constants/config";
 import { CareResponse } from "@/types/care-types";
 import { mapToType, mapListToType, mapToBaseResponse } from "@/utils/mapper";
 import handleError from "@/utils/handleError";
@@ -239,6 +240,80 @@ export const Services = {
       return data;
     } catch (error) {
       handleError(error, "Login");
+    }
+  },
+  
+  updateProfile: async (
+    blob: Blob | null,
+    firstName: string,
+    lastName: string,
+    phone: string,
+    email: string
+  ) => {
+    try {
+      const formData = new FormData();
+      if (blob instanceof Blob) {
+        // Backend expects the file under key "file" (legacy behavior)
+        formData.append("file", blob, "profile.png");
+      }
+
+      formData.append("email", email);
+      formData.append("firstName", firstName);
+      formData.append("lastName", lastName);
+      formData.append("phone", phone);
+      
+      const result = await END_POINT.postFormData(
+        EndpointConstants.UpdateProfile,
+        formData
+      );
+      let data = mapToBaseResponse<UserData>(result);
+      return data;
+    } catch (error) {
+      handleError(error, "updateProfile");
+    }
+  },
+
+  RemoveProfilePicture: async (email: string) => {
+    try {
+      // Legacy service uses GET with query param
+      const result = await END_POINT.get(
+        EndpointConstants.RemoveProfilePicture + `?email=${email}`
+      );
+      let data = mapToBaseResponse<any>(result);
+      return data;
+    } catch (error) {
+      handleError(error, "RemoveProfilePicture");
+    }
+  },
+
+  ChangePassword: async (
+    token: string,
+    oldPassword: string,
+    newPassword: string
+  ) => {
+    try {
+      // Align with existing service: send token in body via endpoint helper
+      const result = await END_POINT.post(
+        EndpointConstants.ChangePassword,
+        { token: token, oldPassword: oldPassword, newPassword: newPassword },
+        true
+      );
+      const data = mapToBaseResponse<unknown>(result);
+      return data;
+    } catch (error) {
+      handleError(error, "ChangePassword");
+    }
+  },
+
+  GetUserByEmail: async (email: string) => {
+    try {
+      const result = await END_POINT.get(
+        EndpointConstants.GetUserByEmail + `?email=${email}`
+      );
+      let data = mapToBaseResponse<UserData>(result);
+      return data;
+    } catch (error) {
+      handleError(error, "GetUserByEmail");
     }
   },
 };

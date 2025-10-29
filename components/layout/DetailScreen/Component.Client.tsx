@@ -114,13 +114,13 @@ function DetailScreen({
           <div className="w-full lg:w-[45rem] xl:w-[60rem] 2xl:w-[60rem] flex flex-col items-start justify-start gap-[2rem] md:gap-[1rem]">
             <hr className="block md:hidden w-full mt-[.4rem] md:w-0 border-t border-neutral-200" />
             {/* CMS Review Section */}
-            {data?.isRatingsAviable && data.rating && (
+            {data?.isRatingsAvailable && data.rating && (
               <RatingSection
                 rating={data.rating}
                 cmsContainerRef={CmsContainerRef}
               />
             )}
-            {data?.isRatingsAviable && data.rating && (
+            {data?.isRatingsAvailable && data.rating && (
               <hr className="block md:hidden w-full md:w-0 border-t border-neutral-200 mt-[.3rem]" />
             )}
             {/* Map Section */}
@@ -202,7 +202,7 @@ function DetailScreen({
     <div className="ListingDetailPage py-[1rem] md:py-[2rem]">
       <div className="w-full max-w-screen-2xl xl:max-w-screen-2xl mx-auto px-4 xl:px-[1rem] 2xl:px-[2.8rem] ListingDetailPage__content">
         {/* Detail content */}
-        {loading ? (
+        {loading || !data ? (
             <div className="w-full h-screen flex justify-center items-center">
               <Loading />
             </div>
