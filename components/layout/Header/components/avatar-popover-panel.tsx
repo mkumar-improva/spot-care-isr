@@ -25,7 +25,14 @@ const AvatarPopoverPanel = ({ onClose }: AvatarPopoverPanelProps) => {
 
   //store
   const { userDetail, setUserDetail } = useAuthDataStore();
-  const { setIsLoggedIn, setProfileImage } = useAuthUIStore();
+  const {
+    firstName,
+    lastName,
+    userName,
+    email,
+    setIsLoggedIn,
+    setProfileImage,
+  } = useAuthUIStore();
   const { isHomePage } = useHeaderUiStore();
 
   //handler
@@ -113,10 +120,11 @@ const AvatarPopoverPanel = ({ onClose }: AvatarPopoverPanelProps) => {
         >
           <div className="ml-2">
             <p className="text-base font-semibold">
-              {userDetail?.firstName ?? ""} {userDetail?.lastName ?? ""}
+              {userDetail?.firstName ?? firstName ?? ""}{" "}
+              {userDetail?.lastName ?? lastName ?? ""}
             </p>
             <p className="text-xs font-medium text-neutral-500">
-              {userDetail?.email ?? ""}
+              {userDetail?.email ?? email ?? ""}
             </p>
           </div>
         </div>

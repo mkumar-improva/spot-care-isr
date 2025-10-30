@@ -37,7 +37,10 @@ const LoginModule = () => {
           showPassword={showPassword}
           authLoader={authLoader}
           loading={loading}
-          NotifierDetails={NotifierDetails}
+          NotifierDetails={{
+            ...NotifierDetails,
+            link: NotifierDetails.link ?? undefined
+          }}
           handleInputChange={handleInputChange}
           handleNotifierClose={handleNotifierClose}
           handler={handler}

@@ -24,4 +24,6 @@ export const AUTH_KEYS = {
   PROFILEIMAGE: "profileImage",
   USERNAME: "username",
   USERID: "userId",
+  FIRSTNAME: "firstName",
+  LASTNAME: "lastName",
 };

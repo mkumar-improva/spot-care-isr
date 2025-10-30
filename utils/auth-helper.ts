@@ -31,6 +31,8 @@ export const AuthHelper = {
     localStorage.setItem(AUTH_KEYS.PROFILEIMAGE, userdata.profilePicture ?? "");
     localStorage.setItem(AUTH_KEYS.USERNAME, userdata.firstName ?? "");
     localStorage.setItem(AUTH_KEYS.USERID, userdata.id?.toString() ?? "");
+    localStorage.setItem(AUTH_KEYS.FIRSTNAME, userdata.firstName ?? "");
+    localStorage.setItem(AUTH_KEYS.LASTNAME, userdata.lastName ?? "");
   },
   clearSession: () => {
     Object.values(AUTH_KEYS).forEach((key) => localStorage.removeItem(key));

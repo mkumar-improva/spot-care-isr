@@ -11,7 +11,15 @@ export const useAuthWatcher = () => {
   const pathname = usePathname();
 
   //store
-  const { isLoggedIn, setIsLoggedIn } = useAuthUIStore();
+  const {
+    isLoggedIn,
+    setIsLoggedIn,
+    setUserName,
+    setEmail,
+    setProfileImage,
+    setFirstName,
+    setLastName,
+  } = useAuthUIStore();
 
   //restricted routes
   const RESTRICTED_ROUTES = ["/account"]; // e.g., ['/dashboard', '/profile']
@@ -24,6 +32,28 @@ export const useAuthWatcher = () => {
     const isRestricted = RESTRICTED_ROUTES.some((route) =>
       pathname.startsWith(route)
     );
+
+    console.log("AuthWatcher Triggered:", {
+      isLoggedIn,
+      token,
+      valid,
+    });
+    // --- Case 0: Rehydrate session on page load ---
+    if (loggedIn && token && valid) {
+      console.info("Hydrating session from localStorage…");
+
+      setIsLoggedIn(true);
+      const userName = localStorage.getItem(AUTH_KEYS.USERNAME) || "";
+      const email = localStorage.getItem(AUTH_KEYS.EMAIL) || "";
+      const profileImage = localStorage.getItem(AUTH_KEYS.PROFILEIMAGE) || "";
+      const firstName = localStorage.getItem(AUTH_KEYS.FIRSTNAME) || "";
+      const lastName = localStorage.getItem(AUTH_KEYS.LASTNAME) || "";
+      setFirstName(firstName);
+      setLastName(lastName);
+      setUserName(userName);
+      setEmail(email);
+      setProfileImage(profileImage);
+    }
 
     // --- Case 1: Session expired ---
     if (loggedIn && !valid) {
@@ -49,18 +79,8 @@ export const useAuthWatcher = () => {
     // --- Case 3: Unauthorized access to restricted routes ---
     if (isRestricted && (!loggedIn || !valid)) {
       console.warn("Unauthorized access attempt:", pathname);
-      router.push("/");
       setIsLoggedIn(false);
-      return;
-    }
-
-    // --- Case 4: Valid token present -> ensure in-memory and local flags are set ---
-    if (token && valid) {
-      if (!loggedIn) {
-        localStorage.setItem(AUTH_KEYS.ISLOGGEDIN, "true");
-      }
-      setIsLoggedIn(true);
-      return;
+      notFound();
     }
   }, [pathname]);
 };
