@@ -174,7 +174,7 @@ const ProviderContent: FC<ProviderContentProps> = ({
                 </div>
               ) : null}
               {/* CMS Rating */}
-              {data.isRatingsAviable && (
+              {data.isRatingsAvailable && (
                 <div className="flex rounded-lg items-center gap-[.25rem]">
                   <Image
                     alt="Medicare Rating"

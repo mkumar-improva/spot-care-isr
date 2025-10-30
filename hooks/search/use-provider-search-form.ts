@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import useSearchUiStore from "store/ui/search-ui-store";
 import useSearchDataStore from "store/data/search-data-store";
 import useHeaderUiStore from "store/ui/header-ui-store";
@@ -9,6 +10,7 @@ import { useOutsideAlerter } from "../common/use-outsider-click";
 const useProviderSearchForm = () => {
   /*--Begining of refs----------*/
   const containerRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
   /*----------End of refs----------*/
 
   /*----------Begining of state ----------*/
@@ -40,16 +42,23 @@ const useProviderSearchForm = () => {
   });
 
   //handlers
-  const handleOnClick = (code: string, distanceInMiles: number) => {
+  const handleOnClick = (code: string, distanceInMiles: number, providerName?: string) => {
+    // Close the dropdown but keep the provider name in the search bar
     setProviderNameDebounce(null);
-    setSearchProviderName("");
-    params = {
-      code: code,
-      lat: currentLocation?.lat ?? 46.603354,
-      lon: currentLocation?.lng ?? -74.0059728,
-      distance: distanceInMiles,
-    };
-    console.log("Selected Provider Location Params: ", params);
+    // Keep the provider name visible if provided
+    if (providerName) {
+      setSearchProviderName(providerName);
+    }
+    
+    // Build query parameters
+    const queryParams = new URLSearchParams({
+      lat: String(currentLocation?.lat ?? 46.603354),
+      lon: String(currentLocation?.lng ?? -74.0059728),
+      distance: String(distanceInMiles),
+    });
+    
+    // Navigate to detail screen with provider code and location params
+    router.push(`/detail-screen/${code}?${queryParams.toString()}`);
   };
 
   return {

@@ -41,7 +41,7 @@ const useProviderDetail = ({
     try {
       let distanceInMiles: number;
       const response = await Services.GetProvider(providerCode);
-      console.log("Provider Response:", response);
+      // console.log("Provider Response:", response);
       
       if (response && response.code) {
         if (!distanceInMilesParam || distanceInMilesParam === "0") {

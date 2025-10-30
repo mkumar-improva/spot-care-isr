@@ -134,14 +134,12 @@ const ReportIssueDialog = () => {
               </div>
               <div className="w-full flex flex-row justify-between items-center mt-[1rem]">
                 <ButtonSecondary
-                  className="rounded"
                   onclick={handleClose}
                 >
                   Cancel
                 </ButtonSecondary>
                 <ButtonPrimary
                   loading={reportIssueLoader}
-                  className="rounded p-1"
                   disabled={!isLoggedIn || reportIssueLoader}
                   onclick={async () => {
                     await saveReport();

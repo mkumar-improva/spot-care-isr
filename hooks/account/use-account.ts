@@ -7,7 +7,7 @@ import { formatPhoneNumber } from "@/utils/converter";
 import useAccountStore from "@/store/account/account-store";
 import { AUTH_KEYS } from "@/constants/KeyConstants";
 import { AuthHelper } from "@/utils/auth-helper";
-
+import { UserData } from "@/types/user-data";
 export const useAccount = () => {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -34,45 +34,51 @@ export const useAccount = () => {
   } = useAccountStore();
 
   // Initialize user data from local storage by email
-  useEffect(() => {
-    if (!loadProfile) return;
+// Immediately hydrate from localStorage if data exists (SPA navigation, no loader/API)
+useEffect(() => {
+  if (userDetail) return; // already hydrated
+  if (typeof window === "undefined") return; // SSR safeguard
+  const hydrated = getUserDataFromLocalStorage();
+  if (hydrated) {
+    initializeUserData(hydrated);
+    setLoadProfile(false);
+  }
+}, []);
 
-    const init = async () => {
-      try {
-        const email = localStorage.getItem(AUTH_KEYS.EMAIL) || "";
-        if (!email) {
-          setLoadProfile(false);
-          return;
-        }
+// Only call the API if loadProfile is still true
+useEffect(() => {
+  if (!loadProfile) return;
 
-        const resp = await Services.GetUserByEmail(email);
-        if (resp && resp.status === "success" && resp.data) {
-          const user = resp.data;
-          initializeUserData(user);
-
-          // Persist latest basic fields to local storage while preserving token
-          const session = AuthHelper.getSession();
-          localStorage.setItem(AUTH_KEYS.EMAIL, user.email ?? "");
-          localStorage.setItem(AUTH_KEYS.USERNAME, user.firstName ?? "");
-          localStorage.setItem(AUTH_KEYS.USERID, user.id?.toString() ?? "");
-          localStorage.setItem(
-            AUTH_KEYS.PROFILEIMAGE,
-            user.profilePicture ?? ""
-          );
-          if (session.token) {
-            localStorage.setItem(AUTH_KEYS.TOKEN, session.token);
-          }
-          localStorage.setItem(AUTH_KEYS.ISLOGGEDIN, "true");
-        }
-      } catch (err) {
-        // fallthrough to disable loader
-      } finally {
+  const init = async () => {
+    try {
+      const email = localStorage.getItem(AUTH_KEYS.EMAIL) || "";
+      if (!email) {
         setLoadProfile(false);
+        return;
       }
-    };
+      const resp = await Services.GetUserByEmail(email);
+      if (resp && resp.status === "success" && resp.data) {
+        const user = resp.data;
+        initializeUserData(user);
+        localStorage.setItem("userDetail", JSON.stringify(user)); // Update fast-hydrate JSON cache
+        // update other localStorage fields as needed...
+        const session = AuthHelper.getSession();
+        localStorage.setItem(AUTH_KEYS.EMAIL, user.email ?? "");
+        localStorage.setItem(AUTH_KEYS.USERNAME, user.firstName ?? "");
+        localStorage.setItem(AUTH_KEYS.USERID, user.id?.toString() ?? "");
+        localStorage.setItem(AUTH_KEYS.PROFILEIMAGE, user.profilePicture ?? "");
+        if (session.token) {
+          localStorage.setItem(AUTH_KEYS.TOKEN, session.token);
+        }
+        localStorage.setItem(AUTH_KEYS.ISLOGGEDIN, "true");
+      }
+    } finally {
+      setLoadProfile(false);
+    }
+  };
 
-    init();
-  }, [loadProfile, initializeUserData, setLoadProfile]);
+  init();
+}, [loadProfile, initializeUserData, setLoadProfile]);
 
   // Handle logout
   const logout = useCallback(() => {
@@ -85,7 +91,41 @@ export const useAccount = () => {
   const handleAvatarClick = useCallback(() => {
     fileInputRef.current?.click();
   }, []);
-
+  
+  function getUserDataFromLocalStorage(): UserData | null {
+    try {
+      // Try reading from a JSON string if possible
+      const userDetailRaw = localStorage.getItem("userDetail");
+      if (userDetailRaw) {
+        const parsed = JSON.parse(userDetailRaw);
+        if (parsed && typeof parsed === "object" && parsed.email) {
+          return parsed as UserData;
+        }
+      }
+      // Legacy: reconstruct from AUTH_KEYS
+      const email = localStorage.getItem(AUTH_KEYS.EMAIL);
+      if (email) {
+        return {
+          id: +(localStorage.getItem(AUTH_KEYS.USERID) || 0),
+          email,
+          plan: null,
+          firstName: localStorage.getItem(AUTH_KEYS.USERNAME) || "",
+          lastName: "",
+          phone: "",
+          profilePicture: localStorage.getItem(AUTH_KEYS.PROFILEIMAGE) || "",
+          resetToken: null,
+          resetTokenExpiry: null,
+          role: "",
+          subscriptionEndDate: null,
+          subscriptionStatus: null,
+          token: localStorage.getItem(AUTH_KEYS.TOKEN) || "",
+        };
+      }
+      return null;
+    } catch {
+      return null;
+    }
+  }
   // Handle profile picture change
   const handleProfilePictureChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
