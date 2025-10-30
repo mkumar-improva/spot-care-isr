@@ -6,6 +6,10 @@ type State = {
   showForgotPassword: boolean;
   isLoggedIn: boolean;
   profileImage: string;
+  userName: string;
+  email: string;
+  firstName: string;
+  lastName: string;
 };
 
 type Actions = {
@@ -14,6 +18,10 @@ type Actions = {
   setShowForgotPassword: (value: boolean) => void;
   setIsLoggedIn: (value: boolean) => void;
   setProfileImage: (value: string) => void;
+  setUserName: (value: string) => void;
+  setEmail: (value: string) => void;
+  setFirstName: (value: string) => void;
+  setLastName: (value: string) => void;
 };
 
 const useAuthUIStore = create<State & Actions>((set) => ({
@@ -22,11 +30,19 @@ const useAuthUIStore = create<State & Actions>((set) => ({
   showForgotPassword: false,
   isLoggedIn: false,
   profileImage: "",
+  userName: "",
+  email: "",
+  firstName: "",
+  lastName: "",
   setShowLogin: (value: boolean) => set({ showLogin: value }),
   setShowSignup: (value: boolean) => set({ showSignup: value }),
   setShowForgotPassword: (value: boolean) => set({ showForgotPassword: value }),
   setIsLoggedIn: (value: boolean) => set({ isLoggedIn: value }),
   setProfileImage: (value: string) => set({ profileImage: value }),
+  setUserName: (value: string) => set({ userName: value }),
+  setEmail: (value: string) => set({ email: value }),
+  setFirstName: (value: string) => set({ firstName: value }),
+  setLastName: (value: string) => set({ lastName: value }),
 }));
 
 export default useAuthUIStore;

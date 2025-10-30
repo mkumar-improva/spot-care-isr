@@ -7,6 +7,10 @@ import useHeaderUiStore from "store/ui/header-ui-store";
 import { Services } from "@/services/service";
 import { parseProviderResults } from "@/utils/makers";
 import useLoadingState from "store/loader/loding-state";
+import toast from "react-hot-toast";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Alert01Icon } from "@hugeicons-pro/core-stroke-rounded/index";
+import HeroSearchCustomToast from "@/components/ui/toast/hero-search-custom-toast";
 
 const useProviderInputType = () => {
   /*--Begining of refs----------*/
@@ -126,9 +130,40 @@ const useProviderInputType = () => {
         filter: "recommended",
         headerType: "provider",
       };
-      console.log("Filter Data for SearchOption:", filterData);
+      if (!filterData.searchText || !filterData.postalCode) {
+        toast.custom((t) => (
+          <HeroSearchCustomToast
+            icon={
+              <HugeiconsIcon
+                icon={Alert01Icon}
+                className="size-10 flex-shrink-0"
+                style={{ color: "#facc15", width: "2.5rem", height: "2.5rem" }}
+                aria-hidden="true"
+              />
+            }
+            description1={`Search criteria missing`}
+            description2={`Enter both provider name and postal code to continue.`}
+            toasttype={t}
+          />
+        ));
+      }
     } catch (ex) {
       console.error(ex);
+      toast.custom((t) => (
+        <HeroSearchCustomToast
+          icon={
+            <HugeiconsIcon
+              icon={Alert01Icon}
+              className="size-10 flex-shrink-0"
+              style={{ color: "#facc15", width: "2.5rem", height: "2.5rem" }}
+              aria-hidden="true"
+            />
+          }
+          description1={`Search criteria missing`}
+          description2={`Enter both provider name and postal code to continue.`}
+          toasttype={t}
+        />
+      ));
     } finally {
       setLoading(false);
     }
@@ -151,7 +186,7 @@ const useProviderInputType = () => {
     handleSpanClick,
     handleProviderNameChange,
     handleClearData,
-    SearchOption
+    SearchOption,
   };
 };
 

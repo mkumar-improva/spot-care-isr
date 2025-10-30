@@ -20,6 +20,7 @@ const StandardHeader = () => {
       "/provider-listing",
       "/addProvider",
       "/provider-profile",
+      "/list"
     ];
 
     setIsHomePage(!nonHomeRoutes.includes(pathName));

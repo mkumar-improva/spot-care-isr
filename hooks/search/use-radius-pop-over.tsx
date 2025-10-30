@@ -9,6 +9,7 @@ import HeroSearchCustomToast from "@/components/ui/toast/hero-search-custom-toas
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Alert01Icon } from "@hugeicons-pro/core-stroke-rounded/index";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 interface UseRadiusPopOverProps {
   setCareSearchShowVerticalLine?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -21,6 +22,8 @@ const useRadiusPopOver = ({
   setCareSearchShowVerticalLine,
   setRadiusSearchShowVerticalLine,
 }: UseRadiusPopOverProps) => {
+  const router = useRouter();
+
   /*----------Begining of Store Import----------*/
   const { isHomePage } = useHeaderUiStore();
   const { loading, isWishlistLoaded, setLoading } = useLoadingState();
@@ -89,14 +92,14 @@ const useRadiusPopOver = ({
                 aria-hidden="true"
               />
             }
-            description1={`Invalid address`}
-            description2={`Make sure you have entered a valid State or City`}
+            description1={`Invalid search parameters`}
+            description2={`Care type, radius, and postal code are required to run this search.`}
             toasttype={t}
           />
         ));
-      } else {
-        console.log("Filter Data for SearchOption:", filterData);
+        return;
       }
+      router.push("/list");
     } catch (err) {
       console.error("Error in SearchOption:", err);
       toast.custom((t) => (
@@ -109,7 +112,7 @@ const useRadiusPopOver = ({
               aria-hidden="true"
             />
           }
-          description1={`Invalid address`}
+          description1={`Invalid search request`}
           description2={`Make sure you have entered a valid State or City`}
           toasttype={t}
         />

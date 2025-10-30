@@ -24,6 +24,7 @@ const ProviderTypeInput: FC<ProviderTypeInputProps> = ({
   const { locationValue, searchProviderName, setSearchProviderName } =
     useSearchUiStore((state) => ({
       locationValue: state.locationValue,
+      storePostalCode: state.storePostalCode,
       searchProviderName: state.searchProviderName,
       setSearchProviderName: state.setSearchProviderName,
     }));
@@ -68,7 +69,8 @@ const ProviderTypeInput: FC<ProviderTypeInputProps> = ({
             ref={inputRef}
             name="providerVal"
             className={`block w-full bg-transparent border-none focus:ring-0 p-0 focus:outline-none focus:placeholder-neutral-300 
-            text-base font-semibold placeholder-neutral-800 dark:placeholder-neutral-200 truncate`}
+            text-base font-semibold placeholder-neutral-800 dark:placeholder-neutral-200 truncate 
+            ${!storePostalCode ? "cursor-not-allowed" : "cursor-text"}`}
             placeholder={placeHolder}
             value={searchProviderName}
             disabled={!storePostalCode}
@@ -95,9 +97,12 @@ const ProviderTypeInput: FC<ProviderTypeInputProps> = ({
       </div>
       <SearchButton
         className={`hidden md:flex items-center justify-center bg-primary-700
-            text-white rounded-full overflow-hidden`}
+            text-white rounded-full overflow-hidden ${
+              !storePostalCode ? "cursor-not-allowed" : "cursor-pointer"
+            }`}
         size="size-12 lg:size-16"
         onClick={SearchOption}
+        disabled={!storePostalCode}
       />
     </div>
   );
