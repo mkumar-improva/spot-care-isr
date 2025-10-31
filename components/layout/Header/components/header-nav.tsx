@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Logo from "@/components/ui/logo";
 import logoImg from "@/assets/app/spot/full.png";
 import NavBarElements from "./navbar-elements";
@@ -11,12 +11,21 @@ import { useOutsideAlerter } from "@/hooks/common/use-outsider-click";
 import SearchTab from "./search-tab";
 import AvatarDropDown from "./avatar-drop-down";
 import useAuthUIStore from "@/store/ui/auth-ui-store";
+import SearchSkeleton from "./search-skeleton";
+import HeroSearchSkeleton from "./hero-search-skeleton";
+import ProfileSkeleton from "./profile-skeleton";
+
 
 const HeaderNav = () => {
   /*----------Begining of Store Import----------*/
   const { isHomePage, showHeroSearch, setShowHeroSearch } = useHeaderUiStore();
-  const { isLoggedIn } = useAuthUIStore();
+  const { isLoggedIn, isAuthLoading } = useAuthUIStore();
+  const [mounted, setMounted] = useState(false);
   /*----------End of Store Import----------*/
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const heroSearchRef = useRef<HTMLDivElement>(null);
 
@@ -58,11 +67,15 @@ const HeaderNav = () => {
               href="/"
               className="w-[4.25rem] md:w-[7.25rem] relative z-[999999]"
             />
-            {/* Hero Search */}
-            {!isHomePage && (
+            {/* Hero Search: render during initial mount/loading to show centered skeleton */}
+            {((!mounted || isAuthLoading) || !isHomePage) && (
               <div className={`ml-[12rem] hidden xl:block`} ref={heroSearchRef}>
                 <div className="block">
-                  <RenderButtonOpenHeroSearch />
+                  {(!mounted || isAuthLoading) ? (
+                    <HeroSearchSkeleton />
+                  ) : (
+                    <RenderButtonOpenHeroSearch />
+                  )}
                   <div className="lg:hidden w-full max-w-lg mx-auto"></div>
                   <SearchComponent />
                 </div>
@@ -71,10 +84,16 @@ const HeaderNav = () => {
             <div className="flex items-center justify-end gap-4">
               {/* Search Tab */}
               <div className="block md:hidden ml-0">
-                <SearchTab />
+                {!mounted || isAuthLoading ? <SearchSkeleton /> : <SearchTab />}
               </div>
-              {/* Right Side Elements */}
-              {isLoggedIn ? <AvatarDropDown /> : <NavBarElements />}
+              {/* Right Side Elements - Show appropriate skeleton during load, then actual component */}
+              {!mounted || isAuthLoading ? (
+                <ProfileSkeleton />
+              ) : isLoggedIn ? (
+                <AvatarDropDown />
+              ) : (
+                <NavBarElements />
+              )}
             </div>
           </div>
         </div>

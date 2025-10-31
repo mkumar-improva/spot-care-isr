@@ -66,7 +66,10 @@ const RadiusPopOver: FC<RadiusPopOverProps> = ({
               <Popover.Button
                 ref={popoverButtonRef}
                 className={`relative z-10 flex-1 flex text-left items-center pl-[1rem] pr-[1rem] py-[.75rem] lg:px-[1.75rem] space-x-3 focus:outline-none`}
-                onClickCapture={onClickCapture}
+                onClickCapture={() => {
+                  onClickCapture();
+                  onFocusScroll?.();
+                }}
               >
                 {" "}
                 <div className="text-neutral-300 dark:text-neutral-400">
@@ -104,6 +107,7 @@ const RadiusPopOver: FC<RadiusPopOverProps> = ({
                       if (!open && popoverButtonRef.current) {
                         popoverButtonRef.current.click();
                       }
+                      onFocusScroll?.();
                     }}
                   />
                   <span className="block mt-0.5 text-sm text-neutral-400 font-light ">

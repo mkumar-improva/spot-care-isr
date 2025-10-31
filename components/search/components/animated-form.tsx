@@ -8,6 +8,7 @@ import useHeaderUiStore from "store/ui/header-ui-store";
 
 interface AnimatedFormProps {
   activeTab: "services" | "provider";
+  onFocusScroll?: () => void;
 }
 
 type TabType = "services" | "provider";
@@ -51,7 +52,7 @@ const getCurrentBreakpoint = (): Breakpoint => {
   return "md";
 };
 
-const AnimatedForm: FC<AnimatedFormProps> = ({ activeTab = "services" }) => {
+const AnimatedForm: FC<AnimatedFormProps> = ({ activeTab = "services", onFocusScroll }) => {
   /*----------Begining of Store Import----------*/
   const { searchActiveTab } = useSearchUiStore();
   const { isHomePage } = useHeaderUiStore();
@@ -82,9 +83,9 @@ const AnimatedForm: FC<AnimatedFormProps> = ({ activeTab = "services" }) => {
       className="transition-all duration-300 ease-in-out overflow-visible"
     >
       {searchActiveTab === "services" ? (
-        <StaySearchForm />
+        <StaySearchForm onFocusScroll={onFocusScroll} />
       ) : (
-        <ProviderSearchForm />
+        <ProviderSearchForm onFocusScroll={onFocusScroll} />
       )}
     </div>
   );

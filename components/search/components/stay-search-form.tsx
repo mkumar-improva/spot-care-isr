@@ -7,7 +7,11 @@ import RadiusInput from "./radius-input";
 import { useOutsideAlerter } from "@/hooks/common/use-outsider-click";
 import useHeaderUiStore from "store/ui/header-ui-store";
 
-const StaySearchForm: FC = () => {
+interface StaySearchFormProps {
+  onFocusScroll?: () => void;
+}
+
+const StaySearchForm: FC<StaySearchFormProps> = ({ onFocusScroll }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isRadiusOpen, setRadiusOpen] = useState(false);
   const [careSearchShowVerticalLine, setCareSearchShowVerticalLine] =
@@ -44,6 +48,7 @@ const StaySearchForm: FC = () => {
         isRadiusOpen={isRadiusOpen}
         setCareSearchShowVerticalLine={setCareSearchShowVerticalLine}
         setRadiusSearchShowVerticalLine={setRadiusSearchShowVerticalLine}
+        onFocusScroll={onFocusScroll}
       />
       <div
         className={`self-center h-8 py-2 border-r ${
@@ -57,6 +62,7 @@ const StaySearchForm: FC = () => {
         setCareSearchShowVerticalLine={setCareSearchShowVerticalLine}
         setRadiusSearchShowVerticalLine={setRadiusSearchShowVerticalLine}
         mobileClassName="py-[0.75rem]"
+        onFocusScroll={onFocusScroll}
       />
       <div
         className={`self-center h-8 py-2 border-r ${
@@ -70,6 +76,7 @@ const StaySearchForm: FC = () => {
         mobileClassName=""
         setCareSearchShowVerticalLine={setCareSearchShowVerticalLine}
         setRadiusSearchShowVerticalLine={setRadiusSearchShowVerticalLine}
+        onFocusScroll={onFocusScroll}
       />
     </div>
   );
