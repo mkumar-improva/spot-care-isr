@@ -15,6 +15,10 @@ const ConsultantHelpInfo = () => {
 
   const handleInputChange = (name: keyof FormData, value: string) => {
     updateFormField(name, value);
+    // Clear error when user starts typing
+    if (formErrors[name]) {
+      updateFormError(name, "");
+    }
   };
     const city = selectedProviderDetail?.locations?.[0]?.city ?? "";
 
@@ -56,6 +60,6 @@ const ConsultantHelpInfo = () => {
         />
       </div>
     );
-  };
+};
 
 export default ConsultantHelpInfo;

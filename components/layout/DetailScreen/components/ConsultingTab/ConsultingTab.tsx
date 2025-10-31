@@ -187,9 +187,6 @@ const ConsultingTab = () => {
           )}
           {activeFormIndex < FormTabs.length - 2 ? (
             <ButtonPrimary
-              disabled={stepFields[activeFormIndex].some(
-                (field) => !formData[field] || (formErrors[field] && formData[field])
-              )}
               onclick={handleNextClick}
             >
               Next

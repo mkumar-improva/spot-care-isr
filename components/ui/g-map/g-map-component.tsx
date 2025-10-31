@@ -2,6 +2,7 @@
 
 import { Transition } from "@headlessui/react";
 import { FC, Fragment, useState } from "react";
+import { usePathname } from "next/navigation";
 import ProviderCard from "../provider-card/provider-card";
 import { Providers } from "@/types/provider-details";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -24,6 +25,7 @@ const GMapComponent: FC<GMapComponentProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const ratingToShow = item.agrReview?.reviews.rating ?? 0;
+  const pathname = usePathname();
 
   return (
     <div
@@ -33,17 +35,26 @@ const GMapComponent: FC<GMapComponentProps> = ({
       onMouseLeave={() => setIsOpen(false)}
     >
       {/* Plot */}
-      <div className="text-primary-500 bg-white">
-        <div
-          className={`${
-            isSelected
-              ? "text-white bg-primary-700 shadow-lg"
-              : "bg-primary-400 text-white shadow-md"
-          } h-6 w-10 text-center p-1 rounded-md text-xs`}
-        >
-          ⭐ {ratingToShow.toString()}
+  {pathname?.startsWith("/detail-screen") ? (
+        <div className="text-[#e71c22] bg-white">
+          <HugeiconsIcon
+            icon={Location01Icon}
+            className="size-5 md:size-7 shrink-0"
+          />
         </div>
-      </div>
+      ) : (
+        <div className="text-primary-500 bg-white">
+          <div
+            className={`${
+              isSelected
+                ? "text-white bg-primary-700 shadow-lg"
+                : "bg-primary-400 text-white shadow-md"
+            } h-6 w-10 text-center p-1 rounded-md text-xs`}
+          >
+            ⭐ {ratingToShow.toString()}
+          </div>
+        </div>
+      )}
       {/* InfoBox */}
       {isList && (
         <Transition

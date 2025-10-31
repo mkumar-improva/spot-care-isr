@@ -43,7 +43,6 @@ const AvatarPopoverPanel = ({ onClose }: AvatarPopoverPanelProps) => {
   const onAccountClicked = () => {
     onClose?.();
     router.push("/account");
-    console.log("Account clicked");
   };
   const logout = () => {
     onClose?.();

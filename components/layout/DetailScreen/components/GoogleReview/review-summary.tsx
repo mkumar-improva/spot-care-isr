@@ -199,7 +199,7 @@ const ReviewSummary: FC<ReviewSummaryProps> = ({
               window.open(agrReviews.url || "https://maps.google.com", "_blank")
             }
           >
-            <ButtonSecondary className="gap-3">
+            <ButtonSecondary >
               <span>View more</span>
               <HugeiconsIcon
                 icon={CircleArrowRight01Icon}

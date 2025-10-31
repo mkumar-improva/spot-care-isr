@@ -33,11 +33,11 @@ export const useAuthWatcher = () => {
       pathname.startsWith(route)
     );
 
-    console.log("AuthWatcher Triggered:", {
-      isLoggedIn,
-      token,
-      valid,
-    });
+    // console.log("AuthWatcher Triggered:", {
+    //   isLoggedIn,
+    //   token,
+    //   valid,
+    // });
     // --- Case 0: Rehydrate session on page load ---
     if (loggedIn && token && valid) {
       console.info("Hydrating session from localStorage…");
