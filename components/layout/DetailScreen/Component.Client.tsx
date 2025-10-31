@@ -104,8 +104,15 @@ export default function DetailScreen({
   };
 
   const setSelectedProviderDetail = useUIStore((s) => s.setSelectedProviderDetail);
+  const previousProviderRef = useRef<Providers | null>(null);
   useEffect(() => {
-    if (initialProvider) setSelectedProviderDetail(initialProvider);
+    if (
+      initialProvider &&
+      (previousProviderRef.current?.code !== initialProvider.code)
+    ) {
+      setSelectedProviderDetail(initialProvider);
+      previousProviderRef.current = initialProvider;
+    }
   }, [initialProvider, setSelectedProviderDetail]);
 
   return (

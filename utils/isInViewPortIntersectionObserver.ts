@@ -15,7 +15,7 @@ const checkInViewIntersectionObserver = ({
     entries: IntersectionObserverEntry[],
     observer: IntersectionObserver
   ) => {
-    entries.map((entry: IntersectionObserverEntry) => {
+    entries.forEach((entry: IntersectionObserverEntry) => {
       if (entry.isIntersecting) {
         //
         callback();
@@ -24,14 +24,13 @@ const checkInViewIntersectionObserver = ({
           observer.unobserve(entry.target);
         }
       }
-      return true;
     });
   };
 
   // _checkBrowserSupport-----
   if (typeof window.IntersectionObserver === "undefined") {
     console.error(
-      "window.IntersectionObserver === undefined! => Your Browser is Notsupport"
+      "window.IntersectionObserver === undefined! => Your Browser is Not supported"
     );
     return;
   }

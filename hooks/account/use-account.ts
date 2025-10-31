@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useRef } from "react";
+import { useEffect, useCallback, useRef, use } from "react";
 import { useRouter } from "next/navigation";
 import { Services } from "@/services/service";
 import { StatusMessages } from "@/constants/StatusMessages";
@@ -33,8 +33,6 @@ export const useAccount = () => {
     initializeUserData,
   } = useAccountStore();
 
-  // Initialize user data from local storage by email
-// Immediately hydrate from localStorage if data exists (SPA navigation, no loader/API)
 useEffect(() => {
   if (userDetail) return; // already hydrated
   if (typeof window === "undefined") return; // SSR safeguard
@@ -43,7 +41,7 @@ useEffect(() => {
     initializeUserData(hydrated);
     setLoadProfile(false);
   }
-}, []);
+}, [userDetail, initializeUserData, setLoadProfile]);
 
 // Only call the API if loadProfile is still true
 useEffect(() => {
@@ -60,8 +58,7 @@ useEffect(() => {
       if (resp && resp.status === "success" && resp.data) {
         const user = resp.data;
         initializeUserData(user);
-        localStorage.setItem("userDetail", JSON.stringify(user)); // Update fast-hydrate JSON cache
-        // update other localStorage fields as needed...
+        localStorage.setItem("userDetail", JSON.stringify(user)); 
         const session = AuthHelper.getSession();
         localStorage.setItem(AUTH_KEYS.EMAIL, user.email ?? "");
         localStorage.setItem(AUTH_KEYS.USERNAME, user.firstName ?? "");
@@ -80,21 +77,17 @@ useEffect(() => {
   init();
 }, [loadProfile, initializeUserData, setLoadProfile]);
 
-  // Handle logout
   const logout = useCallback(() => {
-    // Clear auth session keys
     Object.values(AUTH_KEYS).forEach((key) => localStorage.removeItem(key));
     router.push("/");
   }, [router]);
 
-  // Handle profile picture click
   const handleAvatarClick = useCallback(() => {
     fileInputRef.current?.click();
   }, []);
   
   function getUserDataFromLocalStorage(): UserData | null {
     try {
-      // Try reading from a JSON string if possible
       const userDetailRaw = localStorage.getItem("userDetail");
       if (userDetailRaw) {
         const parsed = JSON.parse(userDetailRaw);
@@ -102,7 +95,6 @@ useEffect(() => {
           return parsed as UserData;
         }
       }
-      // Legacy: reconstruct from AUTH_KEYS
       const email = localStorage.getItem(AUTH_KEYS.EMAIL);
       if (email) {
         return {
@@ -126,7 +118,6 @@ useEffect(() => {
       return null;
     }
   }
-  // Handle profile picture change
   const handleProfilePictureChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
@@ -260,7 +251,6 @@ useEffect(() => {
     initializeUserData,
   ]);
 
-  // Effect to save profile picture when it changes
   useEffect(() => {
     if (
       profilePictureBlob &&
@@ -275,10 +265,7 @@ useEffect(() => {
   const hasUserData = userDetail && userDetail.id > 0;
 
   return {
-    // Refs
     fileInputRef,
-    
-    // State
     userDetail,
     formData,
     loadProfile,
@@ -288,7 +275,6 @@ useEffect(() => {
     notifierState,
     notifierDetails,
     hasUserData,
-    // derive subscription-like details if needed in UI (not currently used)
     subscriptionDetails: userDetail
       ? {
           plan: userDetail.plan ?? null,
@@ -297,7 +283,6 @@ useEffect(() => {
         }
       : null,
 
-    // Actions
     setSelectedTab,
     logout,
     handleAvatarClick,
@@ -305,7 +290,6 @@ useEffect(() => {
     removeProfilePicture,
     hideNotifier,
 
-    // Computed values
     displayName: `${formData.firstName || userDetail?.firstName || ""} ${formData.lastName || userDetail?.lastName || ""}`.trim(),
     displayPhone: formatPhoneNumber(formData.phone || userDetail?.phone || ""),
     displayEmail: formData.email || userDetail?.email || "",

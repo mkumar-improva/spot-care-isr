@@ -38,9 +38,8 @@ export const useReportProviderDialog = () => {
         } else if (result?.data && Array.isArray(result.data)) {
           optionsArray = result.data;
         } else if (typeof result === "object" && result !== null) {
-          // If it's an object with options, try to extract the array
           const foundArray = Object.values(result).find(val => Array.isArray(val));
-          optionsArray = foundArray as Array<{ id: number; category: string }> || [];
+          optionsArray = (foundArray as Array<{ id: number; category: string }> | undefined) ?? [];
         }
         
         if (optionsArray.length > 0) {

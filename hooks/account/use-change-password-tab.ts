@@ -94,7 +94,7 @@ export const useChangePasswordTab = ({ onLogout }: UseChangePasswordTabProps) =>
     return Object.values(errors).every((error) => error === "");
   }, [passwordData, setPasswordErrors]);
 
-  // Handle form submission
+
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -150,7 +150,6 @@ export const useChangePasswordTab = ({ onLogout }: UseChangePasswordTabProps) =>
     ]
   );
 
-  // Handle keyboard events
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLFormElement>) => {
       if (e.key === "Enter") {
@@ -162,18 +161,13 @@ export const useChangePasswordTab = ({ onLogout }: UseChangePasswordTabProps) =>
   );
 
   return {
-    // State
     passwordData,
     passwordErrors,
     profileLoader,
-
-    // Handlers
     handlePasswordChange,
     handleBlur,
     handleSubmit,
     handleKeyDown,
-
-    // Utilities
     validatePasswordForm,
   };
 };

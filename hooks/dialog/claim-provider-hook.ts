@@ -19,7 +19,6 @@ export const useClaimProviderDialog = () => {
     setClaimedProviders,
   } = useClaimProviderDialogStore();
 
-  // Form state
   const [loading, setLoading] = useState(false);
   const [claimStatus, setClaimStatus] = useState<"none" | "approved" | "pending">("none");
   const [npi, setNpi] = useState("");
@@ -126,12 +125,9 @@ export const useClaimProviderDialog = () => {
   };
 
   return {
-    // Dialog state
     showClaimProvider,
     setShowClaimProvider,
     selectedProviderCode,
-    
-    // Form state
     loading,
     claimStatus,
     npi,
@@ -145,8 +141,6 @@ export const useClaimProviderDialog = () => {
     notifierState,
     setNotifierState,
     notifierDetails,
-    
-    // Handlers
     handleSubmit,
     handleClose,
   };
