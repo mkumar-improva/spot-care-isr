@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useRef } from "react";
+import { useEffect, useCallback, useRef, use } from "react";
 import { useRouter } from "next/navigation";
 import { Services } from "@/services/service";
 import { StatusMessages } from "@/constants/StatusMessages";
@@ -7,7 +7,7 @@ import { formatPhoneNumber } from "@/utils/converter";
 import useAccountStore from "@/store/account/account-store";
 import { AUTH_KEYS } from "@/constants/KeyConstants";
 import { AuthHelper } from "@/utils/auth-helper";
-
+import { UserData } from "@/types/user-data";
 export const useAccount = () => {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -33,60 +33,91 @@ export const useAccount = () => {
     initializeUserData,
   } = useAccountStore();
 
-  // Initialize user data from local storage by email
-  useEffect(() => {
-    if (!loadProfile) return;
+useEffect(() => {
+  if (userDetail) return; // already hydrated
+  if (typeof window === "undefined") return; // SSR safeguard
+  const hydrated = getUserDataFromLocalStorage();
+  if (hydrated) {
+    initializeUserData(hydrated);
+    setLoadProfile(false);
+  }
+}, [userDetail, initializeUserData, setLoadProfile]);
 
-    const init = async () => {
-      try {
-        const email = localStorage.getItem(AUTH_KEYS.EMAIL) || "";
-        if (!email) {
-          setLoadProfile(false);
-          return;
-        }
+// Only call the API if loadProfile is still true
+useEffect(() => {
+  if (!loadProfile) return;
 
-        const resp = await Services.GetUserByEmail(email);
-        if (resp && resp.status === "success" && resp.data) {
-          const user = resp.data;
-          initializeUserData(user);
-
-          // Persist latest basic fields to local storage while preserving token
-          const session = AuthHelper.getSession();
-          localStorage.setItem(AUTH_KEYS.EMAIL, user.email ?? "");
-          localStorage.setItem(AUTH_KEYS.USERNAME, user.firstName ?? "");
-          localStorage.setItem(AUTH_KEYS.USERID, user.id?.toString() ?? "");
-          localStorage.setItem(
-            AUTH_KEYS.PROFILEIMAGE,
-            user.profilePicture ?? ""
-          );
-          if (session.token) {
-            localStorage.setItem(AUTH_KEYS.TOKEN, session.token);
-          }
-          localStorage.setItem(AUTH_KEYS.ISLOGGEDIN, "true");
-        }
-      } catch (err) {
-        // fallthrough to disable loader
-      } finally {
+  const init = async () => {
+    try {
+      const email = localStorage.getItem(AUTH_KEYS.EMAIL) || "";
+      if (!email) {
         setLoadProfile(false);
+        return;
       }
-    };
+      const resp = await Services.GetUserByEmail(email);
+      if (resp && resp.status === "success" && resp.data) {
+        const user = resp.data;
+        initializeUserData(user);
+        localStorage.setItem("userDetail", JSON.stringify(user)); 
+        const session = AuthHelper.getSession();
+        localStorage.setItem(AUTH_KEYS.EMAIL, user.email ?? "");
+        localStorage.setItem(AUTH_KEYS.USERNAME, user.firstName ?? "");
+        localStorage.setItem(AUTH_KEYS.USERID, user.id?.toString() ?? "");
+        localStorage.setItem(AUTH_KEYS.PROFILEIMAGE, user.profilePicture ?? "");
+        if (session.token) {
+          localStorage.setItem(AUTH_KEYS.TOKEN, session.token);
+        }
+        localStorage.setItem(AUTH_KEYS.ISLOGGEDIN, "true");
+      }
+    } finally {
+      setLoadProfile(false);
+    }
+  };
 
-    init();
-  }, [loadProfile, initializeUserData, setLoadProfile]);
+  init();
+}, [loadProfile, initializeUserData, setLoadProfile]);
 
-  // Handle logout
   const logout = useCallback(() => {
-    // Clear auth session keys
     Object.values(AUTH_KEYS).forEach((key) => localStorage.removeItem(key));
     router.push("/");
   }, [router]);
 
-  // Handle profile picture click
   const handleAvatarClick = useCallback(() => {
     fileInputRef.current?.click();
   }, []);
-
-  // Handle profile picture change
+  
+  function getUserDataFromLocalStorage(): UserData | null {
+    try {
+      const userDetailRaw = localStorage.getItem("userDetail");
+      if (userDetailRaw) {
+        const parsed = JSON.parse(userDetailRaw);
+        if (parsed && typeof parsed === "object" && parsed.email) {
+          return parsed as UserData;
+        }
+      }
+      const email = localStorage.getItem(AUTH_KEYS.EMAIL);
+      if (email) {
+        return {
+          id: +(localStorage.getItem(AUTH_KEYS.USERID) || 0),
+          email,
+          plan: null,
+          firstName: localStorage.getItem(AUTH_KEYS.USERNAME) || "",
+          lastName: "",
+          phone: "",
+          profilePicture: localStorage.getItem(AUTH_KEYS.PROFILEIMAGE) || "",
+          resetToken: null,
+          resetTokenExpiry: null,
+          role: "",
+          subscriptionEndDate: null,
+          subscriptionStatus: null,
+          token: localStorage.getItem(AUTH_KEYS.TOKEN) || "",
+        };
+      }
+      return null;
+    } catch {
+      return null;
+    }
+  }
   const handleProfilePictureChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
@@ -220,7 +251,6 @@ export const useAccount = () => {
     initializeUserData,
   ]);
 
-  // Effect to save profile picture when it changes
   useEffect(() => {
     if (
       profilePictureBlob &&
@@ -235,10 +265,7 @@ export const useAccount = () => {
   const hasUserData = userDetail && userDetail.id > 0;
 
   return {
-    // Refs
     fileInputRef,
-    
-    // State
     userDetail,
     formData,
     loadProfile,
@@ -248,7 +275,6 @@ export const useAccount = () => {
     notifierState,
     notifierDetails,
     hasUserData,
-    // derive subscription-like details if needed in UI (not currently used)
     subscriptionDetails: userDetail
       ? {
           plan: userDetail.plan ?? null,
@@ -257,7 +283,6 @@ export const useAccount = () => {
         }
       : null,
 
-    // Actions
     setSelectedTab,
     logout,
     handleAvatarClick,
@@ -265,7 +290,6 @@ export const useAccount = () => {
     removeProfilePicture,
     hideNotifier,
 
-    // Computed values
     displayName: `${formData.firstName || userDetail?.firstName || ""} ${formData.lastName || userDetail?.lastName || ""}`.trim(),
     displayPhone: formatPhoneNumber(formData.phone || userDetail?.phone || ""),
     displayEmail: formData.email || userDetail?.email || "",

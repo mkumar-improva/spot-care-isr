@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, FormEvent } from 'react';
+import { useState, FormEvent, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
@@ -14,6 +14,7 @@ type SearchFormProps = {
   defaultLon: number;
   defaultRadius: number;
   className?: string;
+  enableScrollOnFocus?: boolean;
 };
 
 function parseLatLon(value: string) {
@@ -37,12 +38,44 @@ export function SearchForm({
   defaultLon,
   defaultRadius,
   className,
+  enableScrollOnFocus = true,
 }: SearchFormProps) {
   const router = useRouter();
   const [careType, setCareType] = useState(defaultCareType);
   const [location, setLocation] = useState(`${defaultLat}, ${defaultLon}`);
   const [radius, setRadius] = useState(String(defaultRadius));
   const [error, setError] = useState<string | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  const containerRef = useRef<HTMLFormElement | null>(null);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+const handleScrollDown = () => {
+  if (!isMounted || typeof window === 'undefined') {
+    return;
+  }
+
+  if (enableScrollOnFocus && containerRef.current) {
+    requestAnimationFrame(() => {
+      containerRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+        inline: 'nearest'
+      });
+      
+      // Then adjust by scrolling up 150px
+      setTimeout(() => {
+        window.scrollBy({
+          top: -150,
+          behavior: 'smooth'
+        });
+      }, 100);
+    });
+  }
+};
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -72,8 +105,12 @@ export function SearchForm({
 
   return (
     <form
+      ref={containerRef}
       onSubmit={handleSubmit}
-      className={cn('grid w-full gap-6 rounded-2xl border bg-card/70 p-6 shadow-lg backdrop-blur', className)}
+      className={cn(
+        'grid w-full gap-6 rounded-2xl border bg-card/70 p-6 shadow-lg backdrop-blur',
+        className
+      )}
     >
       <div className="grid gap-2">
         <Label htmlFor="careType">Care Type</Label>
@@ -83,6 +120,8 @@ export function SearchForm({
           placeholder="Adult Day Care"
           value={careType}
           onChange={(event) => setCareType(event.target.value)}
+          onFocus={handleScrollDown}
+          onClick={handleScrollDown}
           required
         />
       </div>
@@ -95,6 +134,8 @@ export function SearchForm({
           placeholder="33.9253, -84.3857"
           value={location}
           onChange={(event) => setLocation(event.target.value)}
+          onFocus={handleScrollDown}
+          onClick={handleScrollDown}
           required
         />
       </div>
@@ -109,6 +150,8 @@ export function SearchForm({
           step={0.1}
           value={radius}
           onChange={(event) => setRadius(event.target.value)}
+          onFocus={handleScrollDown}
+          onClick={handleScrollDown}
           required
         />
       </div>

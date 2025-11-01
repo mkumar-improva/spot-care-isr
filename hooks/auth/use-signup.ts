@@ -2,7 +2,7 @@
 import { useState, FormEvent, KeyboardEvent } from "react";
 import { formatPhoneNumber } from "@/utils/converter";
 import { FormValidator } from "@/utils/validator";
-import { NotifierModel } from "@/types/NotifierModel";
+import { NotifierModel } from "@/types/notifier-model";
 import { KEYS } from "@/constants/KeyConstants";
 import useAuthUIStore from "@/store/ui/auth-ui-store";
 import useLoadingState from "@/store/loader/loding-state";

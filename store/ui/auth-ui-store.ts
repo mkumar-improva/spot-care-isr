@@ -1,4 +1,4 @@
-import create from "zustand";
+import { create } from "zustand";
 
 type State = {
   showLogin: boolean;
@@ -10,6 +10,7 @@ type State = {
   email: string;
   firstName: string;
   lastName: string;
+  isAuthLoading: boolean;
 };
 
 type Actions = {
@@ -22,6 +23,7 @@ type Actions = {
   setEmail: (value: string) => void;
   setFirstName: (value: string) => void;
   setLastName: (value: string) => void;
+  setIsAuthLoading: (value: boolean) => void;
 };
 
 const useAuthUIStore = create<State & Actions>((set) => ({
@@ -34,6 +36,7 @@ const useAuthUIStore = create<State & Actions>((set) => ({
   email: "",
   firstName: "",
   lastName: "",
+  isAuthLoading: true,
   setShowLogin: (value: boolean) => set({ showLogin: value }),
   setShowSignup: (value: boolean) => set({ showSignup: value }),
   setShowForgotPassword: (value: boolean) => set({ showForgotPassword: value }),
@@ -43,6 +46,7 @@ const useAuthUIStore = create<State & Actions>((set) => ({
   setEmail: (value: string) => set({ email: value }),
   setFirstName: (value: string) => set({ firstName: value }),
   setLastName: (value: string) => set({ lastName: value }),
+  setIsAuthLoading: (value: boolean) => set({ isAuthLoading: value }),
 }));
 
 export default useAuthUIStore;

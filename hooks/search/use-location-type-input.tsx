@@ -53,8 +53,8 @@ const useLocationTypeInput = ({
   const handlePlaceChanged = async () => {
     if (autocompleteRef.current) {
       const place = autocompleteRef.current.getPlace();
-      const lat = place.geometry?.location!.lat() ?? 0;
-      const lng = place.geometry?.location!.lng() ?? 0;
+      const lat = place.geometry?.location?.lat() ?? 0;
+      const lng = place.geometry?.location?.lng() ?? 0;
 
       if (lat !== 0 && lng !== 0) setCurrentLocation({ lat: lat, lng: lng });
 

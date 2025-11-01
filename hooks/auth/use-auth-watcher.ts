@@ -19,12 +19,15 @@ export const useAuthWatcher = () => {
     setProfileImage,
     setFirstName,
     setLastName,
+    setIsAuthLoading,
   } = useAuthUIStore();
 
   //restricted routes
   const RESTRICTED_ROUTES = ["/account"]; // e.g., ['/dashboard', '/profile']
 
   useEffect(() => {
+    setIsAuthLoading(true);
+
     const token = localStorage.getItem(AUTH_KEYS.TOKEN);
     const loggedIn = localStorage.getItem(AUTH_KEYS.ISLOGGEDIN) === "true";
     const valid = isValidToken(token ?? "");
@@ -32,7 +35,12 @@ export const useAuthWatcher = () => {
     const isRestricted = RESTRICTED_ROUTES.some((route) =>
       pathname.startsWith(route)
     );
-    
+
+    // console.log("AuthWatcher Triggered:", {
+    //   isLoggedIn,
+    //   token,
+    //   valid,
+    // });
     // --- Case 0: Rehydrate session on page load ---
     if (loggedIn && token && valid) {
       console.info("Hydrating session from localStorage…");
@@ -77,5 +85,6 @@ export const useAuthWatcher = () => {
       setIsLoggedIn(false);
       notFound();
     }
+    setIsAuthLoading(false);
   }, [pathname]);
 };

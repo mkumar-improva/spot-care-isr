@@ -9,14 +9,14 @@ export const useShareProviderDialog = () => {
   const { showShareDialog, setShowShareDialog } = useShareProviderDialogStore();
   const { selectedProviderDetail } = useUIStore();
 
-  // Notifier state
+
   const [notifierState, setNotifierState] = useState(false);
   const [notifierDetails, setNotifierDetails] = useState<NotifierModel>({
     message: "",
     mode: "error",
   });
 
-  // Get the current URL (provider detail page URL)
+
   const getShareUrl = (): string => {
     if (typeof window !== "undefined") {
       return window.location.href;
@@ -24,7 +24,6 @@ export const useShareProviderDialog = () => {
     return "";
   };
 
-  // Mail share function
   const handleMailToShare = () => {
     const subject = encodeURIComponent("Check out this spot care provider");
     const body = encodeURIComponent(getShareUrl());
@@ -32,7 +31,6 @@ export const useShareProviderDialog = () => {
     window.open(mailto, "_blank");
   };
 
-  // Link copy function
   const handleCopyLink = async () => {
     try {
       const url = getShareUrl();
@@ -43,7 +41,6 @@ export const useShareProviderDialog = () => {
       });
       setNotifierState(true);
 
-      // Auto-hide notifier after 3 seconds
       setTimeout(() => {
         setNotifierState(false);
       }, 3000);
@@ -54,7 +51,6 @@ export const useShareProviderDialog = () => {
       });
       setNotifierState(true);
 
-      // Auto-hide notifier after 3 seconds
       setTimeout(() => {
         setNotifierState(false);
       }, 3000);
@@ -62,7 +58,6 @@ export const useShareProviderDialog = () => {
     }
   };
 
-  // Handle Notifier close
   const handleNotifierClose = () => {
     setNotifierState(false);
     setNotifierDetails({
@@ -76,18 +71,13 @@ export const useShareProviderDialog = () => {
   };
 
   return {
-    // Dialog state
     showShareDialog,
     setShowShareDialog,
     selectedProviderDetail,
-
-    // Notifier state
     notifierState,
     setNotifierState,
     notifierDetails,
     setNotifierDetails,
-
-    // Handlers
     handleMailToShare,
     handleCopyLink,
     handleNotifierClose,

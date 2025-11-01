@@ -5,7 +5,10 @@ import useProviderSearchForm from "@/hooks/search/use-provider-search-form";
 import LocationInput from "./location-input";
 import ProviderSearchDropdown from "./provider-search-dropdown";
 
-const ProviderSearchForm = () => {
+interface ProviderSearchFormProps {
+  onFocusScroll?: () => void;
+}
+const ProviderSearchForm = ({ onFocusScroll }: ProviderSearchFormProps) => {
   const {
     containerRef,
     isHomePage,
@@ -33,6 +36,7 @@ const ProviderSearchForm = () => {
           className="flex-1"
           setProviderSearchShowVerticalLine={setShowVerticalLine}
           mobileClassName="md:py-[.75rem] lg:py-[1.25rem]"
+          onFocusScroll={onFocusScroll}
         />
         <div
           className={`self-center h-8 py-2 border-r ${
@@ -45,6 +49,7 @@ const ProviderSearchForm = () => {
         <ProviderTypeInput
           setShowVerticalLine={setShowVerticalLine}
           mobileClassName="md:py-[.75rem] lg:py-[1.25rem]"
+          onFocusScroll={onFocusScroll}
         />
       </div>
       <ProviderSearchDropdown

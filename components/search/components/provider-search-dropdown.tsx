@@ -10,7 +10,7 @@ interface ProviderSearchDropdownProps {
   providerNameError: boolean;
   providerIsRecord: boolean;
   providerNameDebounce: Providers[] | null;
-  handleOnClick: (code: string, distance: number) => void;
+  handleOnClick: (code: string, distance: number, providerName?: string) => void;
 }
 
 const ProviderSearchDropdown = ({
@@ -86,7 +86,7 @@ const LoadingState = () => (
 
 interface ProviderListProps {
   providers: Providers[];
-  onProviderClick: (code: string, distance: number) => void;
+  onProviderClick: (code: string, distance: number, providerName?: string) => void;
 }
 
 const ProviderList = ({ providers, onProviderClick }: ProviderListProps) => (
@@ -103,12 +103,16 @@ const ProviderList = ({ providers, onProviderClick }: ProviderListProps) => (
 
 interface ProviderItemProps {
   provider: Providers;
-  onProviderClick: (code: string, distance: number) => void;
+  onProviderClick: (code: string, distance: number, providerName?: string) => void;
 }
 
 const ProviderItem = ({ provider, onProviderClick }: ProviderItemProps) => {
   const handleClick = () => {
-    onProviderClick(provider.code, provider.distanceInMiles || 0);
+    onProviderClick(
+      provider.code, 
+      provider.distanceInMiles || 0,
+      provider.name.replace("''", "'")
+    );
   };
 
   const getProviderImage = () => {

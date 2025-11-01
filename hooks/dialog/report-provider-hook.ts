@@ -29,7 +29,7 @@ export const useReportProviderDialog = () => {
     const loadReportOptions = async () => {
       try {
         const result = await Services.GetReportOptions();
-        console.log("Report options result:", result);
+        // console.log("Report options result:", result);
         
         // Handle different response formats
         let optionsArray: Array<{ id: number; category: string }> = [];
@@ -38,8 +38,8 @@ export const useReportProviderDialog = () => {
         } else if (result?.data && Array.isArray(result.data)) {
           optionsArray = result.data;
         } else if (typeof result === "object" && result !== null) {
-          // If it's an object with options, try to extract the array
-          optionsArray = Object.values(result).find(val => Array.isArray(val)) || [];
+          const foundArray = Object.values(result).find(val => Array.isArray(val));
+          optionsArray = (foundArray as Array<{ id: number; category: string }> | undefined) ?? [];
         }
         
         if (optionsArray.length > 0) {
@@ -109,11 +109,11 @@ export const useReportProviderDialog = () => {
       // );
       
       // Mock success for now
-      console.log("Report submitted:", {
-        providerCode: dialogProviderCode,
-        optionId: selectedOptionId,
-        reportValue: reportValue,
-      });
+      // console.log("Report submitted:", {
+      //   providerCode: dialogProviderCode,
+      //   optionId: selectedOptionId,
+      //   reportValue: reportValue,
+      // });
 
       handleClose();
       // TODO: Show success dialog if needed
