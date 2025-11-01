@@ -80,6 +80,7 @@ const CareTypeInput: FC<CareTypeInputProps> = ({
           setRadiusSearchShowVerticalLine?.(true);
           setCareTypeOpen(true);
           inputRef.current?.focus();
+          onFocusScroll();
         }}
         className={`flex z-10 flex-1 relative pl-[1.3rem] pr-0 py-[.75rem] lg:px-[1.75rem] flex-shrink-0 items-center space-x-3 
             cursor-pointer focus:outline-none text-left ${
@@ -101,6 +102,7 @@ const CareTypeInput: FC<CareTypeInputProps> = ({
             autoFocus={careTypeOpen}
             onChange={(e) => setCareTypeValue(e.target.value)}
             ref={inputRef}
+            onFocus={() => onFocusScroll()}
           />
           <span className="block mt-0.5 text-sm text-neutral-400 font-light">
             <span className="line-clamp-1">{!!careTypeValue ? placeHolder : desc}</span>
