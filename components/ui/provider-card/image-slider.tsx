@@ -49,13 +49,15 @@ const ImageWithLoader: React.FC<{ src: string; alt: string }> = ({
     <div className="relative w-full h-full bg-neutral-100">
       {loading && (
         <div className="absolute inset-0 flex items-center justify-center z-10 bg-white/40">
-          <div className="w-6 h-6 border-2 border-t-transparent border-gray-500 rounded-full animate-spin" />
+          <div className="size-6 border-2 border-t-transparent border-gray-500 rounded-full animate-spin" />
         </div>
       )}
       <Image
         src={error ? placeHolderSvg : src}
         alt={alt}
-        className="object-cover w-full h-full transition-opacity duration-500"
+        fill
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        className="object-cover transition-opacity duration-500"
         onLoad={() => setLoading(false)}
         onError={(e) => {
           setLoading(false);

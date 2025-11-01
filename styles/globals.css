@@ -92,3 +92,44 @@
 * {
   scrollbar-width: none; /* Firefox */
 }
+
+
+/* image swipper custom css */
+.swiper-pagination-bullet {
+  background: #f5f5f1 !important ; /* your default color */
+  opacity: 0.7 !important;
+  width: 0.45rem !important;
+  height: 0.45rem !important;
+}
+.swiper-pagination-bullet.swiper-pagination-bullet-active {
+  background: #ffffff !important; /* your active color */
+  opacity: 1 !important;
+  width: 0.5rem !important;
+  height: 0.5rem !important;
+}
+.swiper-provider .swiper-button-prev:after,
+.swiper-provider .swiper-button-next:after{
+  font-size: 0.75rem !important;
+  color: #1f2937 !important;
+  font-weight: 700 !important;
+  background-color: #fefefebf !important;
+  padding: 0.5rem 0.7rem !important;
+  border-radius: 9999px !important;
+}
+
+.swiper-business  .swiper-button-prev:after,
+.swiper-business  .swiper-button-next:after{
+  font-size: 0.75rem !important;
+  color: #1f2937 !important;
+  font-weight: 700 !important;
+  background-color: #fefefebf !important;
+  padding: 0.5rem 0.7rem !important;
+  border-radius: 9999px !important;
+}
+.swiper-pagination-fraction,
+.swiper-pagination-custom,
+.swiper-horizontal > .swiper-pagination-bullets,
+.swiper-pagination-bullets.swiper-pagination-horizontal {
+  bottom: 10px !important;
+  z-index: 40 !important;
+}

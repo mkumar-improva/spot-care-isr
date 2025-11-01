@@ -9,6 +9,7 @@ import { IpInfo } from "@/types/ip-info";
 import { AddWishlist } from "@/types/add-wish-list";
 import { ContactTypes } from "@/types/contact-types";
 import { UserData } from "@/types/user-data";
+import { Filters } from "@/types/filter-props";
 
 export const Services = {
   LoadCareTypes: async () => {
@@ -242,7 +243,7 @@ export const Services = {
       handleError(error, "Login");
     }
   },
-  
+
   updateProfile: async (
     blob: Blob | null,
     firstName: string,
@@ -261,7 +262,7 @@ export const Services = {
       formData.append("firstName", firstName);
       formData.append("lastName", lastName);
       formData.append("phone", phone);
-      
+
       const result = await END_POINT.postFormData(
         EndpointConstants.UpdateProfile,
         formData
@@ -315,5 +316,64 @@ export const Services = {
     } catch (error) {
       handleError(error, "GetUserByEmail");
     }
+  },
+  LoadCaresAgainstFilters: async (filter: Filters) => {
+    try {
+      const params = {
+        radius: filter.radius.split(" ")[0],
+        lat: filter.lat,
+        lon: filter.lon,
+        careType: filter.careType,
+        page: 1,
+        pageSize: 1000,
+      };
+
+      const result = await END_POINT.get(
+        EndpointConstants.MsProvidersDetailV2,
+        params
+      );
+      const providersList = mapListToType<Providers>(result["data"] ?? []);
+      let uniqueProviders = new Set();
+      let filteredProviders = [];
+      for (let provider of providersList) {
+        const providerKey = `${provider.name}-${JSON.stringify(
+          provider.locations
+        )}`;
+        if (!uniqueProviders.has(providerKey)) {
+          uniqueProviders.add(providerKey);
+          filteredProviders.push(provider);
+        }
+        // if (!uniqueProviders.has(provider.name)) {
+        //     uniqueProviders.add(provider.name);
+        //     filteredProviders.push(provider);
+        // }
+      }
+      return { data: filteredProviders, total: result["total"] };
+    } catch (error) {
+      handleError(error, "LoadCaresAgainstFilters");
+      return { data: [], total: 0 };
+    }
+  },
+  SearchByProviderNameList: async (filter: Filters) => {
+    console.log("SearchByProviderNameList called with filter:", filter);
+    let lng = filter.lon;
+    let result = await END_POINT.get(
+      EndpointConstants.SearchByProviderName +
+        `/${filter.searchText}/${filter.pageSize}/1/true/${filter.lat}/${lng}`
+    );
+    console.log("API response:", result);
+    let searchProviderList = mapListToType<Providers>(result?.data?.data ?? []);
+    let uniqueProviders = new Set();
+    let filteredProviders = [];
+    for (let provider of searchProviderList) {
+      const providerKey = `${provider.name}-${JSON.stringify(
+        provider.locations
+      )}`;
+      if (!uniqueProviders.has(providerKey)) {
+        uniqueProviders.add(providerKey);
+        filteredProviders.push(provider);
+      }
+    }
+    return { data: filteredProviders, total: result.data.total };
   },
 };

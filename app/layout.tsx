@@ -11,6 +11,9 @@ import { Services } from "@/services/service";
 import { ToastProvider } from "@/components/ui/toast/toast-provider";
 import DialogRenderer from "@/components/dialogs/Component";
 import AuthWatcherClient from "@/components/dialogs/components/auth/components/auth-watcher-client";
+import React, { Suspense } from "react";
+import Loading from "@/components/ui/Loader/Loading";
+import "rc-slider/assets/index.css";
 
 const SITE_NAME = "SpotCare Healthcare Provider Directory";
 const SITE_DESCRIPTION =
@@ -119,7 +122,10 @@ export default async function RootLayout({
             homeScreenData={homeData}
           />
           <SiteHeader />
-          <main className="min-h-screen">{children}</main>
+          <main className="min-h-screen">
+            {/* <Suspense fallback={<Loading />}></Suspense> */}
+            {children}
+          </main>
           <ToastProvider />
           <Footer />
           <DialogRenderer />

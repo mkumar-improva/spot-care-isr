@@ -11,8 +11,10 @@ import toast from "react-hot-toast";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Alert01Icon } from "@hugeicons-pro/core-stroke-rounded/index";
 import HeroSearchCustomToast from "@/components/ui/toast/hero-search-custom-toast";
+import { useRouter } from "next/navigation";
 
 const useProviderInputType = () => {
+  const router = useRouter();
   /*--Begining of refs----------*/
   const inputRef = useRef<HTMLInputElement>(null);
   /*----------End of refs----------*/
@@ -146,7 +148,14 @@ const useProviderInputType = () => {
             toasttype={t}
           />
         ));
+        return;
       }
+      const queryParams = new URLSearchParams(
+        Object.fromEntries(
+          Object.entries(filterData).map(([k, v]) => [k, String(v)])
+        )
+      ).toString();
+      router.push(`/list?${queryParams}`);
     } catch (ex) {
       console.error(ex);
       toast.custom((t) => (
@@ -165,7 +174,6 @@ const useProviderInputType = () => {
         />
       ));
     } finally {
-      setLoading(false);
     }
   };
 
@@ -179,6 +187,7 @@ const useProviderInputType = () => {
     searchProviderName,
     providerNameDebounce,
     storePostalCode,
+    loading,
 
     setOnFocus,
     setSearchProviderName,

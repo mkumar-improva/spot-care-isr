@@ -37,6 +37,7 @@ const ProviderTypeInput: FC<ProviderTypeInputProps> = ({
     placeHolder,
     desc,
     storePostalCode,
+    loading,
     setOnFocus,
     handleSpanClick,
     handleProviderNameChange,
@@ -101,6 +102,7 @@ const ProviderTypeInput: FC<ProviderTypeInputProps> = ({
               !storePostalCode ? "cursor-not-allowed" : "cursor-pointer"
             }`}
         size="size-12 lg:size-16"
+        loading={loading}
         onClick={SearchOption}
         disabled={!storePostalCode}
       />
