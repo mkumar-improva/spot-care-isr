@@ -75,6 +75,7 @@ const useRadiusPopOver = ({
         location: locationValue ?? "",
         filter: "recommended",
         headerType: "services",
+        ratingRange: "0-5",
       };
 
       if (
@@ -99,7 +100,12 @@ const useRadiusPopOver = ({
         ));
         return;
       }
-      router.push("/list");
+      const queryParams = new URLSearchParams(
+        Object.fromEntries(
+          Object.entries(filterData).map(([k, v]) => [k, String(v)])
+        )
+      ).toString();
+      router.push(`/list?${queryParams}`);
     } catch (err) {
       console.error("Error in SearchOption:", err);
       toast.custom((t) => (
@@ -118,7 +124,6 @@ const useRadiusPopOver = ({
         />
       ));
     } finally {
-      setLoading(false);
     }
   };
 

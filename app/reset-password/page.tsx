@@ -1,6 +1,6 @@
 import ResetPasswordWatcherServer from "@/components/dialogs/components/reset-password/components/reset-password-watcher-server";
 import { notFound } from "next/navigation";
-import Loading from "@/components/ui/loading/loading";
+import Loading from "@/components/ui/Loader/Loading";
 
 export default function ResetPasswordPage({
   searchParams,

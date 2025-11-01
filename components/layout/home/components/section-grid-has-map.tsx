@@ -61,7 +61,6 @@ const SectionGridHasMap: FC<SectionGridHasMapProps> = ({
               onMouseLeave={() => {
                 setCurrentHoverID((_) => -1);
               }}
-              className="cursor-pointer transition-all hover:shadow-lg"
             >
               {/* Provider Card Component */}
               <ProviderCard data={item} />

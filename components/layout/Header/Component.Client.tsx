@@ -12,7 +12,7 @@ const StandardHeader = () => {
   useEffect(() => {
     const nonHomeRoutes = [
       "/list",
-      "/details-page",
+      "/detail-screen",
       "/contact",
       "/privacy",
       "/account",
@@ -20,7 +20,6 @@ const StandardHeader = () => {
       "/provider-listing",
       "/addProvider",
       "/provider-profile",
-      "/list"
     ];
 
     setIsHomePage(!nonHomeRoutes.includes(pathName));
