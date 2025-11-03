@@ -21,36 +21,51 @@ export function TitleCase(input: string): string {
       .join("")
   );
 }
-
 export const formatAddressFromLocations = (locations: Address[]): string => {
   if (!Array.isArray(locations) || locations.length === 0) return "";
 
-  const location = locations[0];
+  const loc = locations[0];
 
-  const rawAddress = location?.address?.split(",") || [];
-  const street = rawAddress[0]?.trim();
-  const addressLine2 = rawAddress[1]?.trim();
-  const city = location?.city?.trim();
-  const state = location?.state?.trim();
-  const postalCode = location?.postalCode?.split("-")[0]?.trim();
+  // Split primary address into chunks
+  const raw =
+    loc?.address
+      ?.split(",")
+      .map((p) => p.trim())
+      .filter(Boolean) || [];
 
-  const addressParts = [street, addressLine2, city, state].filter(Boolean);
+  // City + state from fields
+  const city = loc?.city?.trim();
+  const state = loc?.state?.trim();
+  const postal = loc?.postalCode?.split("-")[0]?.trim();
 
-  const formattedAddress =
-    addressParts.join(", ") + (postalCode ? ` - ${postalCode}` : "");
+  // Dedupe logic: prevent re-adding city/state if already in the string
+  const parts = [...raw];
 
-  return formattedAddress;
+  if (city && !parts.includes(city)) parts.push(city);
+  if (state && !parts.includes(state)) parts.push(state);
+
+  // Remove consecutive duplicates — belt and suspenders
+  const uniqueParts = parts.filter((p, i) => p && p !== parts[i - 1]);
+
+  const formatted = uniqueParts.join(", ") + (postal ? ` - ${postal}` : "");
+
+  return formatted;
 };
 
-export const formatPhoneNumber = (phoneNumber: string) => {
-  // Remove any non-digit characters
-  phoneNumber = phoneNumber.replace(/\D/g, "");
+export const formatPhoneNumber = (raw: string) => {
+  // Extract digits only
+  let phone = raw.replace(/\D/g, "");
 
-  // Format the phone number into 3-3-4 segments
-  const formattedPhoneNumber = phoneNumber.replace(
-    /(\d{3})(\d{3})(\d{4})/,
-    "$1-$2-$3"
-  );
+  // Drop leading country code if present (US or India)
+  if (phone.startsWith("91") && phone.length > 10) {
+    phone = phone.slice(2);
+  } else if (phone.startsWith("1") && phone.length > 10) {
+    phone = phone.slice(1);
+  }
 
-  return formattedPhoneNumber;
+  // Only format if we have at least 10 digits
+  const main = phone.slice(-10);
+
+  // 3-3-4 slice
+  return main.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
 };

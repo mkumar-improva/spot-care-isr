@@ -5,6 +5,7 @@ import { Providers } from "@/types/provider-details";
 import useProviderListDataStore from "@/store/data/use-provider-list-data-store";
 import { Filters } from "@/types/filter-props";
 import { useSearchParams, usePathname } from "next/navigation";
+import usePageListDialogStore from "@/store/dialog/page-list-dialog-store";
 
 type SortKey = keyof Providers;
 
@@ -18,6 +19,8 @@ const useRenderRatingFilter = () => {
   const { rangeRatings, setRangeRatings } = usePageListUIStore();
   const { providerList, filterVal, setProviderList, setFilterVal } =
     useProviderListDataStore();
+  const { isCmsRatingsDialogOpen, setIsCmsRatingsDialogOpen } =
+    usePageListDialogStore();
 
   //state
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -83,7 +86,7 @@ const useRenderRatingFilter = () => {
   };
 
   const handleRatingChange = useCallback(
-    (range: number[]) => {
+    (range: number[], time: number = 400) => {
       setRangeRatings(range);
 
       if (debounceRef.current) clearTimeout(debounceRef.current);
@@ -108,9 +111,10 @@ const useRenderRatingFilter = () => {
         // ✅ sync URL update with state update
         const newParams = new URLSearchParams(searchParams.toString());
         newParams.set("ratingRange", `${range[0]}-${range[1]}`);
+        newParams.set("page", "1");
         const newUrl = `${pathname}?${newParams.toString()}`;
         window.history.replaceState({}, "", newUrl);
-      }, 400);
+      }, time);
     },
     [filterVal, searchParams, pathname]
   );
@@ -148,12 +152,46 @@ const useRenderRatingFilter = () => {
     };
   };
 
+  const resetRatingFilter = () => {
+    // Reset rating range to default (0-5)
+    const defaultRange = [0, 5];
+    setRangeRatings(defaultRange);
+    setCmsRatingFilterVal("0-5");
+
+    // Update filter state
+    const updatedFilters: Filters = {
+      searchText: filterVal?.searchText || "",
+      careType: filterVal?.careType || "",
+      lat: filterVal?.lat || 0,
+      lon: filterVal?.lon || 0,
+      radius: filterVal?.radius || "10",
+      filter: filterVal?.filter || "recommended",
+      pageSize: filterVal?.pageSize || 10,
+      page: filterVal?.page || 1,
+      postalCode: filterVal?.postalCode || "",
+      headerType: filterVal?.headerType,
+      ratingRange: "0-5",
+    };
+
+    setFilterVal(updatedFilters);
+
+    // Update URL to reflect the reset
+    const newParams = new URLSearchParams(searchParams.toString());
+    newParams.set("ratingRange", "0-5");
+    newParams.set("page", "1");
+    const newUrl = `${pathname}?${newParams.toString()}`;
+    window.history.replaceState({}, "", newUrl);
+  };
+
   return {
     isDialogOpen,
     cmsRatingFilterVal,
     rangeRatings,
+    isCmsRatingsDialogOpen,
+    setIsCmsRatingsDialogOpen,
     pageFilter,
     handleRatingChange,
+    resetRatingFilter,
   };
 };
 

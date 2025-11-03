@@ -18,6 +18,7 @@ const useProviderSearchForm = () => {
   const [isShowPopoOver, setIsShowPopOver] = useState(false);
   const [isRecord, setIsRecord] = useState(true);
   const [error, setError] = useState(false);
+  const [providerInputFocused, setProviderInputFocused] = useState(false);
   let params: Record<string, string | number> = {};
 
   /*----------End of state ----------*/
@@ -42,21 +43,33 @@ const useProviderSearchForm = () => {
   });
 
   //handlers
-  const handleOnClick = (code: string, distanceInMiles: number, providerName?: string) => {
+  const handleProviderInputFocus = () => {
+    setProviderInputFocused(true);
+  };
+
+  const handleProviderInputBlur = () => {
+    setProviderInputFocused(false);
+  };
+
+  const handleOnClick = (
+    code: string,
+    distanceInMiles: number,
+    providerName?: string
+  ) => {
     // Close the dropdown but keep the provider name in the search bar
     setProviderNameDebounce(null);
     // Keep the provider name visible if provided
     if (providerName) {
       setSearchProviderName(providerName);
     }
-    
+
     // Build query parameters
     const queryParams = new URLSearchParams({
       lat: String(currentLocation?.lat ?? 46.603354),
       lon: String(currentLocation?.lng ?? -74.0059728),
       distance: String(distanceInMiles),
     });
-    
+
     // Navigate to detail screen with provider code and location params
     router.push(`/detail-screen/${code}?${queryParams.toString()}`);
   };
@@ -73,8 +86,11 @@ const useProviderSearchForm = () => {
     providerNameDebounce,
     providerNameError,
     providerIsRecord,
+    providerInputFocused,
     setShowVerticalLine,
-    handleOnClick
+    handleOnClick,
+    handleProviderInputFocus,
+    handleProviderInputBlur,
   };
 };
 

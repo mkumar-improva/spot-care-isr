@@ -39,13 +39,16 @@ const RadiusPopOver: FC<RadiusPopOverProps> = ({
     containerRef,
     optionRefs,
     popoverButtonRef,
+    careTypeValue,
+    locationValue,
+    storePostalCode,
     setIsDropdownOpen,
     setRadiusOpen,
     setRadiusValue,
     setHighlightedIndex,
     handleSelectLocation,
     onClickCapture,
-    SearchOption
+    SearchOption,
   } = useRadiusPopOver({
     setCareSearchShowVerticalLine,
     setRadiusSearchShowVerticalLine,
@@ -123,10 +126,27 @@ const RadiusPopOver: FC<RadiusPopOverProps> = ({
                 <div className="hidden md:block pr-2 lg:pr-3">
                   <SearchButton
                     className={`flex items-center justify-center bg-primary-700 
-                  text-white rounded-full overflow-hidden`}
+                  text-white rounded-full overflow-hidden 
+                   ${
+                     loading ||
+                     isWishlistLoaded ||
+                     !careTypeValue ||
+                     !locationValue ||
+                     !storePostalCode ||
+                     !radiusValue
+                       ? "cursor-not-allowed"
+                       : "cursor-pointer"
+                   }`}
                     size="size-12 lg:size-16"
                     onClick={SearchOption ?? (() => {})}
-                    disabled={loading || isWishlistLoaded}
+                    disabled={
+                      loading ||
+                      isWishlistLoaded ||
+                      !careTypeValue ||
+                      !locationValue ||
+                      !storePostalCode ||
+                      !radiusValue
+                    }
                     loading={loading || isWishlistLoaded}
                   />
                 </div>

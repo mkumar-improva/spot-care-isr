@@ -17,8 +17,11 @@ const ProviderSearchForm = ({ onFocusScroll }: ProviderSearchFormProps) => {
     providerNameDebounce,
     providerIsRecord,
     providerNameError,
+    providerInputFocused,
     setShowVerticalLine,
     handleOnClick,
+    handleProviderInputFocus,
+    handleProviderInputBlur,
   } = useProviderSearchForm();
 
   return (
@@ -50,6 +53,8 @@ const ProviderSearchForm = ({ onFocusScroll }: ProviderSearchFormProps) => {
           setShowVerticalLine={setShowVerticalLine}
           mobileClassName="md:py-[.75rem] lg:py-[1.25rem]"
           onFocusScroll={onFocusScroll}
+          handleProviderInputFocus={handleProviderInputFocus}
+          handleProviderInputBlur={handleProviderInputBlur}
         />
       </div>
       <ProviderSearchDropdown
@@ -57,6 +62,7 @@ const ProviderSearchForm = ({ onFocusScroll }: ProviderSearchFormProps) => {
         providerNameError={providerNameError}
         providerIsRecord={providerIsRecord}
         providerNameDebounce={providerNameDebounce}
+        providerInputFocused={providerInputFocused}
         handleOnClick={handleOnClick}
       />
     </div>

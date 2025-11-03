@@ -6,18 +6,11 @@ import { ArrowDown01Icon } from "@hugeicons-pro/core-stroke-standard/index";
 import useSortFilter from "@/hooks/list/use-sort-filter";
 import Radiobox from "@/components/ui/radio-box/radio-box";
 import ButtonSecondary from "@/components/ui/button/types/button-secondary";
+import ButtonClose from "@/components/ui/button/types/button-close";
 
 const RenderSortFilter = () => {
-  const {
-    sortFilterVal,
-    filterOptions,
-    isRecommendedActive,
-    isRatingsActive,
-    isShortDistanceActive,
-    isAdvanceFilterAscending,
-    isAdvanceFilterDescending,
-    sortByOptions,
-  } = useSortFilter();
+  const { sortFilterVal, filterOptions, sortByOptions, resetSortFilter } =
+    useSortFilter();
 
   return (
     <Popover className="relative">
@@ -30,10 +23,24 @@ const RenderSortFilter = () => {
                 }`}
           >
             <span className="text-sm font-medium">Sort ({sortFilterVal})</span>
-            <HugeiconsIcon
-              icon={ArrowDown01Icon}
-              className="size-5 absolute right-2 text-neutral-700"
-            />
+            {sortFilterVal !== "Recommended" ? (
+              <div>
+                <ButtonClose
+                  sizes="!size-3"
+                  className="!size-3"
+                  isHover={false}
+                  onClick={(e) => {
+                    e?.stopPropagation();
+                    resetSortFilter();
+                  }}
+                />
+              </div>
+            ) : (
+              <HugeiconsIcon
+                icon={ArrowDown01Icon}
+                className="size-5 absolute right-2 text-neutral-700"
+              />
+            )}
           </Popover.Button>
           <Transition
             as={Fragment}

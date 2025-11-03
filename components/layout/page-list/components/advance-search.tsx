@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React from "react";
 import useAdvanceSearch from "@/hooks/list/use-advance-search";
 import { TitleCase } from "@/utils/converter";
 import { HugeiconsIcon } from "@hugeicons/react";

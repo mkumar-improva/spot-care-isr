@@ -13,6 +13,8 @@ interface ProviderTypeInputProps {
   onFocusScroll?: () => void;
   mobileClassName?: string;
   setShowPopOver?: React.Dispatch<React.SetStateAction<boolean>>;
+  handleProviderInputFocus?: () => void;
+  handleProviderInputBlur?: () => void;
 }
 
 const ProviderTypeInput: FC<ProviderTypeInputProps> = ({
@@ -20,6 +22,8 @@ const ProviderTypeInput: FC<ProviderTypeInputProps> = ({
   onFocusScroll = () => {},
   mobileClassName = "",
   setShowPopOver,
+  handleProviderInputFocus,
+  handleProviderInputBlur,
 }) => {
   const { locationValue, searchProviderName, setSearchProviderName } =
     useSearchUiStore((state) => ({
@@ -80,11 +84,13 @@ const ProviderTypeInput: FC<ProviderTypeInputProps> = ({
               setOnFocus(true);
               setShowVerticalLine?.(false);
               setShowPopOver?.(true);
+              handleProviderInputFocus?.();
             }}
             onBlur={() => {
               setOnFocus(false);
               setShowVerticalLine?.(true);
               //setShowPopOver?.(false)
+              handleProviderInputBlur?.();
             }}
           />
           <span
@@ -99,12 +105,14 @@ const ProviderTypeInput: FC<ProviderTypeInputProps> = ({
       <SearchButton
         className={`hidden md:flex items-center justify-center bg-primary-700
             text-white rounded-full overflow-hidden ${
-              !storePostalCode ? "cursor-not-allowed" : "cursor-pointer"
+              !storePostalCode || !locationValue || loading || !searchProviderName
+                ? "cursor-not-allowed"
+                : "cursor-pointer"
             }`}
         size="size-12 lg:size-16"
         loading={loading}
         onClick={SearchOption}
-        disabled={!storePostalCode}
+        disabled={!storePostalCode || !locationValue || loading || !searchProviderName}
       />
     </div>
   );

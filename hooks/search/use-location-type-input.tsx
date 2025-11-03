@@ -31,7 +31,7 @@ const useLocationTypeInput = ({
   const { showToast } = useCustomToast();
   /*----------Begining of Store Import----------*/
   const { isMapLoaded, locationValue, setStorePostalCode,setLocationValue } = useSearchUiStore();
-  const { setCurrentLocation } = useSearchDataStore();
+  const { setCurrentLocation,setSearchCurrentLocation } = useSearchDataStore();
   /*----------End of Store Import----------*/
 
   /*--Begining of refs----------*/
@@ -56,7 +56,7 @@ const useLocationTypeInput = ({
       const lat = place.geometry?.location?.lat() ?? 0;
       const lng = place.geometry?.location?.lng() ?? 0;
 
-      if (lat !== 0 && lng !== 0) setCurrentLocation({ lat: lat, lng: lng });
+      if (lat !== 0 && lng !== 0) setSearchCurrentLocation({ lat: lat, lng: lng });
 
       if (place.geometry) {
         const address = extractAddress(

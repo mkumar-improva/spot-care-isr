@@ -37,6 +37,7 @@ const SectionGridHasMap: FC<SectionGridHasMapProps> = ({
     const detailUrl = `/detail-screen/${provider.code}?lat=${provider.locations[0]?.latitude || 40.7127753}&lon=${provider.locations[0]?.longitude || -74.0059728}&distance=${provider.distanceInMiles || 0}`;
     router.push(detailUrl);
   };
+  
   return (
     <div className="relative flex min-h-screen gap-[1.5rem]">
       {/* List */}
