@@ -36,6 +36,7 @@ const Radiobox: FC<RadioboxProps> = ({
              border-primary rounded-full mt-1 border-neutral-500 bg-white dark:bg-neutral-700  dark:checked:bg-primary-500 focus:ring-primary-500`}
         type="radio"
         checked={checked}
+        onChange={() => onChange && onChange(value)}
       />
       {label && (
         <label

@@ -24,7 +24,7 @@ const useProviderInputType = () => {
   /*----------End of state ----------*/
 
   /*----------Begining of Store Import----------*/
-  const { isHomePage } = useHeaderUiStore();
+  const { isHomePage, setShowHeroSearch } = useHeaderUiStore();
   const { loading, setLoading } = useLoadingState();
   //End of store import
 
@@ -47,7 +47,7 @@ const useProviderInputType = () => {
     setProviderNameError: state.setProviderNameError,
     setProviderIsRecord: state.setProviderIsRecord,
   }));
-  const { currentLocation } = useSearchDataStore();
+  const { searchCurrentLocation } = useSearchDataStore();
   /*----------End of Store Import----------*/
 
   //const values
@@ -60,35 +60,37 @@ const useProviderInputType = () => {
     const handler = setTimeout(async () => {
       const query = searchProviderName.trim();
       if (query === "") {
+        setProviderIsRecord(true);
         setProviderNameDebounce([]);
         return;
       }
+      setProviderIsRecord(true);
+      setProviderNameDebounce([]);
       try {
         const result = await Services.SearchByProviderName(
           query,
           10,
           1,
           false,
-          currentLocation?.lat ?? 0.0,
-          currentLocation?.lng ?? 0.0
+          searchCurrentLocation?.lat ?? 0.0,
+          searchCurrentLocation?.lng ?? 0.0
         );
         const filterData = {
           searchText: query,
           careType: "",
-          lat: currentLocation?.lat ?? 0.0,
-          lon: currentLocation?.lng ?? 0.0,
+          lat: searchCurrentLocation?.lat ?? 0.0,
+          lon: searchCurrentLocation?.lng ?? 0.0,
           postalCode: storePostalCode ?? "",
           radius: "30",
-          pageSize: 10,
+          pageSize: 1000,
           headerType: "",
         };
-
         if (result && result.length > 0) {
+          setProviderIsRecord(false);
           setProviderNameError(false);
           parseProviderResults(result, filterData).then((result) => {
             setProviderNameDebounce(result);
           });
-          setProviderIsRecord(true);
         } else {
           setProviderIsRecord(false);
         }
@@ -107,7 +109,7 @@ const useProviderInputType = () => {
   const handleProviderNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (value === "") {
-      setProviderNameDebounce(null);
+      setProviderNameDebounce([]);
     }
     setSearchProviderName(value);
   };
@@ -115,6 +117,7 @@ const useProviderInputType = () => {
   const handleClearData = () => {
     setSearchProviderName("");
     setProviderIsRecord(false);
+    setProviderNameDebounce([]);
     inputRef.current?.focus();
   };
 
@@ -123,14 +126,15 @@ const useProviderInputType = () => {
       setLoading(true);
       const filterData = {
         searchText: searchProviderName ?? "",
-        lat: currentLocation?.lat ?? 0.0,
-        lon: currentLocation?.lng ?? 0.0,
+        lat: searchCurrentLocation?.lat ?? 0.0,
+        lng: searchCurrentLocation?.lng ?? 0.0,
         page: 1,
         pageSize: 1000,
         postalCode: storePostalCode ?? "",
         location: locationValue ?? "",
         filter: "recommended",
         headerType: "provider",
+        ratingRange: "0-5",
       };
       if (!filterData.searchText || !filterData.postalCode) {
         toast.custom((t) => (
@@ -156,6 +160,8 @@ const useProviderInputType = () => {
         )
       ).toString();
       router.push(`/list?${queryParams}`);
+      setShowHeroSearch(false);
+      setProviderNameDebounce([]);
     } catch (ex) {
       console.error(ex);
       toast.custom((t) => (

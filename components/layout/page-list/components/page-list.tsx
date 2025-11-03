@@ -22,7 +22,10 @@ const PageList: FC<pageListServerProps> = ({
     currentHoverID,
     loading,
     totalRecords,
+    isTabFiltersOpen,
+    setIsTabFiltersOpen,
     setCurrentHoverID,
+    handleProviderClick,
   } = useProviderList({
     providersList,
     total,
@@ -37,19 +40,23 @@ const PageList: FC<pageListServerProps> = ({
       <Loading />
     </div>
   ) : (
-    <div className="w-full min-h-screen relative flex flex-col items-start justify-start">
-      <div className="sticky top-[5.15rem] z-[10] py-4 bg-white w-full pl-10">
-        <PageListHeader totalCount={totalRecords} />
+    <div className="w-full min-h-screen relative flex flex-col items-start justify-start pb-[2rem]">
+      <div className="sticky top-[5.15rem] z-[10] py-4 bg-white w-full pl-4 xl:pl-[2.4rem] pr-4 lg:pr-[.25rem]">
+        <PageListHeader
+          totalCount={totalRecords}
+          isTabFiltersOpen={isTabFiltersOpen}
+          setIsTabFiltersOpen={setIsTabFiltersOpen}
+        />
       </div>
-      <div className="w-full flex items-start justify-start gap-[.5rem]">
+      <div className="w-full flex items-start justify-start gap-[.5rem] pl-4 xl:pl-[2.4rem] pr-4 lg:pr-[.25rem]">
         <div
           ref={listinContainerRef}
           className="flex flex-col w-full lg:w-[60%] h-full relative gap-[.25rem]"
         >
-          <div className="w-full flex flex-col gap-3 pl-4 xl:pl-[2.4rem] pr-4 lg:pr-[.25rem]">
+          <div className="w-full flex flex-col gap-3">
             {filteredPaginatedList && filteredPaginatedList.length > 0 ? (
               filteredPaginatedList.map((item, index) => (
-                <div key={index}>
+                <div key={index} onClick={() => handleProviderClick(item)}>
                   <div
                     key={item.code}
                     onMouseEnter={() => {
@@ -75,7 +82,7 @@ const PageList: FC<pageListServerProps> = ({
         </div>
         <div
           className="w-[50%] lg:w-[40%] h-screen overflow-hidden sticky 
-        top-[9.25rem] pr-4 xl:pr-[2.5rem] hidden lg:block"
+        top-[9.25rem] pr-[.25rem] 2xl:pr-[2.5rem] hidden lg:block"
         >
           <div className="w-full h-full rounded-2xl overflow-hidden">
             <GMap

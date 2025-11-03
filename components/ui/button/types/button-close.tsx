@@ -8,7 +8,7 @@ import twFocusClass from "utils/twFocusClass";
 
 export interface ButtonCloseProps {
   className?: string;
-  onClick?: () => void;
+  onClick?: (e?: React.MouseEvent<HTMLButtonElement>) => void;
   sizes?: string;
   isHover?: boolean;
   disabled?: boolean;
@@ -28,7 +28,7 @@ const ButtonClose: React.FC<ButtonCloseProps> = ({
           isHover ? "hover:bg-neutral-100 dark:hover:bg-neutral-700" : ""
         } ${className} ` + twFocusClass()
       }
-      onClick={onClick}
+      onClick={(e) => onClick?.(e)}
       disabled={disabled}
     >
       <span className="sr-only">Close</span>

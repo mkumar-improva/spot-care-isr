@@ -11,7 +11,7 @@ import {
   Link01StrokeRounded,
   Mail01Icon,
 } from "@hugeicons-pro/core-stroke-rounded/index";
-import { formatAddressFromLocations } from "@/utils/format-address";
+import { formatAddressFromLocations } from "@/utils/converter";
 import SocialMediaSection from "@/components/layout/DetailScreen/components/ProviderInfo/components/social-media-section";
 import ProviderAction from "@/components/layout/DetailScreen/components/ProviderInfo/components/provider-action";
 import googleIconImage from "@/assets/logos/google.png";

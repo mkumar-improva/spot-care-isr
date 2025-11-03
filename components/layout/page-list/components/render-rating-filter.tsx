@@ -7,7 +7,7 @@ import Slider from "rc-slider";
 import useRenderRatingFilter from "@/hooks/list/use-render-rating-filter";
 import SliderStarRating from "@/components/ui/StarRating/slider-star-rating";
 import ButtonSecondary from "@/components/ui/button/types/button-secondary";
-import { Filters } from "@/types/filter-props";
+import ButtonClose from "@/components/ui/button/types/button-close";
 
 interface RenderRatingFilterProps {
   //filters: Filters;
@@ -15,8 +15,13 @@ interface RenderRatingFilterProps {
 
 const RenderRatingFilter: FC<RenderRatingFilterProps> = () => {
   //hooks
-  const { isDialogOpen, cmsRatingFilterVal, rangeRatings, handleRatingChange } =
-    useRenderRatingFilter();
+  const {
+    isDialogOpen,
+    cmsRatingFilterVal,
+    rangeRatings,
+    handleRatingChange,
+    resetRatingFilter,
+  } = useRenderRatingFilter();
 
   return (
     <Popover className="relative">
@@ -31,10 +36,24 @@ const RenderRatingFilter: FC<RenderRatingFilterProps> = () => {
             <span className="text-sm  font-semibold truncate min-w-0 mr-2">
               CMS Rating ({cmsRatingFilterVal})
             </span>
-            <HugeiconsIcon
-              icon={ArrowDown01Icon}
-              className="size-5 absolute right-2 text-neutral-700"
-            />
+            {!(rangeRatings[0] === 0 && rangeRatings[1] === 5) ? (
+              <div>
+                <ButtonClose
+                  sizes="!size-3"
+                  className="!size-3"
+                  isHover={false}
+                  onClick={(e) => {
+                    e?.stopPropagation();
+                    resetRatingFilter();
+                  }}
+                />
+              </div>
+            ) : (
+              <HugeiconsIcon
+                icon={ArrowDown01Icon}
+                className="size-5 absolute right-2 text-neutral-700"
+              />
+            )}
           </Popover.Button>
           <Transition
             as={Fragment}
@@ -59,7 +78,9 @@ const RenderRatingFilter: FC<RenderRatingFilterProps> = () => {
                       max={5}
                       defaultValue={[rangeRatings[0], rangeRatings[1]]}
                       allowCross={false}
-                      onChange={(e) => handleRatingChange(e as number[])}
+                      onChangeComplete={(e) =>
+                        handleRatingChange(e as number[])
+                      }
                     />
                   </div>
                   <span className="flex justify-evenly text-base">

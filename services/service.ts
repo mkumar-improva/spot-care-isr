@@ -355,25 +355,30 @@ export const Services = {
     }
   },
   SearchByProviderNameList: async (filter: Filters) => {
-    console.log("SearchByProviderNameList called with filter:", filter);
-    let lng = filter.lon;
-    let result = await END_POINT.get(
-      EndpointConstants.SearchByProviderName +
-        `/${filter.searchText}/${filter.pageSize}/1/true/${filter.lat}/${lng}`
-    );
-    console.log("API response:", result);
-    let searchProviderList = mapListToType<Providers>(result?.data?.data ?? []);
-    let uniqueProviders = new Set();
-    let filteredProviders = [];
-    for (let provider of searchProviderList) {
-      const providerKey = `${provider.name}-${JSON.stringify(
-        provider.locations
-      )}`;
-      if (!uniqueProviders.has(providerKey)) {
-        uniqueProviders.add(providerKey);
-        filteredProviders.push(provider);
+    try {
+      let lng = filter.lon;
+      let result = await END_POINT.get(
+        EndpointConstants.SearchByProviderName +
+          `/${filter.searchText}/${filter.pageSize}/1/true/${filter.lat}/${lng}`
+      );
+      let searchProviderList = mapListToType<Providers>(
+        result?.data?.data ?? []
+      );
+      let uniqueProviders = new Set();
+      let filteredProviders = [];
+      for (let provider of searchProviderList) {
+        const providerKey = `${provider.name}-${JSON.stringify(
+          provider.locations
+        )}`;
+        if (!uniqueProviders.has(providerKey)) {
+          uniqueProviders.add(providerKey);
+          filteredProviders.push(provider);
+        }
       }
+      return { data: filteredProviders, total: result.data.total };
+    } catch (error) {
+      handleError(error, "SearchByProviderNameList");
+      return { data: [], total: 0 };
     }
-    return { data: filteredProviders, total: result.data.total };
   },
 };

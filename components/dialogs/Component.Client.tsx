@@ -10,14 +10,25 @@ import useShareProviderDialogStore from "@/store/dialog/share-provider-store";
 import ClaimProviderDialog from "./components/claim-provider/Component";
 import ReportProviderDialog from "./components/report-provider/Component";
 import ShareProviderDialog from "./components/share-provider/Component";
+import usePageListDialogStore from "@/store/dialog/page-list-dialog-store";
+import CmsRatingDialog from "./components/filters/cms-rating-dialog";
+import SortFilterDialog from "./components/filters/sort-filter-dialog";
 
 const DialogClientRenderer = () => {
   const { showLogin, showSignup, setShowLogin, setShowSignup } =
     useAuthUIStore();
   const { showResetPassword, setShowResetPassword } = useResetPasswordUIStore();
-  const { showClaimProvider, setShowClaimProvider } = useClaimProviderDialogStore();
-  const { showReportDialog, setShowReportDialog } = useReportProviderDialogStore();
+  const { showClaimProvider, setShowClaimProvider } =
+    useClaimProviderDialogStore();
+  const { showReportDialog, setShowReportDialog } =
+    useReportProviderDialogStore();
   const { showShareDialog, setShowShareDialog } = useShareProviderDialogStore();
+  const {
+    isCmsRatingsDialogOpen,
+    setIsCmsRatingsDialogOpen,
+    isSortingDialogOpen,
+    setIsSortingDialogOpen,
+  } = usePageListDialogStore();
 
   //handlers
   const onCloseAuth = () => {
@@ -39,6 +50,14 @@ const DialogClientRenderer = () => {
 
   const closeShareDialog = () => {
     setShowShareDialog(false);
+  };
+
+  const closeCmsRatingDialog = () => {
+    setIsCmsRatingsDialogOpen(false);
+  };
+
+  const closeSortFilterDialog = () => {
+    setIsSortingDialogOpen(false);
   };
 
   return (
@@ -72,6 +91,20 @@ const DialogClientRenderer = () => {
         isDialogOpen={showShareDialog}
         handleClose={closeShareDialog}
         children={<ShareProviderDialog />}
+      />
+      {/* CMS Rating Dialog */}
+      <CustomDialog
+        isDialogOpen={isCmsRatingsDialogOpen}
+        handleClose={closeCmsRatingDialog}
+        dialogVisibleClassName="block lg:hidden"
+        children={<CmsRatingDialog />}
+      />
+      {/* Sort Filter Dialog */}
+      <CustomDialog
+        isDialogOpen={isSortingDialogOpen}
+        handleClose={closeSortFilterDialog}
+        dialogVisibleClassName="block lg:hidden"
+        children={<SortFilterDialog />}
       />
     </>
   );

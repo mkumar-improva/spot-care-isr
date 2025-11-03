@@ -34,7 +34,7 @@ const useRadiusPopOver = ({
     storePostalCode,
     setRadiusValue,
   } = useSearchUiStore();
-  const { currentLocation } = useSearchDataStore();
+  const { currentLocation, searchCurrentLocation } = useSearchDataStore();
   /*----------End of Store Import----------*/
 
   /*--Begining of refs----------*/
@@ -66,8 +66,8 @@ const useRadiusPopOver = ({
       setLoading(true);
       const filterData = {
         careType: careTypeValue ?? "",
-        lat: currentLocation?.lat ?? 0,
-        lng: currentLocation?.lng ?? 0,
+        lat: searchCurrentLocation?.lat ?? 0,
+        lng: searchCurrentLocation?.lng ?? 0,
         page: 1,
         pageSize: 10,
         postalCode: storePostalCode ?? "",
@@ -138,6 +138,9 @@ const useRadiusPopOver = ({
     containerRef,
     optionRefs,
     popoverButtonRef,
+    careTypeValue,
+    locationValue,
+    storePostalCode,
     setIsDropdownOpen,
     setRadiusOpen,
     setRadiusValue,

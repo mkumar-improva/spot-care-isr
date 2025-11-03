@@ -102,10 +102,18 @@ const CareTypeInput: FC<CareTypeInputProps> = ({
             autoFocus={careTypeOpen}
             onChange={(e) => setCareTypeValue(e.target.value)}
             ref={inputRef}
-            onFocus={() => onFocusScroll()}
+            onFocus={() => {
+              setCareSearchShowVerticalLine?.(false);
+              setRadiusSearchShowVerticalLine?.(true);
+              setCareTypeOpen(true);
+              inputRef.current?.focus();
+              onFocusScroll();
+            }}
           />
           <span className="block mt-0.5 text-sm text-neutral-400 font-light">
-            <span className="line-clamp-1">{!!careTypeValue ? placeHolder : desc}</span>
+            <span className="line-clamp-1">
+              {!!careTypeValue ? placeHolder : desc}
+            </span>
           </span>
           {careTypeValue && (
             <ClearDataButton

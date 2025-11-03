@@ -15,10 +15,14 @@ import logoImg from "@/assets/app/spot/full.png";
 import RenderSearchFormCategory from "./render-searchform-category";
 import useRadiusPopOver from "@/hooks/search/use-radius-pop-over";
 import useProviderInputType from "@/hooks/search/use-provider-input-type";
+import useLoadingState from "@/store/loader/loding-state";
+import ButtonPrimary from "@/components/ui/button/types/button-primary";
 
 const SearchMobile = () => {
   const { showHeroMobileSearch, searchActiveTab, setShowHeroMobileSearch } =
     useSearchUiStore();
+
+  const { loading, isWishlistLoaded } = useLoadingState();
 
   //handlers
   const closeDialog = () => {
@@ -93,23 +97,19 @@ const SearchMobile = () => {
                   </div>
                   {/* Footer Section */}
                   <div className="bg-white w-full flex justify-between items-center p-5">
-                    <button
-                      type="submit"
-                      className="flex-shrink-0 px-2 py-1.5 w-full rounded-xl flex items-center justify-center text-neutral-50 focus:outline-none 
-                    relative z-20 bg-primary-700"
-                      onClick={
+                    <ButtonPrimary
+                      className="w-full bg-primary-700 font-medium text-white rounded-lg px-6 py-2 text-base hover:bg-primary-800 
+                    transition-colors duration-200 ease-in-out"
+                      onclick={
                         searchActiveTab === "services"
                           ? SearchOption
                           : SearchOptionProvider
                       }
+                      loading={loading || isWishlistLoaded}
                     >
-                      <HugeiconsIcon
-                        icon={Search02Icon}
-                        size={24}
-                        aria-hidden="true"
-                      />
-                      <span className="ml-2">Search</span>
-                    </button>
+                      <span>Search</span>
+                    </ButtonPrimary>
+                    <button></button>
                   </div>
                 </div>
               </Dialog.Panel>

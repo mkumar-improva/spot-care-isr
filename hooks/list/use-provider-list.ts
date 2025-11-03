@@ -7,6 +7,8 @@ import { parseProviderResults } from "@/utils/makers";
 import { Filters } from "@/types/filter-props";
 import useRenderRatingFilter from "./use-render-rating-filter";
 import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import useSearchUiStore from "@/store/ui/search-ui-store";
 
 interface useProviderListProps {
   providersList: Providers[];
@@ -23,16 +25,21 @@ const useProviderList = ({
   const { loading, setLoading } = useLoadingState();
   const { filterVal, setProviderList, setFilterVal, clearProviderData } =
     useProviderListDataStore();
+  const {setShowHeroMobileSearch} = useSearchUiStore();
 
   //hooks
   const searchParams = useSearchParams();
+  const router = useRouter();
   const { pageFilter } = useRenderRatingFilter();
 
   //refs
   const listinContainerRef = useRef<HTMLDivElement | null>(null);
   const NorecordContainerRef = useRef(null);
+
+  //state
   const [currentHoverID, setCurrentHoverID] = useState<string | number>(-1);
   const [totalRecords, setTotalRecords] = useState<number>(total);
+  const [isTabFiltersOpen, setIsTabFiltersOpen] = useState(false);
 
   //useEffects
   useEffect(() => {
@@ -40,7 +47,7 @@ const useProviderList = ({
     clearProviderData();
     setLoading(true);
     setFilterVal(null);
-    
+
     const filterData = {
       searchText: "",
       careType: searchParams.get("careType") ?? "",
@@ -78,10 +85,28 @@ const useProviderList = ({
       setProviderList(filteredResult);
       setTotalRecords(filteredResult.length);
       setLoading(false);
+      setShowHeroMobileSearch(false);
     };
 
     run();
-  }, [total, providersList, filterData, filterVal, clearProviderData, setLoading]);
+  }, [
+    total,
+    providersList,
+    filterData,
+    filterVal,
+    clearProviderData,
+    setLoading,
+  ]);
+
+  //handlers
+  const handleProviderClick = (provider: Providers) => {
+    const detailUrl = `/detail-screen/${provider.code}?lat=${
+      provider.locations[0]?.latitude || 40.7127753
+    }&lon=${provider.locations[0]?.longitude || -74.0059728}&distance=${
+      provider.distanceInMiles || 0
+    }`;
+    router.push(detailUrl);
+  };
 
   return {
     listinContainerRef,
@@ -89,7 +114,10 @@ const useProviderList = ({
     NorecordContainerRef,
     currentHoverID,
     totalRecords,
+    isTabFiltersOpen,
+    setIsTabFiltersOpen,
     setCurrentHoverID,
+    handleProviderClick
   };
 };
 

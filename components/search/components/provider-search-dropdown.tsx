@@ -10,7 +10,12 @@ interface ProviderSearchDropdownProps {
   providerNameError: boolean;
   providerIsRecord: boolean;
   providerNameDebounce: Providers[] | null;
-  handleOnClick: (code: string, distance: number, providerName?: string) => void;
+  providerInputFocused: boolean;
+  handleOnClick: (
+    code: string,
+    distance: number,
+    providerName?: string
+  ) => void;
 }
 
 const ProviderSearchDropdown = ({
@@ -18,9 +23,10 @@ const ProviderSearchDropdown = ({
   providerNameError,
   providerIsRecord,
   providerNameDebounce,
+  providerInputFocused,
   handleOnClick,
 }: ProviderSearchDropdownProps) => {
-  if (!searchProviderName) {
+  if (!providerInputFocused || searchProviderName.trim() === "") {
     return null;
   }
 
@@ -32,15 +38,15 @@ const ProviderSearchDropdown = ({
     >
       {providerNameError ? (
         <ErrorState />
-      ) : !providerIsRecord ? (
-        <NoRecordsState />
+      ) : providerIsRecord ? (
+        <LoadingState />
       ) : providerNameDebounce && providerNameDebounce.length > 0 ? (
-        <ProviderList 
+        <ProviderList
           providers={providerNameDebounce}
           onProviderClick={handleOnClick}
         />
       ) : (
-        <LoadingState />
+        <NoRecordsState />
       )}
     </div>
   );
@@ -86,7 +92,11 @@ const LoadingState = () => (
 
 interface ProviderListProps {
   providers: Providers[];
-  onProviderClick: (code: string, distance: number, providerName?: string) => void;
+  onProviderClick: (
+    code: string,
+    distance: number,
+    providerName?: string
+  ) => void;
 }
 
 const ProviderList = ({ providers, onProviderClick }: ProviderListProps) => (
@@ -103,13 +113,17 @@ const ProviderList = ({ providers, onProviderClick }: ProviderListProps) => (
 
 interface ProviderItemProps {
   provider: Providers;
-  onProviderClick: (code: string, distance: number, providerName?: string) => void;
+  onProviderClick: (
+    code: string,
+    distance: number,
+    providerName?: string
+  ) => void;
 }
 
 const ProviderItem = ({ provider, onProviderClick }: ProviderItemProps) => {
   const handleClick = () => {
     onProviderClick(
-      provider.code, 
+      provider.code,
       provider.distanceInMiles || 0,
       provider.name.replace("''", "'")
     );
@@ -125,8 +139,11 @@ const ProviderItem = ({ provider, onProviderClick }: ProviderItemProps) => {
   const getProviderAddress = () => {
     if (provider?.locations && provider.locations.length > 0) {
       const location = provider.locations[0];
-      return [location.address, location.city, location.state].join(", ") + 
-             " - " + location.postalCode.split("-")[0];
+      return (
+        [location.address, location.city, location.state].join(", ") +
+        " - " +
+        location.postalCode.split("-")[0]
+      );
     }
     return "";
   };
