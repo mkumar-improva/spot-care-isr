@@ -107,7 +107,7 @@ const SearchMobile = () => {
                       }
                       loading={loading || isWishlistLoaded}
                     >
-                      <span className="ml-2">Search</span>
+                      <span>Search</span>
                     </ButtonPrimary>
                     <button></button>
                   </div>
