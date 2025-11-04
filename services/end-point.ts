@@ -28,9 +28,16 @@ export const END_POINT = {
       console.error("Error fetching:", error);
     }
   },
-  post: async (path: string, body: any, stringfy: boolean = false) => {
+  post: async (
+    path: string,
+    body: any,
+    stringfy: boolean = false,
+    version: string = "V1"
+  ) => {
     try {
-      const response = await fetch(`${Config.URL.API_URL}${path}`, {
+      var basePath = version === "V2" ? Config.URL.API_V2 : Config.URL.API_URL;
+      var url = new URL(`${basePath}${path}`);
+      const response = await fetch(url.toString(), {
         headers: {
           "Content-Type": "application/json",
         },
@@ -42,9 +49,11 @@ export const END_POINT = {
       console.error("Error fetching :", error);
     }
   },
-  postFormData: async (path: string, body: any) => {
+  postFormData: async (path: string, body: any, version: string = "V1") => {
     try {
-      const response = await fetch(`${Config.URL.API_URL}${path}`, {
+      var basePath = version === "V2" ? Config.URL.API_V2 : Config.URL.API_URL;
+      var url = new URL(`${basePath}${path}`);
+      const response = await fetch(url.toString(), {
         method: "POST",
         body: body,
       });
@@ -53,8 +62,10 @@ export const END_POINT = {
       console.error("Error fetching :", error);
     }
   },
-  Delete: async (path: string, body: any) => {
-    const response = await fetch(`${Config.URL.API_URL}${path}`, {
+  Delete: async (path: string, body: any, version: string = "V1") => {
+    var basePath = version === "V2" ? Config.URL.API_V2 : Config.URL.API_URL;
+    var url = new URL(`${basePath}${path}`);
+    const response = await fetch(url.toString(), {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -63,8 +74,15 @@ export const END_POINT = {
     });
     return await response.json();
   },
-  PUT: async (path: string, body: any, stringify: boolean) => {
-    const response = await fetch(`${Config.URL.API_URL}${path}`, {
+  PUT: async (
+    path: string,
+    body: any,
+    stringify: boolean,
+    version: string = "V1"
+  ) => {
+    var basePath = version === "V2" ? Config.URL.API_V2 : Config.URL.API_URL;
+    var url = new URL(`${basePath}${path}`);
+    const response = await fetch(url.toString(), {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -75,7 +93,9 @@ export const END_POINT = {
   },
   getIpAddress: async () => {
     try {
-      var url = new URL(`${Config.URL.IP_FINDER_V2}?key=${Config.KEY.IP_FINDER_V2_API_KEY}`);
+      var url = new URL(
+        `${Config.URL.IP_FINDER_V2}?key=${Config.KEY.IP_FINDER_V2_API_KEY}`
+      );
       const response = await fetch(url.toString(), {
         method: "GET",
         headers: {

@@ -43,7 +43,6 @@ const ProviderInfo: FC<ProviderInfoProps> = ({
   const { isSelected, savedProviders } = useWishlist({
     selectedProviderDetail,
     careTypes,
-    userDetail,
   });
 
   return (

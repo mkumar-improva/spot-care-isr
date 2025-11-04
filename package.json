@@ -39,7 +39,8 @@
     "tailwind-merge": "^3.3.1",
     "turnstile": "^5.0.5",
     "zustand": "^4.5.2",
-    "rc-slider": "^10.5.0"
+    "rc-slider": "^10.5.0",
+    "@react-pdf/renderer": "^3.4.4"
   },
   "devDependencies": {
     "@tailwindcss/aspect-ratio": "^0.4.2",

@@ -14,13 +14,15 @@ import useAuthUIStore from "@/store/ui/auth-ui-store";
 import SearchSkeleton from "./search-skeleton";
 import HeroSearchSkeleton from "./hero-search-skeleton";
 import ProfileSkeleton from "./profile-skeleton";
-
+import SavedProvider from "./saved-provider";
+import useProviderListDataStore from "@/store/data/use-provider-list-data-store";
 
 const HeaderNav = () => {
   /*----------Begining of Store Import----------*/
   const { isHomePage, showHeroSearch, setShowHeroSearch } = useHeaderUiStore();
   const { isLoggedIn, isAuthLoading } = useAuthUIStore();
   const [mounted, setMounted] = useState(false);
+  const { savedProviderList } = useProviderListDataStore();
   /*----------End of Store Import----------*/
 
   useEffect(() => {
@@ -68,10 +70,10 @@ const HeaderNav = () => {
               className="w-[4.25rem] md:w-[7.25rem] relative z-[999999]"
             />
             {/* Hero Search: render during initial mount/loading to show centered skeleton */}
-            {((!mounted || isAuthLoading) || !isHomePage) && (
+            {(!mounted || isAuthLoading || !isHomePage) && (
               <div className={`ml-[12rem] hidden xl:block`} ref={heroSearchRef}>
                 <div className="block">
-                  {(!mounted || isAuthLoading) ? (
+                  {!mounted || isAuthLoading ? (
                     <HeroSearchSkeleton />
                   ) : (
                     <RenderButtonOpenHeroSearch />
@@ -86,14 +88,20 @@ const HeaderNav = () => {
               <div className="block md:hidden ml-0">
                 {!mounted || isAuthLoading ? <SearchSkeleton /> : <SearchTab />}
               </div>
-              {/* Right Side Elements - Show appropriate skeleton during load, then actual component */}
-              {!mounted || isAuthLoading ? (
-                <ProfileSkeleton />
-              ) : isLoggedIn ? (
-                <AvatarDropDown />
-              ) : (
-                <NavBarElements />
-              )}
+              <div className="flex items-center justify-end gap-4">
+                {/* saved providers */}
+                {isLoggedIn &&
+                  savedProviderList &&
+                  savedProviderList.length > 0 && <SavedProvider />}
+                {/* Right Side Elements - Show appropriate skeleton during load, then actual component */}
+                {!mounted || isAuthLoading ? (
+                  <ProfileSkeleton />
+                ) : isLoggedIn ? (
+                  <AvatarDropDown />
+                ) : (
+                  <NavBarElements />
+                )}
+              </div>
             </div>
           </div>
         </div>
