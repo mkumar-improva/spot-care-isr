@@ -2,6 +2,7 @@
 
 import ProviderTypeInput from "./provider-type-input";
 import useProviderSearchForm from "@/hooks/search/use-provider-search-form";
+import useProviderSearchList from "@/hooks/search/use-provider-search-list";
 import LocationInput from "./location-input";
 import ProviderSearchDropdown from "./provider-search-dropdown";
 
@@ -18,21 +19,31 @@ const ProviderSearchForm = ({ onFocusScroll }: ProviderSearchFormProps) => {
     providerIsRecord,
     providerNameError,
     providerInputFocused,
+    navigatingCode,
     setShowVerticalLine,
     handleOnClick,
     handleProviderInputFocus,
     handleProviderInputBlur,
   } = useProviderSearchForm();
 
+  // Hook for list page search
+  const { handleProviderSearchSubmit } = useProviderSearchList();
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleProviderSearchSubmit();
+  };
+
   return (
-    <div
-      ref={containerRef}
-      className={`relative z-50 ml-1 lg:mx-auto w-full rounded-full bg-white ${
-        isHomePage
-          ? "shadow-xl dark:shadow-2xl ring ring-neutral-50"
-          : "border border-neutral-200 dark:border-neutral-6000"
-      } `}
-    >
+    <form onSubmit={handleFormSubmit}>
+      <div
+        ref={containerRef}
+        className={`relative z-50 ml-1 lg:mx-auto w-full rounded-full bg-white ${
+          isHomePage
+            ? "shadow-xl dark:shadow-2xl ring ring-neutral-50"
+            : "border border-neutral-200 dark:border-neutral-6000"
+        } `}
+      >
       <div className="w-full flex items-center justify-start rounded-full bg-white overflow-hidden">
         {/* Location Input */}
         <LocationInput
@@ -63,9 +74,11 @@ const ProviderSearchForm = ({ onFocusScroll }: ProviderSearchFormProps) => {
         providerIsRecord={providerIsRecord}
         providerNameDebounce={providerNameDebounce}
         providerInputFocused={providerInputFocused}
+        navigatingCode={navigatingCode}
         handleOnClick={handleOnClick}
       />
     </div>
+    </form>
   );
 };
 
