@@ -5,16 +5,16 @@ const HeroSearchSkeleton = () => {
       aria-hidden="true"
     >
       <div className="flex items-center font-medium text-sm">
-        <span className="block pl-5 pr-4 py-2 md:py-3">
-          <span className="animate-pulse h-4 w-20 md:w-24 bg-neutral-200 dark:bg-neutral-700 rounded-full inline-block" />
+        <span className="flex items-center pl-5 pr-4 py-2 md:py-3">
+          <span className="animate-pulse h-4 w-20 md:w-24 bg-neutral-200 dark:bg-neutral-700 rounded-full" />
         </span>
-        <span className="h-5 w-[1px] bg-neutral-300 dark:bg-neutral-700"></span>
-        <span className="block px-4 py-2 md:py-3">
-          <span className="animate-pulse h-4 w-20 md:w-24 bg-neutral-200 dark:bg-neutral-700 rounded-full inline-block" />
+        <span className="h-4 w-[1px] bg-neutral-300 dark:bg-neutral-700"></span>
+        <span className="flex items-center px-4 py-2 md:py-3">
+          <span className="animate-pulse h-4 w-20 md:w-24 bg-neutral-200 dark:bg-neutral-700 rounded-full" />
         </span>
-        <span className="h-5 w-[1px] bg-neutral-300 dark:bg-neutral-700"></span>
-        <span className="block px-4 py-2 md:py-3">
-          <span className="animate-pulse h-4 w-16 md:w-20 bg-neutral-200 dark:bg-neutral-700 rounded-full inline-block" />
+        <span className="h-4 w-[1px] bg-neutral-300 dark:bg-neutral-700"></span>
+        <span className="flex items-center px-4 py-2 md:py-3">
+          <span className="animate-pulse h-4 w-16 md:w-20 bg-neutral-200 dark:bg-neutral-700 rounded-full" />
         </span>
       </div>
       <div className="size-8 flex items-center justify-center">
@@ -25,5 +25,3 @@ const HeroSearchSkeleton = () => {
 };
 
 export default HeroSearchSkeleton;
-
-

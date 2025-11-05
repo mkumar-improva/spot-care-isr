@@ -16,7 +16,7 @@ import { TitleCase } from "@/utils/converter";
 import ClaimListingCardV2 from "@/components/ui/ClaimListingCard/claim-listing-card";
 import { PermissionGuard } from "components/ui/PermissionGuard";
 import { Providers } from "@/types/provider-details";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import useUIStore from "@/store/detailscreen/ui-store";
 import careTypePresent from "@/utils/care-type-present";
 import useSearchDataStore from "@/store/data/search-data-store";
@@ -38,8 +38,27 @@ export default function DetailScreen({
   initialProvider,
   error,
 }: DetailScreenProps) {
+  // Move all hooks to the top before any conditional returns (React rules-of-hooks)
   const ReviewContainerRef = useRef<HTMLDivElement>(null);
   const CmsContainerRef = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
+  const { careTypes } = useSearchDataStore();
+  const setSelectedProviderDetail = useUIStore((s) => s.setSelectedProviderDetail);
+  const previousProviderRef = useRef<Providers | null>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (
+      initialProvider &&
+      (previousProviderRef.current?.code !== initialProvider.code)
+    ) {
+      setSelectedProviderDetail(initialProvider);
+      previousProviderRef.current = initialProvider;
+    }
+  }, [initialProvider, setSelectedProviderDetail]);
 
   const handleScrollDown = () => {
     if (ReviewContainerRef.current) {
@@ -63,8 +82,19 @@ export default function DetailScreen({
       });
     }
   };
+  // consider provider "complete" only if required fields are present
+  const isProviderComplete = (p?: Providers | null) => {
+    if (!p) return false;
+    // require code and at least one location; adjust requirements as needed
+    const hasCode = !!p.code;
+    const hasLocation = Array.isArray(p.locations) && p.locations.length > 0;
+    const hasName = !!p.name;
+    return hasCode && hasLocation && hasName;
+  };
 
-  if (!initialProvider && !error) {
+  // show full-screen loader until we have a complete provider object (or an error)
+  // Also check mounted to avoid hydration mismatch on SSR
+  if (!mounted || (!isProviderComplete(initialProvider) && !error)) {
     return (
       <div className="w-full h-screen flex justify-center items-center">
         <Loading />
@@ -89,9 +119,6 @@ export default function DetailScreen({
 
   const data = initialProvider;
 
-  // Get care types from store to determine service name
-  const { careTypes } = useSearchDataStore();
-  
   // Calculate service name from provider's services
   const getServiceName = () => {
     if (data?.services && data.services.length > 0) {
@@ -102,18 +129,6 @@ export default function DetailScreen({
     }
     return "";
   };
-
-  const setSelectedProviderDetail = useUIStore((s) => s.setSelectedProviderDetail);
-  const previousProviderRef = useRef<Providers | null>(null);
-  useEffect(() => {
-    if (
-      initialProvider &&
-      (previousProviderRef.current?.code !== initialProvider.code)
-    ) {
-      setSelectedProviderDetail(initialProvider);
-      previousProviderRef.current = initialProvider;
-    }
-  }, [initialProvider, setSelectedProviderDetail]);
 
   return (
     <div className="ListingDetailPage py-[1rem] md:py-[2rem]">
@@ -135,7 +150,7 @@ export default function DetailScreen({
               {TitleCase(data?.name?.replace("''", "'") ?? "")}
             </p>
             {data && data.images && data.images.length > 0 && (
-              <ImageGallery images={data.images} />
+              <ImageGallery images={data.images} providerData={data} />
             )}
             <div className="w-full flex-1 flex flex-col items-start justify-start">
               <ProviderInfo

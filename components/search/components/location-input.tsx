@@ -55,7 +55,7 @@ const LocationInput: FC<LocationInputProps> = ({
 
   if (!isMapLoaded) {
     return (
-      <div className="flex-1 flex items-center justify-start pl-[1rem] pr-[1rem] lg:px-[1.75rem] gap-2">
+      <div className="flex-1 flex items-center justify-start">
         <HugeiconsIcon icon={Location01Icon} className="text-neutral-300 size-6 lg:size-7" />
         <p className="text-neutral-500 text-base">Loading...</p>
       </div>
@@ -68,6 +68,8 @@ const LocationInput: FC<LocationInputProps> = ({
         }`}
       onClick={() => {
         inputRef.current?.focus();
+        // make full-area click trigger scroll as well
+        onFocusScroll?.();
       }}
       ref={containerRef}
     >
@@ -99,6 +101,8 @@ const LocationInput: FC<LocationInputProps> = ({
                 setCareSearchShowVerticalLine?.(false);
                 setRadiusSearchShowVerticalLine?.(false);
                 setProviderSearchShowVerticalLine?.(false);
+                // ensure focus triggers the scroll handler
+                onFocusScroll?.();
               }}
               onChange={(e) => setLocationValue(e.currentTarget.value)}
               ref={inputRef}
@@ -110,7 +114,7 @@ const LocationInput: FC<LocationInputProps> = ({
               className="line-clamp-1"
               onClick={() => {
                 inputRef.current?.focus();
-                onFocusScroll();
+                onFocusScroll?.();
               }}
             >
               {!!locationValue ? placeHolder : desc}

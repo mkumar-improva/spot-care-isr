@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import useSearchUiStore from "store/ui/search-ui-store";
 import useSearchDataStore from "store/data/search-data-store";
@@ -19,6 +19,7 @@ const useProviderSearchForm = () => {
   const [isRecord, setIsRecord] = useState(true);
   const [error, setError] = useState(false);
   const [providerInputFocused, setProviderInputFocused] = useState(false);
+  const [navigatingCode, setNavigatingCode] = useState<string | null>(null);
   let params: Record<string, string | number> = {};
 
   /*----------End of state ----------*/
@@ -42,13 +43,36 @@ const useProviderSearchForm = () => {
     setIsShowPopOver(false);
   });
 
+  // Update isRecord when results change and clear navigation state on new searches
+  useEffect(() => {
+    if (providerNameDebounce && providerNameDebounce.length > 0) {
+      setIsRecord(false); // Results found
+    } else if (searchProviderName && searchProviderName.trim() !== "" && !navigatingCode) {
+      setIsRecord(true); // Searching (only if not navigating)
+    }
+  }, [providerNameDebounce, searchProviderName, navigatingCode]);
+
+  // Clear navigation state when search changes
+  useEffect(() => {
+    if (searchProviderName && searchProviderName.trim() !== "" && navigatingCode) {
+      // If user is typing while navigating, clear the navigation state
+      const timeoutId = setTimeout(() => {
+        setNavigatingCode(null);
+      }, 100);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [searchProviderName, navigatingCode]);
+
   //handlers
   const handleProviderInputFocus = () => {
     setProviderInputFocused(true);
   };
 
   const handleProviderInputBlur = () => {
-    setProviderInputFocused(false);
+    // Add small delay to allow click events to fire before hiding dropdown
+    setTimeout(() => {
+      setProviderInputFocused(false);
+    }, 150);
   };
 
   const handleOnClick = (
@@ -56,12 +80,8 @@ const useProviderSearchForm = () => {
     distanceInMiles: number,
     providerName?: string
   ) => {
-    // Close the dropdown but keep the provider name in the search bar
-    setProviderNameDebounce(null);
-    // Keep the provider name visible if provided
-    if (providerName) {
-      setSearchProviderName(providerName);
-    }
+    // Set loading state for this specific provider
+    setNavigatingCode(code);
 
     // Build query parameters
     const queryParams = new URLSearchParams({
@@ -78,15 +98,15 @@ const useProviderSearchForm = () => {
     containerRef,
     showVerticalLine,
     isShowPopoOver,
-    isRecord,
     isHomePage,
     locationValue,
     error,
     searchProviderName,
     providerNameDebounce,
     providerNameError,
-    providerIsRecord,
+    providerIsRecord: isRecord, // Use local state instead of store state
     providerInputFocused,
+    navigatingCode,
     setShowVerticalLine,
     handleOnClick,
     handleProviderInputFocus,

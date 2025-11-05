@@ -1,10 +1,13 @@
+"use client";
 import { MenuSquareIcon } from "@hugeicons-pro/core-stroke-rounded/index";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Image } from "@/types/provider-details";
+import { Image, Providers } from "@/types/provider-details";
 import { APP_CONSTANTS } from "@/constants/AppConstants";
 import placeHolderSvg from "@/assets/PlaceHolders/placeholder.svg";
+import useImageGalleryStore from "@/store/dialog/image-gallery-store";
 
-function ImageGallery({ images, onShowGallery }: { images: Image[]; onShowGallery?: () => void }) {
+function ImageGallery({ images, onShowGallery, providerData }: { images: Image[]; onShowGallery?: () => void; providerData?: Providers }) {
+  const { setSelectedProviderDetails, setIsImageGalleryOpen } = useImageGalleryStore();
   const sortedImages = Array.isArray(images)
     ? images
         .filter((img) => img.imageTypeId === 1 || img.imageTypeId === 2)
@@ -18,7 +21,13 @@ function ImageGallery({ images, onShowGallery }: { images: Image[]; onShowGaller
 
   const primaryImageSrc = primaryImageObj?.imagePath;
 
-  const openModal = () => onShowGallery?.();
+  const openModal = () => {
+    if (providerData) {
+      setSelectedProviderDetails(providerData);
+      setIsImageGalleryOpen(true);
+    }
+    onShowGallery?.();
+  };
 
   if (!primaryImageSrc && gridImages.length === 0) return null;
   return (
