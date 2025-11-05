@@ -43,7 +43,9 @@ export default function DetailScreen({
   const CmsContainerRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
   const { careTypes } = useSearchDataStore();
-  const setSelectedProviderDetail = useUIStore((s) => s.setSelectedProviderDetail);
+  const setSelectedProviderDetail = useUIStore(
+    (s) => s.setSelectedProviderDetail
+  );
   const previousProviderRef = useRef<Providers | null>(null);
 
   useEffect(() => {
@@ -53,7 +55,7 @@ export default function DetailScreen({
   useEffect(() => {
     if (
       initialProvider &&
-      (previousProviderRef.current?.code !== initialProvider.code)
+      previousProviderRef.current?.code !== initialProvider.code
     ) {
       setSelectedProviderDetail(initialProvider);
       previousProviderRef.current = initialProvider;
@@ -162,15 +164,21 @@ export default function DetailScreen({
           <div className="w-full flex items-start justify-start relative gap-[1rem] flex-col-reverse lg:flex-row">
             <div className="w-full lg:w-[45rem] xl:w-[60rem] 2xl:w-[60rem] flex flex-col items-start justify-start gap-[2rem] md:gap-[1rem]">
               <hr className="block md:hidden w-full mt-[.4rem] md:w-0 border-t border-neutral-200" />
-              {data?.isRatingsAvailable && data.rating && (
-                <RatingSection
-                  rating={data.rating}
-                  cmsContainerRef={CmsContainerRef}
-                />
-              )}
-              {data?.isRatingsAvailable && data.rating && (
-                <hr className="block md:hidden w-full md:w-0 border-t border-neutral-200 mt-[.3rem]" />
-              )}
+              {data &&
+                data.isRatingsAvailable &&
+                data.rating &&
+                data.rating.overall > 0 && (
+                  <RatingSection
+                    rating={data.rating}
+                    cmsContainerRef={CmsContainerRef}
+                  />
+                )}
+              {data &&
+                data.isRatingsAvailable &&
+                data.rating &&
+                data.rating.overall > 0 && (
+                  <hr className="block md:hidden w-full md:w-0 border-t border-neutral-200 mt-[.3rem]" />
+                )}
               {data?.agrReview && (
                 <ReviewSummary
                   agrReviews={data.agrReview?.reviews}
@@ -193,7 +201,7 @@ export default function DetailScreen({
               )}
               {data && (
                 <div className="w-full lg:w-[45rem] xl:w-[60rem] 2xl:w-[60rem] border border-transparent md:border-neutral-200 px-0 md:px-[2rem] md:pb-[1.65rem] md:pt-[1.65rem] rounded-2xl flex flex-col items-start gap-[1rem]">
-                  <h2 className="text-2xl font-semibold">Facts & Features</h2>
+                  <h2 className="text-2xl font-medium">Facts & Features</h2>
                   {Array.isArray(data.sections) && data.sections.length > 0 ? (
                     <FactsSection
                       facts={(data.sections || []).filter(
@@ -203,21 +211,14 @@ export default function DetailScreen({
                   ) : (
                     <span className="text-base text-neutral-500 dark:text-neutral-400">
                       This provider has not provided any additional information.
-                      Please contact them directly to inform them of their missing
-                      information and to learn more about their services.
+                      Please contact them directly to inform them of their
+                      missing information and to learn more about their
+                      services.
                     </span>
                   )}
                 </div>
               )}
-              {data &&
-                Array.isArray(data.sections) &&
-                data.sections.length > 0 && (
-                  <hr
-                    className={`block md:hidden w-full md:w-0 border-t border-neutral-200 ${
-                      data.sections.length > 0 ? "mt-0" : "mt-[.5rem]"
-                    }`}
-                  />
-                )}
+              <hr className="block md:hidden w-full md:w-0 border-t border-neutral-200 mt-[.3rem]" />
               <div className="w-full block lg:hidden  border border-transparent md:border-neutral-200 px-[0] md:px-[2rem] py-[0rem] pb-[.2rem] md:py-[2rem] lg:py-[1.5rem] rounded-xl lg:sticky top-[6rem]">
                 <ConsultingTab />
               </div>
@@ -228,7 +229,7 @@ export default function DetailScreen({
                   <ClaimListingCardV2 providerCode={data?.code ?? ""} />
                 </PermissionGuard>
               )}
-              <div className="w-full  border border-transparent md:border-neutral-200 px-[0] md:px-[2rem] py-[1rem] md:pb-[2rem] md:pt-[1.65rem] rounded-xl  bg-white">
+              <div className="w-full border border-transparent md:border-neutral-200 px-[0] md:px-[2rem] py-[1rem] md:pb-[2rem] md:pt-[1.65rem] rounded-xl  bg-white">
                 <ConsultingTab />
               </div>
               <img src={MedicalService.src} className="rounded-xl" alt="" />

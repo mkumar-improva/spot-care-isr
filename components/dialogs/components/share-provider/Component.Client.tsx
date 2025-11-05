@@ -50,7 +50,7 @@ export const ShareDialog = () => {
       {/* Dialog Content */}
       <div className="flex-1 justify-center items-center sm:space-y-6 relative">
         <div className="flex flex-row text-neutral-700 dark:text-neutral-300 text-center justify-between items-center border-b dark:border-neutral-800 p-4 relative">
-          <p className="text-2xl font-bold flex-grow">Share</p>
+          <p className="text-2xl font-semibold flex-grow">Share</p>
           <span className="absolute right-3 top-3">
             <ButtonClose onClick={handleClose} isHover={false} />
           </span>
@@ -75,12 +75,12 @@ export const ShareDialog = () => {
                 />
               )}
             <div className="flex-1 flex flex-col flex-wrap items-start justify-start gap-1">
-              <p className="text-base text-neutral-800 dark:text-neutral-200 font-bold">
+              <p className="text-base text-neutral-800 dark:text-neutral-200 font-semibold">
                 {selectedProviderDetail?.name.replace("''", "'")}
               </p>
               <p className="text-sm text-neutral-500">
                 <span className="text-sm text-neutral-500 font-semibold">
-                  {selectedProviderDetail?.distanceInMiles} mi
+                  {selectedProviderDetail?.distanceInMiles} ml
                 </span>
                 &nbsp;&nbsp; •&nbsp;&nbsp;{" "}
                 {formatAddressFromLocations(

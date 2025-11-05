@@ -12,7 +12,11 @@ import {
   Flag02Icon,
 } from "@hugeicons-pro/core-stroke-rounded/index";
 
-export const useProviderActions = () => {
+interface useProviderActionProps {
+  onSave: () => void;
+}
+
+export const useProviderActions = ({ onSave }: useProviderActionProps) => {
   const [isTouchDevice, setIsTouchDevice] = useState(false);
 
   useEffect(() => {
@@ -34,14 +38,16 @@ export const useProviderActions = () => {
     useReportProviderDialogStore();
 
   // For now, check if user is logged in from localStorage
-  const isLoggedIn = typeof window !== "undefined" && localStorage.getItem(KEYS.ISLOGGEDIN) === "true";
+  const isLoggedIn =
+    typeof window !== "undefined" &&
+    localStorage.getItem(KEYS.ISLOGGEDIN) === "true";
 
   const providerActions = [
     {
       title: "Save",
       isSave: true,
       icon: FavouriteStrokeRounded,
-      onclick: () => {},
+      onclick: onSave,
     },
     {
       title: "Share",

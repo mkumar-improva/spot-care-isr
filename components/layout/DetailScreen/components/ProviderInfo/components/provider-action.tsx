@@ -20,7 +20,7 @@ const ProviderAction: FC<ProviderActionProps> = ({
   onReport = () => {},
   isSelected = false,
 }) => {
-  const { isTouchDevice, providerActions } = useProviderActions();
+  const { isTouchDevice, providerActions } = useProviderActions({ onSave });
 
   return (
     <div

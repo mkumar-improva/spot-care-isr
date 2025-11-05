@@ -202,7 +202,7 @@ const ProviderItem = ({ provider, navigatingCode, onProviderClick }: ProviderIte
         alt={`${provider.name} image`}
       />
       <div className="py-[.75rem] w-full">
-        <p className="text-gray-500 text-base font-semibold">
+        <p className="text-gray-500 text-base font-medium">
           {provider.name.replace("''", "'")}
         </p>
         {provider?.locations && provider.locations.length > 0 && (

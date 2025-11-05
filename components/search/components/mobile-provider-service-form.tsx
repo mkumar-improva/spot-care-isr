@@ -11,6 +11,7 @@ const MobileProviderServiceForm = () => {
     providerIsRecord,
     providerNameError,
     providerInputFocused,
+    navigatingCode,
     handleOnClick,
     handleProviderInputFocus,
     handleProviderInputBlur,
@@ -36,6 +37,7 @@ const MobileProviderServiceForm = () => {
           providerIsRecord={providerIsRecord}
           providerNameDebounce={providerNameDebounce}
           providerInputFocused={providerInputFocused}
+          navigatingCode={navigatingCode}
           handleOnClick={handleOnClick}
         />
       </div>

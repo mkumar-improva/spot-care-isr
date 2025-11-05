@@ -6,7 +6,8 @@ import {
 } from "@hugeicons-pro/core-stroke-rounded/index";
 import { renderProgressBar } from "@/components/ui/ProgressBar/progress-bar";
 import StarRating from "@/components/ui/StarRating/star-rating";
-// import MedicareLogo from "../../../../../images/logos/medicare.png";
+import MedicareLogo from "assets/logos/medicare.png";
+import Image from "next/image";
 
 interface Rating {
   overall: number;
@@ -42,15 +43,15 @@ export default function RatingSection({
       className="w-full flex flex-col border border-transparent md:border-neutral-200 px-0 py-0 gap-6 
       md:px-[2rem] md:pt-[1.5rem] md:pb-[2rem] rounded-2xl "
     >
-      <p className="text-2xl font-semibold">CMS ratings</p>
+      <p className="text-2xl font-medium">CMS ratings</p>
       {/* CMS Rating Overview */}
       <div
         className="w-full flex items-center justify-between border border-neutral-300 px-[1rem] 
       md:px-[2rem] py-[.5rem] md:py-[1.5rem] rounded-2xl"
       >
         <div className="flex items-center justify-start gap-4">
-          {/* <img alt="Medicare" className="w-[7.25rem]" src={MedicareLogo} /> */}
-          <p className="hidden md:block text-sm md:text-base leading-[18px] text-wrap text-neutral-500 font-semibold">
+          <Image src={MedicareLogo} alt="Medicare" className="w-[7.25rem]" />
+          <p className="hidden md:block text-sm md:text-base leading-[18px] text-wrap text-neutral-500 font-medium">
             These ratings are based on verified quality metrics and patient
             survey data
             <span className="hidden xl:inline">
@@ -70,7 +71,7 @@ export default function RatingSection({
               Medicare.gov.
             </span>
           </p>
-          <p className="text-sm hidden xsm:block md:hidden leading-[18px] text-wrap text-neutral-500 font-semibold">
+          <p className="text-sm hidden xsm:block md:hidden leading-[18px] text-wrap text-neutral-500 font-medium">
             Based on{" "}
             <span
               onClick={() => {
@@ -87,7 +88,7 @@ export default function RatingSection({
           </p>
         </div>
         <div className="flex flex-col items-center gap-2">
-          <p className="text-2xl font-semibold text-neutral-900">
+          <p className="text-2xl font-medium text-neutral-900">
             {rating.overall || <span className="text-gray-500">N/A</span>}
           </p>
           <StarRating

@@ -110,6 +110,7 @@ const useLocationTypeInput = ({
     showPopover,
     setShowPopover,
     handlePlaceChanged,
+    setStorePostalCode
   };
 };
 

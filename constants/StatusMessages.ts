@@ -90,6 +90,8 @@ export const StatusMessages = {
       "An error occurred while uploading image. Please try again later",
     //Auth Errors
     SignupError: "Failed to create account. Please try again later",
+    //report template
+    ReportTemplateError: "Failed to generate report. Please try again later",
   },
   //Schema Messages
   SchemaMessage: {

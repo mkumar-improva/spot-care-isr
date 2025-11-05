@@ -15,7 +15,7 @@ const RenderGroupedCareCategories: FC<RenderGroupedCareCategoriesProps> = ({
   let itemIndex = -1;
   return groupedCareCategories.map((item: Cares, index) => (
     <div key={index} className="mb-2">
-      <h3 className="px-4 sm:px-8 font-bold text-base text-neutral-800 dark:text-neutral-100">
+      <h3 className="px-4 sm:px-8 font-semibold text-base text-neutral-800 dark:text-neutral-100">
         {item.name}
       </h3>
       {item.careTypes.map((care) => {

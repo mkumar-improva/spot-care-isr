@@ -18,6 +18,7 @@ import { formatPhoneNumber } from "@/utils/converter";
 import google from "@/assets/logos/google.png";
 import Image from "next/image";
 import medicare from "@/assets/logos/medicare.png";
+import useProviderCard from "@/hooks/card/use-provider-card";
 
 interface ProviderContentProps {
   data: Providers;
@@ -30,13 +31,15 @@ const ProviderContent: FC<ProviderContentProps> = ({
   isLite,
   fromDrawer,
 }) => {
-  //state
-  const [isSelected, setIsSelected] = useState(false);
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
+  //hook
+  const {
+    isSelected,
+    isTouchDevice,
+    shouldShowReviews,
+    ratingToShow,
+    savedProviders,
+  } = useProviderCard({ provider: data });
 
-  //determine if we should show reviews
-  const shouldShowReviews = data.agrReview || data.rating;
-  const ratingToShow = data.agrReview?.reviews.rating;
   return (
     <div
       className="flex-1 flex flex-col items-start justify-start relative px-[.75rem] 
@@ -115,6 +118,10 @@ const ProviderContent: FC<ProviderContentProps> = ({
                   ? "border-neutral-300 text-neutral-500 active:border-red-500 active:text-red-500"
                   : "border-neutral-300 text-neutral-500 hover:border-red-500 hover:text-red-500"
               }`}
+              onClick={async (e) => {
+                e.stopPropagation();
+                await savedProviders();
+              }}
             >
               <HugeiconsIcon
                 icon={FavouriteIcon}
@@ -142,7 +149,13 @@ const ProviderContent: FC<ProviderContentProps> = ({
           )}
           {/* Remove Button */}
           {!isLite && fromDrawer && (
-            <div className="border rounded-lg flex items-center gap-[5px] px-[.5rem] py-[.29rem] border-red-500 text-red-500">
+            <div
+              onClick={async (e) => {
+                e.stopPropagation();
+                await savedProviders();
+              }}
+              className="border rounded-lg flex items-center gap-[5px] px-[.5rem] py-[.29rem] border-red-500 text-red-500"
+            >
               {" "}
               <HugeiconsIcon
                 icon={Delete02Icon}
@@ -174,24 +187,26 @@ const ProviderContent: FC<ProviderContentProps> = ({
                 </div>
               ) : null}
               {/* CMS Rating */}
-              {data.isRatingsAvailable && (
-                <div className="flex rounded-lg items-center gap-[.25rem]">
-                  <Image
-                    alt="Medicare Rating"
-                    src={medicare}
-                    className="w-[6rem]"
-                  />
-                  <div className="flex items-center justify-start gap-[.25rem] mb-[.15rem]">
-                    <HugeiconsIcon
-                      icon={StarIcon}
-                      className="text-[#f49d0a] size-3"
+              {data.isRatingsAvailable &&
+                data.rating &&
+                data.rating.overall > 0 && (
+                  <div className="flex rounded-lg items-center gap-[.25rem]">
+                    <Image
+                      alt="Medicare Rating"
+                      src={medicare}
+                      className="w-[6rem]"
                     />
-                    <span className="text-sm font-medium text-neutral-500">
-                      ({data.rating?.overall ?? 0})
-                    </span>
+                    <div className="flex items-center justify-start gap-[.25rem] mb-[.15rem]">
+                      <HugeiconsIcon
+                        icon={StarIcon}
+                        className="text-[#f49d0a] size-3"
+                      />
+                      <span className="text-sm font-medium text-neutral-500">
+                        ({data.rating?.overall ?? 0})
+                      </span>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
             </>
           )}
         </div>

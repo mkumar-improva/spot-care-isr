@@ -1,18 +1,25 @@
 "use client";
 
-import { usePathname } from 'next/navigation';
+import { usePathname } from "next/navigation";
 import HeaderNav from "./components/header-nav";
 import React, { use, useEffect } from "react";
 import useHeaderUiStore from "store/ui/header-ui-store";
+import useAuthUIStore from "@/store/ui/auth-ui-store";
+import useWishlist from "@/hooks/wishlist/use-wishlist";
 
 const StandardHeader = () => {
   const pathName = usePathname();
   const { setIsHomePage } = useHeaderUiStore();
+  const { isLoggedIn } = useAuthUIStore();
+
+  //hooks
+  const { loadWishlist } = useWishlist();
 
   useEffect(() => {
-    const nonHomeRoutes = [
+    const dynamicRoutePrefixes = ["/detail-screen/"];
+
+    const staticRoutes = [
       "/list",
-      "/detail-screen",
       "/contact",
       "/privacy",
       "/account",
@@ -22,11 +29,18 @@ const StandardHeader = () => {
       "/provider-profile",
     ];
 
-    setIsHomePage(!nonHomeRoutes.includes(pathName));
+    const isDetailScreen = pathName.startsWith("/detail-screen/");
+    const isStaticPage = staticRoutes.includes(pathName);
+
+    setIsHomePage(!(isDetailScreen || isStaticPage));
   }, [pathName]);
 
+  useEffect(() => {
+    loadWishlist();
+  }, [isLoggedIn]);
+
   const pathname = usePathname();
-  const isBlogPage = pathname === '/blog';
+  const isBlogPage = pathname === "/blog";
 
   if (isBlogPage) return null;
 

@@ -14,6 +14,7 @@ export const useReportProviderDialog = () => {
     dialogProviderCode,
     reportOptions,
     setReportOptions,
+    setSuccessDialogOpen
   } = useReportProviderDialogStore();
 
   // Form state
@@ -30,7 +31,7 @@ export const useReportProviderDialog = () => {
       try {
         const result = await Services.GetReportOptions();
         // console.log("Report options result:", result);
-        
+
         // Handle different response formats
         let optionsArray: Array<{ id: number; category: string }> = [];
         if (Array.isArray(result)) {
@@ -38,10 +39,15 @@ export const useReportProviderDialog = () => {
         } else if (result?.data && Array.isArray(result.data)) {
           optionsArray = result.data;
         } else if (typeof result === "object" && result !== null) {
-          const foundArray = Object.values(result).find(val => Array.isArray(val));
-          optionsArray = (foundArray as Array<{ id: number; category: string }> | undefined) ?? [];
+          const foundArray = Object.values(result).find((val) =>
+            Array.isArray(val)
+          );
+          optionsArray =
+            (foundArray as
+              | Array<{ id: number; category: string }>
+              | undefined) ?? [];
         }
-        
+
         if (optionsArray.length > 0) {
           setReportOptions(optionsArray);
         }
@@ -101,22 +107,13 @@ export const useReportProviderDialog = () => {
     setReportIssueLoader(true);
 
     try {
-      // TODO: Uncomment when Services.SaveReport is implemented
-      // await Services.SaveReport(
-      //   dialogProviderCode ?? "",
-      //   selectedOptionId ?? 0,
-      //   reportValue ?? ""
-      // );
-      
-      // Mock success for now
-      // console.log("Report submitted:", {
-      //   providerCode: dialogProviderCode,
-      //   optionId: selectedOptionId,
-      //   reportValue: reportValue,
-      // });
-
+      await Services.SaveReport(
+        dialogProviderCode || "",
+        selectedOptionId ?? 0,
+        reportValue ?? ""
+      );
       handleClose();
-      // TODO: Show success dialog if needed
+      setSuccessDialogOpen(true);
     } catch (error) {
       console.error("Error saving report:", error);
       setIsError(true);

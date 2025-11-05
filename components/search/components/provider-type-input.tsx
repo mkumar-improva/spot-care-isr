@@ -74,7 +74,7 @@ const ProviderTypeInput: FC<ProviderTypeInputProps> = ({
             ref={inputRef}
             name="providerVal"
             className={`block w-full bg-transparent border-none focus:ring-0 p-0 focus:outline-none focus:placeholder-neutral-300 
-            text-base font-semibold placeholder-neutral-800 dark:placeholder-neutral-200 truncate 
+            text-base font-medium placeholder-neutral-800 dark:placeholder-neutral-200 truncate 
             ${!storePostalCode ? "cursor-not-allowed" : "cursor-text"}`}
             placeholder={placeHolder}
             value={searchProviderName}

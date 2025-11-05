@@ -46,6 +46,7 @@ const LocationInput: FC<LocationInputProps> = ({
     setShowPopover,
     setLocationValue,
     handlePlaceChanged,
+    setStorePostalCode
   } = useLocationTypeInput({
     autofocus: autoFocus,
     setProviderSearchShowVerticalLine,
@@ -55,8 +56,11 @@ const LocationInput: FC<LocationInputProps> = ({
 
   if (!isMapLoaded) {
     return (
-      <div className="flex-1 flex items-center justify-start">
-        <HugeiconsIcon icon={Location01Icon} className="text-neutral-300 size-6 lg:size-7" />
+      <div className="flex-1 flex items-center justify-start pl-[1rem] pr-[1rem] lg:px-[1.75rem] gap-2">
+        <HugeiconsIcon
+          icon={Location01Icon}
+          className="text-neutral-300 size-6 lg:size-7"
+        />
         <p className="text-neutral-500 text-base">Loading...</p>
       </div>
     );
@@ -92,7 +96,7 @@ const LocationInput: FC<LocationInputProps> = ({
           >
             <input
               className={`block w-full bg-transparent border-none focus:ring-0 p-0 focus:outline-none 
-                focus:placeholder-neutral-300 text-base font-semibold placeholder-neutral-800 
+                focus:placeholder-neutral-300 text-base font-medium placeholder-neutral-800 
                 dark:placeholder-neutral-200 overflow-hidden text-ellipsis whitespace-nowrap`}
               placeholder={placeHolder}
               value={locationValue}
@@ -124,6 +128,7 @@ const LocationInput: FC<LocationInputProps> = ({
             <ClearDataButton
               onClick={() => {
                 setLocationValue("");
+                setStorePostalCode("");
                 inputRef.current?.focus();
               }}
             />

@@ -97,7 +97,7 @@ const ReviewSummary: FC<ReviewSummaryProps> = ({
       px-0 py-0 gap-6 md:px-[2rem] md:pt-[1.5rem] md:pb-[2rem]"
     >
       {/* Title */}
-      <p className="text-2xl font-semibold">Reviews</p>
+      <p className="text-2xl font-medium">Reviews</p>
       {/* Review Overview */}
       <div
         className="w-full flex items-center justify-between border border-neutral-300 rounded-2xl px-[1rem] 
@@ -105,20 +105,20 @@ const ReviewSummary: FC<ReviewSummaryProps> = ({
       >
         <div className="flex items-center justify-start gap-4 sm:gap-8">
           <img alt="Load again" src={GooglePng.src} className="size-[42px]" />
-          <p className="hidden md:block text-sm md:text-base leading-[18px] text-wrap text-neutral-500 font-semibold">
+          <p className="hidden md:block text-sm md:text-base leading-[18px] text-wrap text-neutral-500 font-medium">
             These reviews are based on public opinions and feedback collected
             <span className="hidden xl:inline">
               <br />
             </span>{" "}
             from Google.
           </p>
-          <p className="hidden xsm:block md:hidden text-sm text-neutral-500 font-semibold">
+          <p className="hidden xsm:block md:hidden text-sm text-neutral-500 font-medium">
             Based on Google Reviews
           </p>
         </div>
         <div className="flex items-center justify-start xsm:justify-end gap-2 xsm:gap-4 ms:gap-6 md:gap-8 lg:gap-4 xl:gap-6 2xl:gap-8">
           <div className="flex flex-col items-center gap-2">
-            <p className="text-2xl font-semibold text-neutral-900">
+            <p className="text-2xl font-medium text-neutral-900">
               {formatRating(agrReviews?.rating)}
             </p>
             <StarRating
@@ -129,10 +129,10 @@ const ReviewSummary: FC<ReviewSummaryProps> = ({
           </div>
           <div className="h-12 border border-neutral-200"></div>
           <div className="flex flex-col items-center gap-2">
-            <p className="text-2xl font-semibold text-neutral-900">
+            <p className="text-2xl font-medium text-neutral-900">
               {agrReviews?.user_ratings_total}
             </p>
-            <p className="text-base text-neutral-500 font-semibold">Reviews</p>
+            <p className="text-base text-neutral-500 font-medium">Reviews</p>
           </div>
         </div>
       </div>
@@ -164,7 +164,7 @@ const ReviewSummary: FC<ReviewSummaryProps> = ({
               <div className="w-full flex flex-col items-start justify-start">
                 <div className="w-full flex items-start justify-between">
                   <div className="flex flex-col items-start">
-                    <p className="text-base font-semibold">{r.author_name}</p>
+                    <p className="text-base font-medium">{r.author_name}</p>
                     <p className="text-sm text-neutral-500 dark:text-neutral-400">
                       {r.relative_time_description}
                     </p>

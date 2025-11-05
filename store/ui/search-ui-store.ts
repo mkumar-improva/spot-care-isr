@@ -16,6 +16,7 @@ type State = {
   providerNameDebounce: Providers[] | null;
   providerNameError: boolean;
   providerIsRecord: boolean;
+  servicesTag: string;
 };
 
 type Action = {
@@ -32,6 +33,7 @@ type Action = {
   setProviderNameDebounce: (providers: Providers[] | null) => void;
   setProviderNameError: (error: boolean) => void;
   setProviderIsRecord: (isRecord: boolean) => void;
+  setServicesTag: (tag: string) => void;
 };
 
 const useSearchUiStore = createWithEqualityFn<State & Action>()(
@@ -49,6 +51,7 @@ const useSearchUiStore = createWithEqualityFn<State & Action>()(
     providerNameDebounce: null,
     providerNameError: false,
     providerIsRecord: true,
+    servicesTag: "",
     setSearchActiveTab: (tab) => set({ searchActiveTab: tab }),
     setIsMapLoaded: (loaded) => set({ isMapLoaded: loaded }),
     setLocationValue: (value) => set({ locationValue: value }),
@@ -60,9 +63,11 @@ const useSearchUiStore = createWithEqualityFn<State & Action>()(
     setCareTypeValue: (value) => set({ careTypeValue: value }),
     setRadiusValue: (value) => set({ radiusValue: value }),
     setStorePostalCode: (code) => set({ storePostalCode: code }),
-    setProviderNameDebounce: (providers) => set({ providerNameDebounce: providers }),
+    setProviderNameDebounce: (providers) =>
+      set({ providerNameDebounce: providers }),
     setProviderNameError: (error) => set({ providerNameError: error }),
     setProviderIsRecord: (isRecord) => set({ providerIsRecord: isRecord }),
+    setServicesTag: (tag) => set({ servicesTag: tag }),
   }),
   shallow // ✅ this is now valid
 );

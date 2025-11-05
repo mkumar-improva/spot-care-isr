@@ -10,6 +10,7 @@ import { AddWishlist } from "@/types/add-wish-list";
 import { ContactTypes } from "@/types/contact-types";
 import { UserData } from "@/types/user-data";
 import { Filters } from "@/types/filter-props";
+import { WishlistType } from "@/types/wishlist-type";
 
 export const Services = {
   LoadCareTypes: async () => {
@@ -87,12 +88,16 @@ export const Services = {
   },
   AddWishlist: async (wishlistBody: AddWishlist) => {
     try {
-      const result = await END_POINT.post(EndpointConstants.AddWishlist, {
-        customerId: wishlistBody.customerId,
-        providerId: wishlistBody.providerId,
-        providercode: wishlistBody.providercode,
-        serviceTag: wishlistBody.serviceTag,
-      });
+      const result = await END_POINT.post(
+        EndpointConstants.AddWishlist,
+        {
+          customerId: wishlistBody.customerId,
+          providerId: wishlistBody.providerId,
+          providercode: wishlistBody.providercode,
+          serviceTag: wishlistBody.serviceTag,
+        },
+        true
+      );
       return result;
     } catch (error) {
       handleError(error, "AddWishlist");
@@ -117,7 +122,8 @@ export const Services = {
           fullName: contactMessage.fullName,
           email: contactMessage.email,
           message: contactMessage.message,
-        }
+        },
+        true
       );
       return result;
     } catch (error) {
@@ -379,6 +385,54 @@ export const Services = {
     } catch (error) {
       handleError(error, "SearchByProviderNameList");
       return { data: [], total: 0 };
+    }
+  },
+  GetWishlist: async (customerId: number) => {
+    try {
+      const result = await END_POINT.get(
+        EndpointConstants.GetWishlist + `?customerId=${customerId}`
+      );
+      let data = mapListToType<WishlistType>(result["data"] ?? []);
+      return data;
+    } catch (error) {
+      handleError(error, "GetWishlist");
+    }
+  },
+  SendEmail: async (
+    blob: Blob,
+    emailId: string,
+    firstname: string,
+    lastname: string
+  ) => {
+    const formData = new FormData();
+    formData.append("file", blob, "Spot Care Providers.pdf");
+    formData.append("email", emailId);
+    formData.append("firstName", firstname);
+    formData.append("lastname", lastname);
+    try {
+      let result = await END_POINT.postFormData(
+        EndpointConstants.SendEmail,
+        formData
+      );
+      return result;
+    } catch (error) {
+      handleError(error, "SendEmail");
+    }
+  },
+  SaveReport: async (code: string, categoryId: number, desc: string) => {
+    try {
+      let result = await END_POINT.post(
+        EndpointConstants.SaveReport,
+        {
+          code: code,
+          categoryId: categoryId,
+          desc: desc,
+        },
+        true
+      );
+      return result;
+    } catch (error) {
+      handleError(error, "SaveReport");
     }
   },
 };

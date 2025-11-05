@@ -115,10 +115,10 @@ const ConsultingTab = () => {
     >
       {!isLastStep && (
         <div className="w-full flex flex-col items-start justify-start gap-2">
-          <p className="text-2xl font-semibold">
+          <p className="text-2xl font-medium">
             Looking for {serviceType ?? ""}
           </p>
-          <p className="text-sm text-neutral-500 text-wrap">
+          <p className="text-sm text-neutral-500 font-normal text-wrap">
             Learn about pricing and availability for {serviceType ?? ""} homes near{" "}
             {selectedProviderDetail?.locations?.[0]?.city ?? ""}
           </p>
