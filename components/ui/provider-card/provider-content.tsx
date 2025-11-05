@@ -187,24 +187,26 @@ const ProviderContent: FC<ProviderContentProps> = ({
                 </div>
               ) : null}
               {/* CMS Rating */}
-              {data.isRatingsAvailable && (
-                <div className="flex rounded-lg items-center gap-[.25rem]">
-                  <Image
-                    alt="Medicare Rating"
-                    src={medicare}
-                    className="w-[6rem]"
-                  />
-                  <div className="flex items-center justify-start gap-[.25rem] mb-[.15rem]">
-                    <HugeiconsIcon
-                      icon={StarIcon}
-                      className="text-[#f49d0a] size-3"
+              {data.isRatingsAvailable &&
+                data.rating &&
+                data.rating.overall > 0 && (
+                  <div className="flex rounded-lg items-center gap-[.25rem]">
+                    <Image
+                      alt="Medicare Rating"
+                      src={medicare}
+                      className="w-[6rem]"
                     />
-                    <span className="text-sm font-medium text-neutral-500">
-                      ({data.rating?.overall ?? 0})
-                    </span>
+                    <div className="flex items-center justify-start gap-[.25rem] mb-[.15rem]">
+                      <HugeiconsIcon
+                        icon={StarIcon}
+                        className="text-[#f49d0a] size-3"
+                      />
+                      <span className="text-sm font-medium text-neutral-500">
+                        ({data.rating?.overall ?? 0})
+                      </span>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
             </>
           )}
         </div>

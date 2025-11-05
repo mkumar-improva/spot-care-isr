@@ -9,6 +9,7 @@ import useRenderRatingFilter from "./use-render-rating-filter";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import useSearchUiStore from "@/store/ui/search-ui-store";
+import useHeaderUiStore from "@/store/ui/header-ui-store";
 
 interface useProviderListProps {
   providersList: Providers[];
@@ -25,7 +26,8 @@ const useProviderList = ({
   const { loading, setLoading } = useLoadingState();
   const { filterVal, setProviderList, setFilterVal, clearProviderData } =
     useProviderListDataStore();
-  const {setShowHeroMobileSearch} = useSearchUiStore();
+  const { setShowHeroMobileSearch } = useSearchUiStore();
+  const { listHeaderHeight } = useHeaderUiStore();
 
   //hooks
   const searchParams = useSearchParams();
@@ -104,7 +106,7 @@ const useProviderList = ({
   const handleProviderClick = (provider: Providers) => {
     // Set loading state for this specific provider
     setNavigatingCode(provider.code);
-    
+
     const detailUrl = `/detail-screen/${provider.code}?lat=${
       provider.locations[0]?.latitude || 40.7127753
     }&lon=${provider.locations[0]?.longitude || -74.0059728}&distance=${
@@ -121,9 +123,10 @@ const useProviderList = ({
     totalRecords,
     isTabFiltersOpen,
     navigatingCode,
+    listHeaderHeight,
     setIsTabFiltersOpen,
     setCurrentHoverID,
-    handleProviderClick
+    handleProviderClick,
   };
 };
 

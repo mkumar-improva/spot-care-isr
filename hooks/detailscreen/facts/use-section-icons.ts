@@ -20,43 +20,43 @@ export const useSectionIcons = () => {
       strokeWidth: 2,
     };
 
-    switch (sectionName) {
-      case "General information":
+    switch (sectionName.toLowerCase()) {
+      case "general information":
         return createElement(HugeiconsIcon, {
           icon: InformationCircleIcon,
           ...iconProps,
         });
-      case "Staff information":
+      case "staff information":
         return createElement(HugeiconsIcon, {
           icon: User02Icon,
           ...iconProps,
         });
-      case "Financial information":
+      case "financial information":
         return createElement(HugeiconsIcon, {
           icon: CheckmarkCircle02Icon,
           ...iconProps,
         });
-      case "Services offered":
+      case "services offered":
         return createElement(HugeiconsIcon, {
           icon: HealthIcon,
           ...iconProps,
         });
-      case "CMS data":
+      case "cms data":
         return createElement(HugeiconsIcon, {
           icon: ThumbsUpIcon,
           ...iconProps,
         });
-      case "Features & Amenitites":
+      case "features & amenities":
         return createElement(HugeiconsIcon, {
           icon: FeatherIcon,
           ...iconProps,
         });
-      case "Availability":
+      case "availability":
         return createElement(HugeiconsIcon, {
           icon: TimeQuarter02Icon,
           ...iconProps,
         });
-      case "Pricing & Availability":
+      case "pricing & availability":
         return createElement(HugeiconsIcon, {
           icon: SaveMoneyDollarIcon,
           ...iconProps,

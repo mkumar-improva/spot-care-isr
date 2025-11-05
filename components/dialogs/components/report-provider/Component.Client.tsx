@@ -46,7 +46,7 @@ const ReportIssueDialog = () => {
       >
         <div className="flex-1 justify-center items-center w-screen md:w-98 space-y-0 relative">
           <div className="flex flex-row text-neutral-700 dark:text-neutral-300 text-center justify-between items-center border-b dark:border-neutral-800 p-4 relative">
-            <p className="text-2xl font-bold truncate max-w-[16rem] sm:max-w-[26rem] mx-auto overflow-hidden ">
+            <p className="text-2xl font-semibold truncate max-w-[16rem] sm:max-w-[26rem] mx-auto overflow-hidden ">
               {TitleCase((dialogProviderName ?? "").replace("''", "'"))}
             </p>
             <span className="flex-shrink-0 absolute right-3 top-3">
@@ -76,7 +76,7 @@ const ReportIssueDialog = () => {
                   />
                 </div>
               </div>
-              <p className="text-[22px] text-neutral-900 font-semibold">Report This Provider</p>
+              <p className="text-[22px] text-neutral-900 font-medium">Report This Provider</p>
             </div>
             {Array.isArray(reportOptions) && reportOptions.map((option: { id: number; category: string }) => (
               <div key={option.id} className="flex flex-row items-center">
@@ -86,6 +86,11 @@ const ReportIssueDialog = () => {
                   name="radio"
                   className="hidden radioBoxShadow"
                   checked={option.id === selectedOptionId}
+                  onChange={() => {
+                    setIsError(false);
+                    setIsEmptyReport(false);
+                    setSelectedOptionId(option.id);
+                  }}
                 />
                 <label
                   htmlFor={option.id.toString()}
@@ -109,7 +114,7 @@ const ReportIssueDialog = () => {
             ))}
             <div className="w-full flex flex-col justify-center items-center gap-y-3">
               <div className="w-full">
-                <span className="text-[22px] font-semibold text-neutral-800 dark:text-neutral-200">
+                <span className="text-[22px] font-medium text-neutral-800 dark:text-neutral-200">
                   Report Something Else
                 </span>
                 <TextField

@@ -122,6 +122,9 @@ const GMap: FC<GMapProps> = ({
           streetViewControl: true,
           fullscreenControl: false,
           clickableIcons: false,
+          streetViewControlOptions: {
+            position: google.maps.ControlPosition.TOP_RIGHT,
+          },
         }}
       >
         {paginatedList.map((item) => (

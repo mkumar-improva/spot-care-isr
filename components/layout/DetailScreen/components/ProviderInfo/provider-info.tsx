@@ -16,7 +16,11 @@ import SocialMediaSection from "@/components/layout/DetailScreen/components/Prov
 import ProviderAction from "@/components/layout/DetailScreen/components/ProviderInfo/components/provider-action";
 import googleIconImage from "@/assets/logos/google.png";
 import medicareIconImage from "@/assets/logos/medicare.png";
-import { useProviderOverview, useWishlist, useTouchDevice } from "@/hooks/detailscreen/providerinfo";
+import {
+  useProviderOverview,
+  useWishlist,
+  useTouchDevice,
+} from "@/hooks/detailscreen/providerinfo";
 import { ContainerMap } from "@/components/ui/g-map/container-map";
 
 export interface ProviderInfoProps {
@@ -31,9 +35,7 @@ const ProviderInfo: FC<ProviderInfoProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const [userDetail, setUserDetail] = useState<Record<string, any>>({});
 
-  const {
-    selectedProviderDetail,
-  } = uiUseStore();
+  const { selectedProviderDetail } = uiUseStore();
 
   const { careTypes } = useCareTypes();
   const providerContainerRef = useRef<HTMLDivElement>(null);
@@ -57,8 +59,8 @@ const ProviderInfo: FC<ProviderInfoProps> = ({
         className="w-[100%] lg:w-[60%] flex flex-col items-start justify-start gap-4"
       >
         {/* Provider Action for smaller screen */}
-        <ProviderAction 
-          className="flex lg:hidden" 
+        <ProviderAction
+          className="flex lg:hidden"
           isSelected={isSelected}
           onSave={savedProviders}
         />
@@ -70,13 +72,14 @@ const ProviderInfo: FC<ProviderInfoProps> = ({
             )}
         </div>
         {/* Provider Info header section */}
-        <p className="hidden sm:block text-[36px] font-semibold leading-[2.75rem]">
+        <p className="hidden sm:block text-[36px] font-medium leading-[2.75rem]">
           {TitleCase(selectedProviderDetail?.name.replace("''", "'") ?? "")}
         </p>
         {/* Google and CMS rating Overview Section */}
         {((selectedProviderDetail?.agrReview &&
           selectedProviderDetail?.agrReview?.reviews) ||
-          selectedProviderDetail?.rating) && (
+          (selectedProviderDetail?.rating &&
+            selectedProviderDetail?.rating.overall > 0)) && (
           <div className="flex items-center justify-start gap-2 flex-wrap">
             {/* Total Review Overview */}
             {selectedProviderDetail?.agrReview &&
@@ -86,7 +89,11 @@ const ProviderInfo: FC<ProviderInfoProps> = ({
                   onClick={onScrollDown}
                   className="flex items-center justify-start gap-2 cursor-pointer relative group"
                 >
-                  <img src={googleIconImage.src} alt="Google" className="w-[4.1rem]" />
+                  <img
+                    src={googleIconImage.src}
+                    alt="Google"
+                    className="w-[4.1rem]"
+                  />
                   <div className="flex items-center justify-start mb-[1.25px] gap-2">
                     <StarRating
                       rating={
@@ -115,36 +122,38 @@ const ProviderInfo: FC<ProviderInfoProps> = ({
                 <p className="text-neutral-500">&nbsp;•&nbsp;</p>
               )}
             {/* CMS Rating Overview */}
-            {selectedProviderDetail?.rating && (
-              <div
-                onClick={onCmsScrollDown}
-                className="flex items-center justify-start gap-2 cursor-pointer relative group"
-              >
-                <img
-                  src={medicareIconImage.src}
-                  alt="Medicare"
-                  className="w-[7.25rem]"
-                />
-                <div className="flex items-center justify-start mb-[1.25px] gap-2">
-                  <StarRating
-                    rating={selectedProviderDetail?.rating.overall || 0}
-                    className="flex items-center gap-1"
-                    starSize="size-[1rem]"
+            {selectedProviderDetail &&
+              selectedProviderDetail.rating &&
+              selectedProviderDetail.rating.overall > 0 && (
+                <div
+                  onClick={onCmsScrollDown}
+                  className="flex items-center justify-start gap-2 cursor-pointer relative group"
+                >
+                  <img
+                    src={medicareIconImage.src}
+                    alt="Medicare"
+                    className="w-[7.25rem]"
                   />
-                  <p className="text-base text-neutral-500 font-medium">
-                    ({selectedProviderDetail?.rating.overall || 0})
-                  </p>
-                  {!isTouchDevice && (
-                    <span
-                      className="absolute right-1/2 translate-x-1/2 top-5 mt-2 px-2 py-1 rounded bg-neutral-800 
+                  <div className="flex items-center justify-start mb-[1.25px] gap-2">
+                    <StarRating
+                      rating={selectedProviderDetail?.rating.overall || 0}
+                      className="flex items-center gap-1"
+                      starSize="size-[1rem]"
+                    />
+                    <p className="text-base text-neutral-500 font-medium">
+                      ({selectedProviderDetail?.rating.overall || 0})
+                    </p>
+                    {!isTouchDevice && (
+                      <span
+                        className="absolute right-1/2 translate-x-1/2 top-5 mt-2 px-2 py-1 rounded bg-neutral-800 
                 text-white text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10"
-                    >
-                      medicare.gov
-                    </span>
-                  )}
+                      >
+                        medicare.gov
+                      </span>
+                    )}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
           </div>
         )}
         {/* Provider Details */}
@@ -224,18 +233,15 @@ const ProviderInfo: FC<ProviderInfoProps> = ({
       {/* Provider Detail Action And Map */}
       <div className="w-[100%] lg:w-[40%] flex flex-col items-end justify-start gap-4">
         {/* Provider Action for larger screen */}
-        <ProviderAction 
-          className="hidden lg:flex -mt-[10px]" 
+        <ProviderAction
+          className="hidden lg:flex -mt-[10px]"
           isSelected={isSelected}
           onSave={savedProviders}
         />
         {/* Map Container */}
         {selectedProviderDetail && (
           <div className="rounded-xl w-full overflow-hidden z-0 h-[13rem]">
-            <ContainerMap 
-              markers={selectedProviderDetail}
-              isContainer={true}
-            />
+            <ContainerMap markers={selectedProviderDetail} isContainer={true} />
           </div>
         )}
       </div>

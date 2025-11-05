@@ -22,7 +22,7 @@ export default function FactsSection({ facts }: FactsSectionProps) {
           key={careType}
           className="w-full flex flex-col items-start justify-start gap-[1rem]"
         >
-          <div className="w-full bg-primary-50 border border-primary-200 py-3 px-3 rounded-md">
+          <div className="w-full bg-primary-50 border border-primary-200 py-2 px-3 rounded-md">
             <p className="text-[22px] font-medium text-primary tracking-wide">
               {careType}
             </p>
@@ -38,7 +38,7 @@ export default function FactsSection({ facts }: FactsSectionProps) {
                         key={`${careType}-subsection-${subsectionIndex}-${subsection.subSectionName}`}
                         className="flex flex-col items-start justify-start bg-white md:px-1"
                       >
-                        <p className="mb-1 text-base text-neutral-900 font-semibold subsection-heading py-2">
+                        <p className="mb-1 text-base text-neutral-900 font-medium subsection-heading py-2">
                           {convertToNormalCase(subsection.subSectionName)}
                         </p>
                         {subsection.questions.map((e, questionIndex) => (

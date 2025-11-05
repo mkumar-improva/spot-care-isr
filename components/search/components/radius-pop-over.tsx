@@ -83,7 +83,7 @@ const RadiusPopOver: FC<RadiusPopOverProps> = ({
                 </div>
                 <div className="flex-grow">
                   <input
-                    className={`block w-full bg-transparent border-none focus:ring-0 p-0 focus:outline-none focus:placeholder-neutral-300 text-base font-semibold placeholder-neutral-800 dark:placeholder-neutral-200 truncate`}
+                    className={`block w-full bg-transparent border-none focus:ring-0 p-0 focus:outline-none focus:placeholder-neutral-300 text-base font-medium placeholder-neutral-800 dark:placeholder-neutral-200 truncate`}
                     placeholder={placeHolder}
                     value={radiusValue}
                     required

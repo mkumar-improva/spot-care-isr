@@ -122,7 +122,8 @@ export const Services = {
           fullName: contactMessage.fullName,
           email: contactMessage.email,
           message: contactMessage.message,
-        }
+        },
+        true
       );
       return result;
     } catch (error) {
@@ -416,6 +417,22 @@ export const Services = {
       return result;
     } catch (error) {
       handleError(error, "SendEmail");
+    }
+  },
+  SaveReport: async (code: string, categoryId: number, desc: string) => {
+    try {
+      let result = await END_POINT.post(
+        EndpointConstants.SaveReport,
+        {
+          code: code,
+          categoryId: categoryId,
+          desc: desc,
+        },
+        true
+      );
+      return result;
+    } catch (error) {
+      handleError(error, "SaveReport");
     }
   },
 };

@@ -15,6 +15,8 @@ import CmsRatingDialog from "./components/filters/cms-rating-dialog";
 import SortFilterDialog from "./components/filters/sort-filter-dialog";
 import CustomImageModal from "./components/custom image-dialog";
 import useImageGalleryStore from "@/store/dialog/image-gallery-store";
+import SuccessDialog from "./components/sucess/success-dialog";
+import SuccessPng from "@/assets/success.png";
 
 const DialogClientRenderer = () => {
   const { showLogin, showSignup, setShowLogin, setShowSignup } =
@@ -22,8 +24,12 @@ const DialogClientRenderer = () => {
   const { showResetPassword, setShowResetPassword } = useResetPasswordUIStore();
   const { showClaimProvider, setShowClaimProvider } =
     useClaimProviderDialogStore();
-  const { showReportDialog, setShowReportDialog } =
-    useReportProviderDialogStore();
+  const {
+    showReportDialog,
+    setShowReportDialog,
+    successDialogOpen,
+    setSuccessDialogOpen,
+  } = useReportProviderDialogStore();
   const { showShareDialog, setShowShareDialog } = useShareProviderDialogStore();
   const {
     isCmsRatingsDialogOpen,
@@ -61,6 +67,10 @@ const DialogClientRenderer = () => {
 
   const closeSortFilterDialog = () => {
     setIsSortingDialogOpen(false);
+  };
+
+  const closeSuccessDialog = () => {
+    setSuccessDialogOpen(false);
   };
 
   return (
@@ -109,10 +119,24 @@ const DialogClientRenderer = () => {
         dialogVisibleClassName="block lg:hidden"
         children={<SortFilterDialog />}
       />
-            {/* Image Modals */}
+      {/* Image Modals */}
       <CustomImageModal
         handleClose={() => setIsImageGalleryOpen(false)}
         isShowDialog={isImageGalleryOpen}
+      />
+      {/* Success Dialog */}
+      <CustomDialog
+        isDialogOpen={successDialogOpen}
+        handleClose={closeSuccessDialog}
+        children={
+          <SuccessDialog
+            img={SuccessPng.src}
+            content={"Thank you for sharing your concern."}
+            contentToBold="Our safety team will review and take actions."
+            onClick={closeSuccessDialog}
+            btnString="Done"
+          />
+        }
       />
     </>
   );

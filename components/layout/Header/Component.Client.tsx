@@ -16,9 +16,10 @@ const StandardHeader = () => {
   const { loadWishlist } = useWishlist();
 
   useEffect(() => {
-    const nonHomeRoutes = [
+    const dynamicRoutePrefixes = ["/detail-screen/"];
+
+    const staticRoutes = [
       "/list",
-      "/detail-screen",
       "/contact",
       "/privacy",
       "/account",
@@ -28,7 +29,10 @@ const StandardHeader = () => {
       "/provider-profile",
     ];
 
-    setIsHomePage(!nonHomeRoutes.includes(pathName));
+    const isDetailScreen = pathName.startsWith("/detail-screen/");
+    const isStaticPage = staticRoutes.includes(pathName);
+
+    setIsHomePage(!(isDetailScreen || isStaticPage));
   }, [pathName]);
 
   useEffect(() => {

@@ -27,6 +27,7 @@ const PageList: FC<pageListServerProps> = ({
     setIsTabFiltersOpen,
     setCurrentHoverID,
     handleProviderClick,
+    listHeaderHeight,
   } = useProviderList({
     providersList,
     total,
@@ -42,7 +43,10 @@ const PageList: FC<pageListServerProps> = ({
     </div>
   ) : (
     <div className="w-full min-h-screen relative flex flex-col items-start justify-start pb-[2rem]">
-      <div className="sticky top-[5.15rem] z-[10] py-4 bg-white w-full pl-4 xl:pl-[2.4rem] pr-4 lg:pr-[.25rem]">
+      <div
+        style={{ top: `${listHeaderHeight}px` }}
+        className="sticky z-[10] py-4 bg-white w-full pl-4 xl:pl-[2.4rem] pr-4 lg:pr-[.25rem]"
+      >
         <PageListHeader
           totalCount={totalRecords}
           isTabFiltersOpen={isTabFiltersOpen}
@@ -67,8 +71,8 @@ const PageList: FC<pageListServerProps> = ({
                       setCurrentHoverID((_) => -1);
                     }}
                   >
-                    <ProviderCard 
-                      data={item} 
+                    <ProviderCard
+                      data={item}
                       navigating={navigatingCode === item.code}
                     />
                   </div>

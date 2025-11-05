@@ -33,6 +33,7 @@ const useProviderSearchForm = () => {
     providerIsRecord,
     setProviderNameDebounce,
     setSearchProviderName,
+    setShowHeroMobileSearch,
   } = useSearchUiStore();
   const { currentLocation } = useSearchDataStore();
   const { isHomePage } = useHeaderUiStore();
@@ -47,14 +48,22 @@ const useProviderSearchForm = () => {
   useEffect(() => {
     if (providerNameDebounce && providerNameDebounce.length > 0) {
       setIsRecord(false); // Results found
-    } else if (searchProviderName && searchProviderName.trim() !== "" && !navigatingCode) {
+    } else if (
+      searchProviderName &&
+      searchProviderName.trim() !== "" &&
+      !navigatingCode
+    ) {
       setIsRecord(true); // Searching (only if not navigating)
     }
   }, [providerNameDebounce, searchProviderName, navigatingCode]);
 
   // Clear navigation state when search changes
   useEffect(() => {
-    if (searchProviderName && searchProviderName.trim() !== "" && navigatingCode) {
+    if (
+      searchProviderName &&
+      searchProviderName.trim() !== "" &&
+      navigatingCode
+    ) {
       // If user is typing while navigating, clear the navigation state
       const timeoutId = setTimeout(() => {
         setNavigatingCode(null);
@@ -92,6 +101,7 @@ const useProviderSearchForm = () => {
 
     // Navigate to detail screen with provider code and location params
     router.push(`/detail-screen/${code}?${queryParams.toString()}`);
+    setShowHeroMobileSearch(false);
   };
 
   return {
