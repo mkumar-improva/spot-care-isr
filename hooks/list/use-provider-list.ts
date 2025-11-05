@@ -40,6 +40,7 @@ const useProviderList = ({
   const [currentHoverID, setCurrentHoverID] = useState<string | number>(-1);
   const [totalRecords, setTotalRecords] = useState<number>(total);
   const [isTabFiltersOpen, setIsTabFiltersOpen] = useState(false);
+  const [navigatingCode, setNavigatingCode] = useState<string | null>(null);
 
   //useEffects
   useEffect(() => {
@@ -47,6 +48,7 @@ const useProviderList = ({
     clearProviderData();
     setLoading(true);
     setFilterVal(null);
+    setNavigatingCode(null);
 
     const filterData = {
       searchText: "",
@@ -100,6 +102,9 @@ const useProviderList = ({
 
   //handlers
   const handleProviderClick = (provider: Providers) => {
+    // Set loading state for this specific provider
+    setNavigatingCode(provider.code);
+    
     const detailUrl = `/detail-screen/${provider.code}?lat=${
       provider.locations[0]?.latitude || 40.7127753
     }&lon=${provider.locations[0]?.longitude || -74.0059728}&distance=${
@@ -115,6 +120,7 @@ const useProviderList = ({
     currentHoverID,
     totalRecords,
     isTabFiltersOpen,
+    navigatingCode,
     setIsTabFiltersOpen,
     setCurrentHoverID,
     handleProviderClick

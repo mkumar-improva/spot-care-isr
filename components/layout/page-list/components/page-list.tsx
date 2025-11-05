@@ -23,6 +23,7 @@ const PageList: FC<pageListServerProps> = ({
     loading,
     totalRecords,
     isTabFiltersOpen,
+    navigatingCode,
     setIsTabFiltersOpen,
     setCurrentHoverID,
     handleProviderClick,
@@ -66,7 +67,10 @@ const PageList: FC<pageListServerProps> = ({
                       setCurrentHoverID((_) => -1);
                     }}
                   >
-                    <ProviderCard data={item} />
+                    <ProviderCard 
+                      data={item} 
+                      navigating={navigatingCode === item.code}
+                    />
                   </div>
                 </div>
               ))

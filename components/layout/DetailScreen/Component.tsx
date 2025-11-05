@@ -32,7 +32,6 @@ export async function DetailScreenComponent({
         }
       }
     } catch (error) {
-      console.error("Error fetching provider details:", error);
       initialProvider = null;
     }
   }

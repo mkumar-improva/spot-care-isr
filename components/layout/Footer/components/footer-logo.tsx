@@ -12,7 +12,7 @@ const FooterLogo = () => {
         img={logoImg}
         alt="SpotCare Logo"
         href="/"
-        className="w-[7.25rem] relative z-[999999]"
+        className="w-[132px] h-[64px] relative z-[999999]"
         onclick={onScroll}
       />
     </div>

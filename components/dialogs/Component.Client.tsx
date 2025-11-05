@@ -13,6 +13,8 @@ import ShareProviderDialog from "./components/share-provider/Component";
 import usePageListDialogStore from "@/store/dialog/page-list-dialog-store";
 import CmsRatingDialog from "./components/filters/cms-rating-dialog";
 import SortFilterDialog from "./components/filters/sort-filter-dialog";
+import CustomImageModal from "./components/custom image-dialog";
+import useImageGalleryStore from "@/store/dialog/image-gallery-store";
 
 const DialogClientRenderer = () => {
   const { showLogin, showSignup, setShowLogin, setShowSignup } =
@@ -29,6 +31,7 @@ const DialogClientRenderer = () => {
     isSortingDialogOpen,
     setIsSortingDialogOpen,
   } = usePageListDialogStore();
+  const { isImageGalleryOpen, setIsImageGalleryOpen } = useImageGalleryStore();
 
   //handlers
   const onCloseAuth = () => {
@@ -105,6 +108,11 @@ const DialogClientRenderer = () => {
         handleClose={closeSortFilterDialog}
         dialogVisibleClassName="block lg:hidden"
         children={<SortFilterDialog />}
+      />
+            {/* Image Modals */}
+      <CustomImageModal
+        handleClose={() => setIsImageGalleryOpen(false)}
+        isShowDialog={isImageGalleryOpen}
       />
     </>
   );
