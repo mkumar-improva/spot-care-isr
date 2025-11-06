@@ -15,7 +15,13 @@ interface ImageSliderProps {
 
 const ImageSlider: FC<ImageSliderProps> = ({ images, type = "provider" }) => {
   return (
-    <Swiper
+    <div
+      className={`h-full swiper-${type} relative`}
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+    >
+      <Swiper
       modules={[Pagination, Navigation]}
       pagination={{
         clickable: true,
@@ -24,7 +30,7 @@ const ImageSlider: FC<ImageSliderProps> = ({ images, type = "provider" }) => {
       }}
       navigation={true}
       slidesPerView={1}
-      className={`h-full swiper-${type}`}
+      className="h-full"
     >
       {images.map((img, i) => (
         <SwiperSlide key={i}>
@@ -34,7 +40,8 @@ const ImageSlider: FC<ImageSliderProps> = ({ images, type = "provider" }) => {
       {!images.includes(placeHolderSvg) && images.length > 1 && (
         <div className="absolute w-full bottom-0 h-8 bg-black/30 z-10"></div>
       )}
-    </Swiper>
+      </Swiper>
+    </div>
   );
 };
 
@@ -46,7 +53,12 @@ const ImageWithLoader: React.FC<{ src: string; alt: string }> = ({
   const [error, setError] = useState(false);
 
   return (
-    <div className="relative w-full h-full bg-neutral-100">
+    <div
+      className="relative w-full h-full bg-neutral-100"
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+    >
       {loading && (
         <div className="absolute inset-0 flex items-center justify-center z-10 bg-white/40">
           <div className="size-6 border-2 border-t-transparent border-gray-500 rounded-full animate-spin" />
