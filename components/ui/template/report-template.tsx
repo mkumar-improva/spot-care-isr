@@ -301,13 +301,14 @@ Font.register({
     { src: "/fonts/ttf/Improva-Regular.ttf", fontWeight: 400 },
     { src: "/fonts/ttf/Improva-Medium.ttf", fontWeight: 500 },
     { src: "/fonts/ttf/Improva-Bold.ttf", fontWeight: 700 },
-    { src: "/fonts/ttf/Improva-ExtraBold.ttf", fontWeight: 900 },
-  ],
+    { src: "/fonts/ttf/Improva-ExtraBold.ttf", fontWeight: 900 }
+  ]
 });
 
 const styles = StyleSheet.create({
   page: {
     padding: "20px 20px 0px 20px",
+    fontFamily: "Improva",
     position: "relative",
     backgroundColor: "#F9FAFB",
   },
