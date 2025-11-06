@@ -2,7 +2,7 @@
 const nextConfig = {
   output: 'standalone',
   experimental: {
-    fetchCache: true,
+    fetchCache: true
   },
   reactStrictMode: true,
   images: {
