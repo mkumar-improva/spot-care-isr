@@ -25,7 +25,7 @@ const useRadiusPopOver = ({
   const router = useRouter();
 
   /*----------Begining of Store Import----------*/
-  const { isHomePage } = useHeaderUiStore();
+  const { isHomePage, setShowHeroSearch } = useHeaderUiStore();
   const { loading, isWishlistLoaded, setLoading } = useLoadingState();
   const {
     radiusValue,
@@ -124,6 +124,7 @@ const useRadiusPopOver = ({
         />
       ));
     } finally {
+      setShowHeroSearch(false);
     }
   };
 
