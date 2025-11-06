@@ -21,9 +21,9 @@ COPY package*.json .npmrc ./
 RUN npm ci 
 
 # Copy build output & dependencies
-COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/node_modules ./node_modules
 
 # Expose 80
 EXPOSE 80

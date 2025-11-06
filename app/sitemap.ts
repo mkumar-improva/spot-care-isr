@@ -1,24 +1,37 @@
-import type { MetadataRoute } from 'next';
-import { getSiteUrl } from '@/lib/site';
+import { MetadataRoute } from "next";
+import { getSiteUrl } from "@/lib/site";
 
-export const revalidate = 3600;
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const siteUrl = getSiteUrl();
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = getSiteUrl();
-  const lastModified = new Date();
+  // Static routes (manually define your main pages)
+  const staticPages = [
+    "",
+    "/about",
+    "/contact",
+    "/faq",
+    "/privacy",
+    "/terms",
+  ].map((path) => ({
+    url: `${siteUrl}${path}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly",
+    priority: 0.8,
+  }));
 
-  return [
-    {
-      url: baseUrl,
-      lastModified,
-      changeFrequency: 'daily',
-      priority: 1,
-    },
-    {
-      url: `${baseUrl}/providers`,
-      lastModified,
-      changeFrequency: 'hourly',
-      priority: 0.8,
-    },
-  ];
+  // Example dynamic routes — if you have provider or service pages
+  // Fetch from API or database
+  const providers = await fetch(`${siteUrl}/api/providers`).then((res) =>
+    res.json().catch(() => [])
+  );
+
+  const providerPages =
+    providers?.map((p: { code: string }) => ({
+      url: `${siteUrl}/detail-screen/${p.code}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.7,
+    })) ?? [];
+
+  return [...staticPages, ...providerPages];
 }

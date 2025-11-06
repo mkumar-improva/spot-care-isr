@@ -30,8 +30,23 @@ const SearchMobile = () => {
   };
 
   //hooks
-  const { SearchOption } = useRadiusPopOver({});
-  const { SearchOption: SearchOptionProvider } = useProviderInputType();
+  const {
+    careTypeValue,
+    storePostalCode,
+    locationValue,
+    radiusValue,
+    SearchOption,
+  } = useRadiusPopOver({});
+  const { searchProviderName, SearchOption: SearchOptionProvider } =
+    useProviderInputType();
+
+  //handlers
+  const isSearchDisabled = () => {
+    const commonInvalid = !storePostalCode || !locationValue || loading;
+    return searchActiveTab === "services"
+      ? commonInvalid || !radiusValue || !careTypeValue
+      : commonInvalid || !searchProviderName;
+  };
 
   return (
     <Transition appear show={showHeroMobileSearch} as={Fragment}>
@@ -98,14 +113,20 @@ const SearchMobile = () => {
                   {/* Footer Section */}
                   <div className="bg-white w-full flex justify-between items-center p-5">
                     <ButtonPrimary
-                      className="w-full bg-primary-700 font-medium text-white rounded-lg px-6 py-2 text-base hover:bg-primary-800 
-                    transition-colors duration-200 ease-in-out"
+                      className={`w-full font-medium text-white rounded-lg px-6 py-2 text-base transition-colors 
+                        duration-200 ease-in-out
+                      ${
+                        loading || isWishlistLoaded || isSearchDisabled()
+                          ? "bg-primary-400 hover:bg-primary-400 cursor-not-allowed"
+                          : "bg-primary-700 hover:bg-primary-800 cursor-pointer"
+                      }`}
                       onclick={
                         searchActiveTab === "services"
                           ? SearchOption
                           : SearchOptionProvider
                       }
                       loading={loading || isWishlistLoaded}
+                      disabled={isSearchDisabled()}
                     >
                       <span>Search</span>
                     </ButtonPrimary>

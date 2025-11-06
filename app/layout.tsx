@@ -89,8 +89,8 @@ export const metadata: Metadata = {
     images: [twitterImageUrl],
   },
   icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
+    icon: "/symbol.png",
+    shortcut: "/symbol.png",
   },
 };
 
