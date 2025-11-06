@@ -1,49 +1,34 @@
-# ---------- Base build image ----------
-FROM node:20-alpine AS base
+# ---------- Base builder ----------
+FROM node:20-alpine AS builder
 
 WORKDIR /app
-
-# Install OS deps
 RUN apk add --no-cache libc6-compat
 
-# Copy package files and optional config files
-COPY package*.json ./
-
-# Copy .npmrc and .env if they exist (use COPY with wildcard or make them optional)
-COPY .npmrc* ./
-COPY .env* ./
-
-# Install dependencies
+COPY package*.json .npmrc ./
 RUN npm ci
 
-# Copy the full application
 COPY . .
-
-
-# Build Next.js app
 RUN npm run build
-
 
 # ---------- Production runtime ----------
 FROM node:20-alpine AS runner
-
 WORKDIR /app
+
 ENV NODE_ENV=production
 
-# Copy only what runtime needs
-COPY --from=base /app/node_modules ./node_modules
-COPY --from=base /app/.next ./.next
-COPY --from=base /app/public ./public
-COPY --from=base /app/assets ./assets
-COPY --from=base /app/package*.json ./
+# Install only prod dependencies
+COPY package*.json .npmrc ./
+RUN npm ci 
 
-# Copy environment files if they exist
-COPY --from=base /app/.env* ./
+# Copy build output & dependencies
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/node_modules ./node_modules
 
-# Cleanup unnecessary build secrets/configs
-RUN rm -f .npmrc || true
-
-# Next.js runs on 80 but you mapped external already
+# Expose 80
 EXPOSE 80
 
-CMD ["npm", "start"]
+# Force Next.js to run on port 80
+ENV PORT=80
+
+CMD ["node_modules/.bin/next", "start", "-p", "80"]
