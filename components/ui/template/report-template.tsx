@@ -84,31 +84,49 @@ const renderPaginatedPages = (
                       <View style={styles.imagePlaceholder}>
                         <Svg style={styles.placeholderIcon} viewBox="0 0 24 24">
                           <Path
-                            d="M2 21L2 7C2 4.79086 3.79086 3 6 3L18 3C20.2091 3 22 4.79086 22 7L22 21"
+                            d="M12 4.5V6M12 6V7.5M12 6H13.5M12 6H10.5"
                             stroke="#9CA3AF"
                             strokeWidth={1.5}
                             strokeLinecap="round"
                             fill="none"
                           />
                           <Path
-                            d="M12 17L12 21"
+                            d="M8.58579 2.58579C8 3.17157 8 4.11438 8 6C8 7.88562 8 8.82843 8.58579 9.41421C9.17157 10 10.1144 10 12 10C13.8856 10 14.8284 10 15.4142 9.41421C16 8.82843 16 7.88562 16 6C16 4.11438 16 3.17157 15.4142 2.58579C14.8284 2 13.8856 2 12 2C10.1144 2 9.17157 2 8.58579 2.58579Z"
+                            stroke="#9CA3AF"
+                            strokeWidth={1.5}
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            fill="none"
+                          />
+                          <Path
+                            d="M4 22V11.9707C4 8.66123 4 7.00649 5.02513 5.97836C5.67665 5.32493 6.58055 5.08679 8 5M20 22V11.9707C20 8.66123 20 7.00649 18.9749 5.97836C18.3233 5.32493 17.4194 5.08679 16 5"
+                            stroke="#9CA3AF"
+                            strokeWidth={1.5}
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            fill="none"
+                          />
+                          <Path
+                            d="M3 22H21"
+                            stroke="#9CA3AF"
+                            strokeWidth={1.5}
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            fill="none"
+                          />
+                          <Path
+                            d="M9.5 22V19.5C9.5 18.5654 9.5 18.0981 9.70096 17.75C9.83261 17.522 10.022 17.3326 10.25 17.201C10.5981 17 11.0654 17 12 17C12.9346 17 13.4019 17 13.75 17.201C13.978 17.3326 14.1674 17.522 14.299 17.75C14.5 18.0981 14.5 18.5654 14.5 19.5V22"
                             stroke="#9CA3AF"
                             strokeWidth={1.5}
                             strokeLinecap="round"
                             fill="none"
                           />
                           <Path
-                            d="M9 21L15 21"
+                            d="M8.00896 13H8M12 13H11.991M16.0011 13H15.9922"
                             stroke="#9CA3AF"
                             strokeWidth={1.5}
                             strokeLinecap="round"
-                            fill="none"
-                          />
-                          <Path
-                            d="M6 8L6 14C6 15.1046 6.89543 16 8 16L16 16C17.1046 16 18 15.1046 18 14L18 8"
-                            stroke="#9CA3AF"
-                            strokeWidth={1.5}
-                            strokeLinecap="round"
+                            strokeLinejoin="round"
                             fill="none"
                           />
                         </Svg>
@@ -283,13 +301,14 @@ Font.register({
     { src: "/fonts/ttf/Improva-Regular.ttf", fontWeight: 400 },
     { src: "/fonts/ttf/Improva-Medium.ttf", fontWeight: 500 },
     { src: "/fonts/ttf/Improva-Bold.ttf", fontWeight: 700 },
-    { src: "/fonts/ttf/Improva-ExtraBold.ttf", fontWeight: 900 },
-  ],
+    { src: "/fonts/ttf/Improva-ExtraBold.ttf", fontWeight: 900 }
+  ]
 });
 
 const styles = StyleSheet.create({
   page: {
     padding: "20px 20px 0px 20px",
+    fontFamily: "Improva",
     position: "relative",
     backgroundColor: "#F9FAFB",
   },

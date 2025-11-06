@@ -6,6 +6,7 @@ import useProviderList from "@/hooks/list/use-provider-list";
 import useProviderListDataStore from "@/store/data/use-provider-list-data-store";
 import NoProvidersContainerProps from "@/components/ui/no-providers/no-providers-conainer";
 import ProviderCard from "@/components/ui/provider-card/provider-card";
+import { HealthCardSkeleton } from "@/components/providers/provider-car-schema-loader";
 import GMap from "@/components/ui/g-map/g-map";
 import Pagination from "./pagination";
 import Loading from "@/components/ui/Loader/Loading";
@@ -61,21 +62,22 @@ const PageList: FC<pageListServerProps> = ({
           <div className="w-full flex flex-col gap-3">
             {filteredPaginatedList && filteredPaginatedList.length > 0 ? (
               filteredPaginatedList.map((item, index) => (
-                <div key={index} onClick={() => handleProviderClick(item)}>
-                  <div
-                    key={item.code}
-                    onMouseEnter={() => {
-                      setCurrentHoverID((_) => item.code);
-                    }}
-                    onMouseLeave={() => {
-                      setCurrentHoverID((_) => -1);
-                    }}
-                  >
-                    <ProviderCard
-                      data={item}
-                      navigating={navigatingCode === item.code}
-                    />
-                  </div>
+                <div
+                  key={index}
+                  onClick={() => handleProviderClick(item)}
+                  onMouseEnter={() => {
+                    setCurrentHoverID((_) => item.code);
+                  }}
+                  onMouseLeave={() => {
+                    setCurrentHoverID((_) => -1);
+                  }}
+                  className="cursor-pointer transition-all hover:shadow-lg rounded-2xl overflow-hidden"
+                >
+                  {navigatingCode === item.code ? (
+                    <HealthCardSkeleton />
+                  ) : (
+                    <ProviderCard data={item} navigating={false} />
+                  )}
                 </div>
               ))
             ) : (
