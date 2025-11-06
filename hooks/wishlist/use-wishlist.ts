@@ -10,6 +10,7 @@ import { parseProviderResults } from "@/contains/makers";
 import { Providers } from "@/types/provider-details";
 import { WishlistType } from "@/types/wishlist-type";
 import useCommonUiStore from "@/store/ui/common-ui-store";
+import { LocationHelper } from "@/utils/auth-helper";
 
 const useWishlist = () => {
   //store
@@ -18,7 +19,7 @@ const useWishlist = () => {
   const { userDetail } = useAuthDataStore();
   const { savedProviderList, setSavedProviderList } =
     useProviderListDataStore();
-  const { isTouchDevice } = useCommonUiStore();
+  const { isTouchDevice, latLng } = useCommonUiStore();
 
   //state
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -33,8 +34,14 @@ const useWishlist = () => {
 
     const filterData = {
       radius: "20",
-      lat: 40.7127753,
-      lon: -74.0059728,
+      lat: latLng
+        ? latLng.lat
+        : parseInt(LocationHelper.getLocation().latitude ?? "40.7127753") ||
+          40.7127753,
+      lon: latLng
+        ? latLng.lng
+        : parseInt(LocationHelper.getLocation().longitude ?? "-74.0059728") ||
+          -74.0059728,
       careType: "Skilled Nursing",
       page: 1,
       pageSize: 1000,

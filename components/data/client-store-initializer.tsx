@@ -10,7 +10,7 @@ import { APP_CONSTANTS } from "@/constants/app-constants";
 import { Filters } from "@/types/filter-props";
 import useLoadingState from "store/loader/loding-state";
 
-interface HomeScreenData {
+export interface HomeScreenData {
   providers: Providers[];
   total: number;
   location: { lat: number; lon: number; city: string };
@@ -100,7 +100,6 @@ const ClientStoreInitializerProps: FC<ClientStoreInitializerProps> = ({
         });
         setHomeDataInitialized(true);
       }
-      setLoading(false);
     };
 
     initializeHomeData();

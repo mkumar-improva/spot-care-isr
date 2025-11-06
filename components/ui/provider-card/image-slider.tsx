@@ -45,6 +45,9 @@ const ImageWithLoader: React.FC<{ src: string; alt: string }> = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
+  // Use the actual URL string from the imported SVG
+  const fallbackSrc = placeHolderSvg.src;
+
   return (
     <div className="relative w-full h-full bg-neutral-100">
       {loading && (
@@ -52,17 +55,22 @@ const ImageWithLoader: React.FC<{ src: string; alt: string }> = ({
           <div className="size-6 border-2 border-t-transparent border-gray-500 rounded-full animate-spin" />
         </div>
       )}
+
       <img
-        src={error ? placeHolderSvg : src}
+        src={error ? fallbackSrc : src}
         alt={alt}
         className="object-cover w-full h-full transition-opacity duration-500"
         onLoad={() => setLoading(false)}
         onError={(e) => {
           setLoading(false);
           setError(true);
+
+          // Prevent recursive onError loops
           const target = e.target as HTMLImageElement;
-          target.onerror = null;
-          target.src = placeHolderSvg;
+          if (target.src !== window.location.origin + fallbackSrc) {
+            target.onerror = null;
+            target.src = fallbackSrc;
+          }
         }}
       />
     </div>

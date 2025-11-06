@@ -35,7 +35,7 @@ const GMapComponent: FC<GMapComponentProps> = ({
       onMouseLeave={() => setIsOpen(false)}
     >
       {/* Plot */}
-  {pathname?.startsWith("/detail-screen") ? (
+      {pathname?.startsWith("/detail-screen") ? (
         <div className="text-[#e71c22] bg-white">
           <HugeiconsIcon
             icon={Location01Icon}
@@ -45,13 +45,19 @@ const GMapComponent: FC<GMapComponentProps> = ({
       ) : (
         <div className="text-primary-500 bg-white">
           <div
-            className={`${
-              isSelected
-                ? "text-white bg-primary-700 shadow-lg"
-                : "bg-primary-400 text-white shadow-md"
-            } h-6 w-10 text-center p-1 rounded-md text-xs`}
+            className={`rounded-full ${
+              isSelected || isOpen
+                ? "size-5 bg-primary-600"
+                : "bg-neutral-400 size-4"
+            }  flex items-center justify-center`}
           >
-            ⭐ {ratingToShow.toString()}
+            <div
+              className={`${
+                isSelected || isOpen
+                  ? "size-2 bg-neutral-400"
+                  : "size-3 bg-primary-600"
+              } bg-primary-600 rounded-full z-10 `}
+            ></div>
           </div>
         </div>
       )}

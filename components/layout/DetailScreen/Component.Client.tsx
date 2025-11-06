@@ -20,6 +20,9 @@ import { useRef, useEffect, useState } from "react";
 import useUIStore from "@/store/detailscreen/ui-store";
 import careTypePresent from "@/utils/care-type-present";
 import useSearchDataStore from "@/store/data/search-data-store";
+import { LocationHelper } from "@/utils/auth-helper";
+import useCommonUiStore from "@/store/ui/common-ui-store";
+import { getDistanceFromLatLon } from "@/utils/distance-finder";
 
 interface DetailScreenProps {
   code?: string;
@@ -43,6 +46,7 @@ export default function DetailScreen({
   const CmsContainerRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
   const { careTypes } = useSearchDataStore();
+  const { latLng } = useCommonUiStore();
   const setSelectedProviderDetail = useUIStore(
     (s) => s.setSelectedProviderDetail
   );
@@ -57,6 +61,26 @@ export default function DetailScreen({
       initialProvider &&
       previousProviderRef.current?.code !== initialProvider.code
     ) {
+      if (
+        initialProvider.distanceInMiles === undefined ||
+        initialProvider.distanceInMiles === null ||
+        isNaN(initialProvider.distanceInMiles) ||
+        initialProvider.distanceInMiles <= 0
+      ) {
+        const latitude =
+          latLng?.lat ||
+          parseFloat(LocationHelper.getLocation().latitude ?? "40.7127753");
+        const longitude =
+          latLng?.lng ||
+          parseFloat(LocationHelper.getLocation().longitude ?? "-74.0059728");
+        const distance = getDistanceFromLatLon(
+          latitude,
+          longitude,
+          initialProvider.locations[0].latitude,
+          initialProvider.locations[0].longitude
+        );
+        initialProvider.distanceInMiles = distance;
+      }
       setSelectedProviderDetail(initialProvider);
       previousProviderRef.current = initialProvider;
     }
