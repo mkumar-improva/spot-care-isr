@@ -11,13 +11,18 @@ import {
   HealthIcon,
   FeatherIcon,
 } from "@hugeicons-pro/core-stroke-rounded/index";
-import {RecordIcon} from "@hugeicons-pro/core-solid-rounded/index";
+import { RecordIcon } from "@hugeicons-pro/core-solid-rounded/index";
 import { ReactNode, createElement } from "react";
 
 export const useSectionIcons = () => {
   const getSectionIcon = (sectionName: string): ReactNode => {
     const iconProps = {
       className: "h-4 w-4 flex-shrink-0 mt-1",
+      strokeWidth: 2,
+    };
+
+    const defaultIconProps = {
+      className: "size-2 flex-shrink-0 mt-2",
       strokeWidth: 2,
     };
 
@@ -69,8 +74,8 @@ export const useSectionIcons = () => {
       default:
         return createElement(HugeiconsIcon, {
           icon: RecordIcon,
-          size: 8,
-          ...iconProps,
+          size: 2,
+          ...defaultIconProps,
         });
     }
   };

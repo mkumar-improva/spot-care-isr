@@ -36,11 +36,11 @@ const useWishlist = () => {
       radius: "20",
       lat: latLng
         ? latLng.lat
-        : parseInt(LocationHelper.getLocation().latitude ?? "40.7127753") ||
+        : parseFloat(LocationHelper.getLocation().latitude ?? "40.7127753") ||
           40.7127753,
       lon: latLng
         ? latLng.lng
-        : parseInt(LocationHelper.getLocation().longitude ?? "-74.0059728") ||
+        : parseFloat(LocationHelper.getLocation().longitude ?? "-74.0059728") ||
           -74.0059728,
       careType: "Skilled Nursing",
       page: 1,
