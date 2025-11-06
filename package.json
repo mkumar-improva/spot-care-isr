@@ -19,6 +19,7 @@
     "@hugeicons/react": "^1.0.5",
     "@radix-ui/react-slot": "^1.2.3",
     "@react-google-maps/api": "^2.20.7",
+    "@react-pdf/renderer": "^3.4.5",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.18",
@@ -43,8 +44,7 @@
     "swiper": "^11.2.10",
     "tailwind-merge": "^3.3.1",
     "turnstile": "^5.0.5",
-    "zustand": "^4.5.2",
-    "@react-pdf/renderer": "^3.4.4"
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@tailwindcss/aspect-ratio": "^0.4.2",

@@ -2,7 +2,7 @@
 import BgGlassmorphism from "./components/bg-glass-morphism";
 import SectionHero from "./components/section-hero";
 import useLoadingState from "store/loader/loding-state";
-import Loading from "@/components/ui/Loader/Loading";
+import HomePageSkeletonLoader from "@/components/layout/home/components/home-page-skeleton-loader";
 import useHomeDataStore from "store/data/home-data-store";
 import HomeProviderList from "./components/home-provider-list";
 import { useState, useRef, useEffect } from "react";
@@ -81,9 +81,7 @@ const HomePageComponent = () => {
         </div>
       </div>
       {loading ? (
-        <div className="h-[30vh] w-full flex justify-center items-center">
-          <Loading />
-        </div>
+        <HomePageSkeletonLoader />
       ) : (
         homeFilteredPaginatedList &&
         homeFilteredPaginatedList.length > 0 && (

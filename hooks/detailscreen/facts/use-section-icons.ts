@@ -9,8 +9,9 @@ import {
   TimeQuarter02Icon,
   SaveMoneyDollarIcon,
   HealthIcon,
+  FeatherIcon,
 } from "@hugeicons-pro/core-stroke-rounded/index";
-import { FeatherIcon } from "@hugeicons-pro/core-stroke-sharp/index";
+import {RecordIcon} from "@hugeicons-pro/core-solid-rounded/index";
 import { ReactNode, createElement } from "react";
 
 export const useSectionIcons = () => {
@@ -20,7 +21,9 @@ export const useSectionIcons = () => {
       strokeWidth: 2,
     };
 
-    switch (sectionName.toLowerCase()) {
+    const normalizedName = sectionName.toLowerCase().trim();
+
+    switch (normalizedName) {
       case "general information":
         return createElement(HugeiconsIcon, {
           icon: InformationCircleIcon,
@@ -47,6 +50,7 @@ export const useSectionIcons = () => {
           ...iconProps,
         });
       case "features & amenities":
+      case "features and amenities":
         return createElement(HugeiconsIcon, {
           icon: FeatherIcon,
           ...iconProps,
@@ -56,14 +60,17 @@ export const useSectionIcons = () => {
           icon: TimeQuarter02Icon,
           ...iconProps,
         });
+      case "pricing and availability":
       case "pricing & availability":
         return createElement(HugeiconsIcon, {
           icon: SaveMoneyDollarIcon,
           ...iconProps,
         });
       default:
-        return createElement("span", {
-          className: "p-[3px] rounded-full bg-neutral-500 mt-[9px]",
+        return createElement(HugeiconsIcon, {
+          icon: RecordIcon,
+          size: 8,
+          ...iconProps,
         });
     }
   };

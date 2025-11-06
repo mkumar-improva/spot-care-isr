@@ -19,15 +19,19 @@
 @font-face {
   font-family: Improva;
   font-weight: 600;
-  src: url('/fonts/Improva/Improva-Bold.otf');
+  src: url('/fonts/Improva/Improva-Medium.otf');
 }
 
 @font-face {
   font-family: Improva;
   font-weight: 700;
+  src: url('/fonts/Improva/Improva-Bold.otf');
+}
+@font-face {
+  font-family: Improva;
+  font-weight: 800;
   src: url('/fonts/Improva/Improva-ExtraBold.otf');
 }
-
 @font-face {
   font-family: 'Improva';
   src: url('/fonts/Airbnb/Airbnb.woff2') format('woff2');
