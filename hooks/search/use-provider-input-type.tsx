@@ -160,7 +160,6 @@ const useProviderInputType = () => {
         )
       ).toString();
       router.push(`/list?${queryParams}`);
-      setShowHeroSearch(false);
       setProviderNameDebounce([]);
     } catch (ex) {
       console.error(ex);
@@ -180,6 +179,7 @@ const useProviderInputType = () => {
         />
       ));
     } finally {
+      setShowHeroSearch(false);
     }
   };
 

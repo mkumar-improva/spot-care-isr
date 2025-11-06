@@ -59,7 +59,6 @@ const SectionGridHasMap: FC<SectionGridHasMapProps> = ({
             {homeFilteredPaginatedList.map((item, index) => (
               <div
                 key={index}
-                onClick={() => handleProviderClick(item)}
                 onMouseEnter={() => {
                   setCurrentHoverID((_) => item.code);
                 }}
@@ -72,7 +71,7 @@ const SectionGridHasMap: FC<SectionGridHasMapProps> = ({
                 {navigatingId === item.code ? (
                   <HealthCardSkeleton />
                 ) : (
-                  <ProviderCard data={item} navigating={false} />
+                  <ProviderCard data={item} navigating={false} handleProviderClick={handleProviderClick} />
                 )}
               </div>
             ))}

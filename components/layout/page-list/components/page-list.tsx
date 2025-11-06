@@ -64,7 +64,6 @@ const PageList: FC<pageListServerProps> = ({
               filteredPaginatedList.map((item, index) => (
                 <div
                   key={index}
-                  onClick={() => handleProviderClick(item)}
                   onMouseEnter={() => {
                     setCurrentHoverID((_) => item.code);
                   }}
@@ -76,7 +75,11 @@ const PageList: FC<pageListServerProps> = ({
                   {navigatingCode === item.code ? (
                     <HealthCardSkeleton />
                   ) : (
-                    <ProviderCard data={item} navigating={false} />
+                    <ProviderCard
+                      data={item}
+                      navigating={false}
+                      handleProviderClick={handleProviderClick}
+                    />
                   )}
                 </div>
               ))

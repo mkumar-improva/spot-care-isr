@@ -27,3 +27,8 @@ export const AUTH_KEYS = {
   FIRSTNAME: "firstName",
   LASTNAME: "lastName",
 };
+
+export const GEO_KEYS = {
+  LATITUDE: "latitude",
+  LONGITUDE: "longitude",
+}

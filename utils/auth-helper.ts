@@ -1,5 +1,5 @@
 import { jwtDecode, JwtPayload } from "jwt-decode";
-import { AUTH_KEYS } from "@/constants/KeyConstants";
+import { AUTH_KEYS, GEO_KEYS } from "@/constants/KeyConstants";
 import { UserData } from "@/types/user-data";
 
 export interface AuthData {
@@ -44,5 +44,19 @@ export const AuthHelper = {
     profileImage: localStorage.getItem(AUTH_KEYS.PROFILEIMAGE),
     username: localStorage.getItem(AUTH_KEYS.USERNAME),
     userId: localStorage.getItem(AUTH_KEYS.USERID),
+  }),
+};
+
+export const LocationHelper = {
+  saveLocation: (lat: string, lon: string) => {
+    localStorage.setItem(GEO_KEYS.LATITUDE, lat);
+    localStorage.setItem(GEO_KEYS.LONGITUDE, lon);
+  },
+  clearLocation: () => {
+    Object.values(GEO_KEYS).forEach((key) => localStorage.removeItem(key));
+  },
+  getLocation: () => ({
+    latitude: localStorage.getItem(GEO_KEYS.LATITUDE),
+    longitude: localStorage.getItem(GEO_KEYS.LONGITUDE),
   }),
 };

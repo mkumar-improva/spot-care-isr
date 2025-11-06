@@ -21,7 +21,7 @@ function FAQ() {
 
   return (
     <div className="bg-white">
-      <div className="w-full max-w-screen-2xl mx-auto px-2 md:px-[2rem] xl:px-[7.5rem] pt-2 lg:py-[2rem] lg:pt-[8rem]">
+      <div className="w-full max-w-screen-2xl mx-auto px-2 md:px-[2rem] xl:px-[7.5rem] pt-2 lg:pb-[2rem] lg:pt-[4rem]">
         <div className={isMobile ? "" : "flex flex-row h-auto overflow-hidden"}>
           {!isMobile && (
             <Topicbar

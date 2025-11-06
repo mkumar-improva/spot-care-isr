@@ -1,7 +1,7 @@
 "use client";
 
 import { Providers } from "@/types/provider-details";
-import { FC } from "react";
+import { FC, Fragment } from "react";
 import ProviderContent from "./provider-content";
 import ProviderSliderGallery from "./provider-slider-gallery";
 
@@ -10,6 +10,7 @@ interface ProviderCardProps {
   isLite?: boolean;
   fromDrawer?: boolean;
   navigating?: boolean;
+  handleProviderClick?: (provider: Providers) => void;
 }
 
 const ProviderCard: FC<ProviderCardProps> = ({
@@ -17,6 +18,7 @@ const ProviderCard: FC<ProviderCardProps> = ({
   isLite = false,
   fromDrawer = false,
   navigating = false,
+  handleProviderClick = () => {},
 }) => {
   return (
     <div
@@ -55,7 +57,13 @@ const ProviderCard: FC<ProviderCardProps> = ({
         </div>
       )}
       <div className="flex flex-col-reverse md:flex-row lg:flex-col-reverse xl:flex-row lg:gap-0">
-        <ProviderContent data={data} isLite={isLite} fromDrawer={fromDrawer} />
+        <div className="w-full" onClick={() => handleProviderClick(data)}>
+          <ProviderContent
+            data={data}
+            isLite={isLite}
+            fromDrawer={fromDrawer}
+          />
+        </div>
         {!isLite && data && data.images.length > 0 && (
           <ProviderSliderGallery data={data} fromDrawer={fromDrawer} />
         )}
