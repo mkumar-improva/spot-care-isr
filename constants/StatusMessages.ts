@@ -1,0 +1,141 @@
+export const StatusMessages = {
+  //Success Messages
+  SuccessMessages: {
+    ProfileImageUpdate: "Profile image updated successfully",
+    ProfileUpdate: "Profile updated successfully",
+    EmailVerification: "Verification link has been sent to your email address",
+    OtpVerification: "Verification code has been sent to your email address",
+    PasswordReset: "Password reset successfully",
+    EmailCodeVerification:
+      "Verification code has been sent to your email address",
+    Verification: "Verification successful",
+    ProfilePictureUpdate: "Profile picture removed successfully",
+    MessageSent: "Thank you! We'll get back to you soon",
+    EmailSuccessToastMessage: "Email sent successfully",
+    WishlistPDFToastMessage: "Wishlist PDF downloaded successfully!",
+    ConsultantSubmitMessage: "You Request have been submitted successfully",
+    ClaimProviderSuccess: "Provider claim request approved",
+    ClaimProviderSuccessDesc: "Now you can manage your provider profile",
+    ClaimProviderError: "Failed to claim provider. Please try again",
+    ClaimProviderAlreadyExists: "Provider already claimed",
+    ClaimProviderNotFound: "Provider not found",
+    ClaimProviderInvalidNPI: "Invalid NPI number",
+    ClaimProviderPending: "Provider claim request is pending",
+    ClaimProviderPendingDesc:
+      "Please wait for approval. It will take up to 2 days",
+    UpserProviderMessage: "Your brand has been successfully created",
+    UpdateProviderService: "The provider's service list has been updated",
+    UpsertLocationService: "The provider's location list has been updated",
+    ProviderImageUpdate: "Image uploaded successfully",
+    //List of Business
+    BusinessEmailVerification: "Email verified successfully",
+    BusinessDetailUpsert: "Provider details saved successfully",
+    //Auth Success
+    SignupSuccess: "Account created successfully",
+  },
+  //Error Messages
+  ErrorMessage: {
+    ProfileImageUpdate: "Failed to update profile image",
+    ProfileUpdate: "Failed to update profile",
+    OtpVerification: "Verification failed",
+    PasswordReset: "Invalid link. Please retry verification",
+    OTPError: "Unexpected error occurred",
+    InvalidSearchField: "Please enter the required search criteria",
+    LoginError: "Invalid username or password",
+    WentWrongError: "Something went wrong, please try again",
+    ProfilePictureUpdate: "Failed to remove profile picture",
+    VerificationCode: "Invalid verfication code",
+    VerificationCodeMissing: "Verification code is missing",
+    LoadingDocument: "Error loading document",
+    NoProvidersSelected: "Please select providers to send",
+    PasswordResetFailed: "Invalid or expired link, please retry later",
+    CaptchaVerification: "Please verify you are human",
+    RadiusInputValidationDescription1: "Enter search criteria",
+    RadiusInputValidationDescription2:
+      "Please select the care type, radius and location",
+    LocationInputValidationDescription1: "Invalid address",
+    LocationInputValidationDescription2:
+      "Make sure you have entered a valid State or City",
+    InvalidImageType:
+      "Invalid image type selected. Only JPG, JPEG, and PNG formats are allowed",
+    ImageSize:
+      "Image size exceeds the limit. Please upload an image less than 2MB",
+    NoImage: "Choose a Valid Image",
+    ReportIssueNoCategory: "Please select a category",
+    ReportIssueAdditionalInformation: "Please provide additional information",
+    SessionExpired: "Session expired. Please login again",
+    EmailNotFound: "No account found with the provided email address",
+    UpsertProviderMessage:
+      "Failed to save your provider details. Please try again",
+    UpdateProviderService:
+      "Something went wrong while updating services. Check your connection or try again later",
+    UpsertLocationService:
+      "Something went wrong while updating location. Check your connection or try again later",
+    CommonError: "We couldn’t process your request. Please try again later",
+    ChangePassword:
+      "Password update failed. Please verify your details and try again later",
+    ConsultingTabAcceptTerms:
+      "Please accept the terms and conditions to proceed",
+    ProviderImageUpdate: "Failed to upload image. Please try again later",
+    //List of Business
+    BusinessEmailVerification: "Failed to Update Email",
+    BusinessDetailUpsert: "Failed to save provider details",
+    BusinessDetailUpsertCommon:
+      "An error occurred while saving provider details",
+    BusinessOtp: "Failed to send OTP. Please try again later",
+    BusinessOtpCommon:
+      "An error occurred while sending OTP. Please try again later",
+    BusinessImageValidation: "Image must be less than 10MB",
+    BusinessImageCommon:
+      "An error occurred while uploading image. Please try again later",
+    //Auth Errors
+    SignupError: "Failed to create account. Please try again later",
+    //report template
+    ReportTemplateError: "Failed to generate report. Please try again later",
+  },
+  //Schema Messages
+  SchemaMessage: {
+    EmailAddressValidation: "Invalid email address",
+    EmailRequired: "Email is required",
+    FirstNameRequired: "First name is required",
+    FirstNameCondition: {
+      minimumValidation: "Firstname should be atleast 3 characters",
+      maximumValidation: "First name should be less than 25 characters",
+    },
+    FullNameCondition: {
+      minimumValidation: "Firstname should be atleast 3 characters",
+      maximumValidation: "First name should be less than 25 characters",
+    },
+    LastNameRequired: "Last name is required",
+    LastNameCondition: {
+      maximumValidation: "Last name should be less than 25 characters",
+    },
+    PhoneNumberValid: "Invalid phone number",
+    PhoneNumberRequired: "Phone is required",
+    PasswordValidation: "Password must be at least 8 characters long",
+    PasswordRequired: "Password is required",
+    FullNameRequired: "Name is required",
+    MessageRequired: "Message is required",
+    CurrentPasswordRequired: "Current password is required",
+    NewPasswordRequired: "New password is required",
+    NewPasswordTooShort: "Password must be at least 8 characters",
+    ConfirmPasswordRequired: "Please confirm your new password",
+    PasswordsDoNotMatch: "Passwords do not match",
+    NewPasswordSameAsCurrent:
+      "New password must be different from the current password",
+    ReasonForConsultingRequired: "Reason is required.",
+    ContactingOnBehalfOfRequired: "This field is required",
+    HelpTextRequired: "Please describe your care needs",
+    InterestedInRequired: "Please select an option",
+    //List of Business
+    BusinessNameRequired: "Provider name is required",
+    BusinessNameValidation: "Provider name must be at least 2 characters long",
+    BusinessEmailRequired: "Provider email is required",
+    BusinessEmailValidation: "Invalid provider email address",
+    BusinessLocationRequiredValidation: "Location is required",
+    BusinessAddressValidation:
+      "Please select a valid location from the suggestions",
+    //Auth
+    otpField: "Please fill in all OTP fields",
+  },
+};
